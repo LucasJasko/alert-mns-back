@@ -6,15 +6,18 @@ header("Content-Type: application/json");
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/connect.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/function.php";
 
+
+// Réception et transpilage des données client
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
+$token = $data["target_token"];
 $mail = $data["user_mail"];
 $pwd = $data["user_password"];
 
 
 
 if (isset($mail) && isset($pwd)) {
-  $stmt = $db->prepare("SELECT user_password FROM _user WHERE user_mail = :user_mail");
+  $stmt = $db->prepare("SELECT user_password FROM user WHERE user_mail = :user_mail");
   $stmt->bindValue(":user_mail", $mail);
   $stmt->execute();
 
@@ -24,7 +27,7 @@ if (isset($mail) && isset($pwd)) {
     if ($pwd == $row["user_password"]) {
       session_start();
       $_SESSION["is_logged"] = "Utilisateur connecté";
-      $_SESSION["token"] = bin2hex(random_bytes(32));
+      $_SESSION["token"] = $token;
 
       $response = [
         'success' => true,
@@ -44,9 +47,14 @@ if (isset($mail) && isset($pwd)) {
   } else {
     $response = [
       'success' => false,
-      'message' => 'Veuillez remplir tous les champs.'
+      'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
     ];
   }
+} else {
+  $response = [
+    'success' => false,
+    'message' => 'Veuillez remplir tous les champs.'
+  ];
 }
 
 echo json_encode($response);
