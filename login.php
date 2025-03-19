@@ -1,16 +1,14 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: application/json");
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "/include/clientAccess.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/connect.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/function.php";
 
 
-// Réception et transpilage des données client
+// Réception des données client
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
-$token = $data["target_token"];
+
+// Assignation des données
 $mail = $data["user_mail"];
 $pwd = $data["user_password"];
 
@@ -26,16 +24,11 @@ if (isset($mail) && isset($pwd)) {
 // $pwd == $row["user_password"]
     if ($pwd == $row["user_password"]) {
       session_start();
-      $_SESSION["is_logged"] = "Utilisateur connecté";
-      $_SESSION["token"] = $token;
+      $_SESSION["is_logged"] = "oui";
 
       $response = [
         'success' => true,
-        'message' => "Utilisateur connecté.",
-        'data' => [
-          'user' => "Lucas", // a changer par nom d'utilisateur
-          'token' => $_SESSION["token"]
-        ]
+        'data' => $_SESSION,
       ];
 
     } else {
