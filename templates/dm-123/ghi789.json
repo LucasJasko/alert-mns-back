@@ -1,0 +1,74 @@
+[
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur",
+    "messageDate": "10/05/2023",
+    "authorImg": "/assets/img/user1.png",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur 3",
+    "messageDate": "12/05/2023",
+    "authorImg": "/assets/img/user3.jpg",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message 3"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur",
+    "messageDate": "10/05/2023",
+    "authorImg": "/assets/img/user1.png",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur 3",
+    "messageDate": "12/05/2023",
+    "authorImg": "/assets/img/user3.jpg",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message 3"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur",
+    "messageDate": "10/05/2023",
+    "authorImg": "/assets/img/user1.png",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur 3",
+    "messageDate": "12/05/2023",
+    "authorImg": "/assets/img/user3.jpg",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message 3"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur",
+    "messageDate": "10/05/2023",
+    "authorImg": "/assets/img/user1.png",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message"
+    }
+  },
+  {
+    "authorLink": "",
+    "authorName": "Utilisateur 3",
+    "messageDate": "12/05/2023",
+    "authorImg": "/assets/img/user3.jpg",
+    "authorMessage": {
+      "authorMessageText": "Ceci est un message 3"
+    }
+  }
+]
