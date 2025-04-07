@@ -19,3 +19,15 @@ function writeLog($message)
 
     fclose($openedfile);
 }
+
+spl_autoload_register("loadClass");
+
+function loadClass($class)
+{
+    $file = $class . ".php";
+    $folders = ["controllers", "core", "models"];
+    foreach ($folders as $folderName) {
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/class/" . $folderName . "/" . $file;
+        if (file_exists($path)) require_once $path;
+    }
+}

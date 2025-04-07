@@ -1,5 +1,7 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . "/include/protect.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/include/function.php";
+
+$user1 = new User();
 
 ?>
 
@@ -14,6 +16,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/include/protect.php";
 
 <body>
   <h1>Le back du projet alert-mns</h1>
+  <?= var_dump($user1) ?>
 </body>
 
 </html>

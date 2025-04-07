@@ -8,7 +8,7 @@ class JWToken
   private $secretKey;
   private $method;
 
-  private function __construct()
+  public function __construct()
   {
     $this->secretKey = "Mon ptit gr@in de sel";
     $this->method = 'HSC256';
