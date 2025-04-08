@@ -2,21 +2,8 @@
 
 namespace class\models;
 
-/**
- * Class User
- * Permet de générer un utilisateur
- */
 class User
 {
-  /**
-   * @var int $id L'identifiant de l'utilisateur
-   * @var string $name Le nom de l'utilisateur
-   * @var 
-   * @var 
-   * @var 
-   * @var 
-   * @var 
-   */
   private static int $id;
   private string $name;
   private ?string $surname;

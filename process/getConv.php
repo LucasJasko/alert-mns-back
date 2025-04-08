@@ -1,6 +1,6 @@
 <?php
 
-require_once "./include/clientAccess.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/include/clientAccess.php";
 
 $rawData = file_get_contents("php://input");
 $data    = json_decode($rawData, true);

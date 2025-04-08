@@ -1,7 +1,7 @@
 <?php
 
-require_once "./include/clientAccess.php";
-require_once "./include/connect.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/include/clientAccess.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/include/connect.php";
 
 $data        = json_decode(file_get_contents("php://input"), true);
 $inputSearch = $data['search'];

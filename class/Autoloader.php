@@ -5,12 +5,12 @@ namespace class;
 class Autoloader
 {
 
-  static function autoload()
+  public static function autoload()
   {
     spl_autoload_register([__CLASS__, "loadClass"]);
   }
 
-  static function loadClass($class)
+  private static function loadClass($class)
   {
     $folders = ["controllers", "core", "models"];
     foreach ($folders as $path) {

@@ -2,7 +2,7 @@
 
 namespace class\models;
 
-class Role
+class Access
 {
 
   private int $id;
