@@ -1,5 +1,7 @@
 <?php
 
+namespace class\models;
+
 /**
  * Class User
  * Permet de générer un utilisateur
