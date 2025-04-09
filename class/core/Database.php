@@ -45,6 +45,13 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function selectAllWhere(string $table, string $field, int $id)
+  {
+    $stmt = $this->pdo->prepare("SELECT * FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt->execute([":" . $field => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getFields(string $table)
   {
     $stmt = $this->pdo->prepare("DESCRIBE " . $table);

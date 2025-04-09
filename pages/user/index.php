@@ -49,7 +49,7 @@ $fields = $db->getFields("user");
             <?php foreach ($raw[$i] as $key => $value) { ?>
               <td><?= $value ?> </td>
             <?php } ?>
-            <td class="user-btn__container"> <a class="user-btn user-btn__update" href=""><i class="fa-solid fa-pen"></i></a> </td>
+            <td class="user-btn__container"> <a class="user-btn user-btn__update" href="../form.php?id=<?= $raw[$i]["user_id"] ?>"><i class="fa-solid fa-pen"></i></a> </td>
             <td class="user-btn__container"> <a class="user-btn user-btn__delete" href=""><i class="fa-solid fa-trash-can"></i></a> </td>
           </tr>
         <?php } ?>
