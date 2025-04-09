@@ -1,8 +1,8 @@
 <?php
 
-namespace class\controllers;
+namespace controllers;
 
-use class\models\User;
+use models\User;
 
 class UserManager
 {

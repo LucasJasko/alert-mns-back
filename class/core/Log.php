@@ -1,6 +1,6 @@
 <?php
 
-namespace class\core;
+namespace core;
 
 class Log
 {

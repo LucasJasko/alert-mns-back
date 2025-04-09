@@ -1,7 +1,5 @@
 <?php
 
-namespace class;
-
 class Autoloader
 {
 
@@ -12,10 +10,7 @@ class Autoloader
 
   private static function loadClass($class)
   {
-    $folders = ["controllers", "core", "models"];
-    foreach ($folders as $path) {
-      $path = $class . ".php";
-      if (file_exists($path)) require_once $path;
-    }
+    $str = $_SERVER["DOCUMENT_ROOT"] . "/class/" . $class . ".php";
+    require_once $str;
   }
 }

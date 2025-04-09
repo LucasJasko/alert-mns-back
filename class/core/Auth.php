@@ -1,8 +1,8 @@
 <?php
 
-namespace class\core;
+namespace core;
 
-use \class\controllers\DatabaseManager;
+use \controllers\DatabaseManager;
 
 class Auth
 {

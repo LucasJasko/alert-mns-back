@@ -1,7 +1,6 @@
 <?php
 
-namespace class;
-
+use \class\Autoloader;
 use \class\core\Auth;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/clientAccess.php";

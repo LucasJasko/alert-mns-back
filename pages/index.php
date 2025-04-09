@@ -1,22 +1,17 @@
 <?php
 
-namespace class;
-
-use \class\core\Auth;
-
 require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
 Autoloader::autoload();
 
+use core\Auth;
+
+$err = null;
 
 if (isset($_POST["email"])) {
   $auth = new Auth();
-  $email = $_POST["email"];
-  $pwd = $_POST["password"];
-  $res = $auth->login($email, $pwd);
-  var_dump($res);
+  $res = $auth->login($_POST["email"], $_POST["password"]);
+  $res["success"] ? header("Location:/pages/user/index.php") : $err = "Email ou mot de passe incorrect";
 }
-
-
 
 ?>
 
@@ -30,12 +25,13 @@ if (isset($_POST["email"])) {
 </head>
 
 <body>
-  <h1>Le back du projet alert-mns</h1>
+  <h1>Back office du projet alert-mns</h1>
 
-  <form action="/index.php" method="post">
-    <input type="text" name="email">
-    <input type="text" name="password">
-    <input type="submit" value="Envoyer">
+  <form action="index.php" method="post">
+    <input type="text" name="email" placeholder="email">
+    <input type="text" name="password" placeholder="password">
+    <input type="submit" value="Envoyer"> <br>
+    <?php if (!is_null($err)) echo $err; ?>
   </form>
 
 </body>

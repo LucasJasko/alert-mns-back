@@ -1,8 +1,8 @@
 <?php
 
-namespace class\controllers;
+namespace controllers;
 
-use \class\core\Database;
+use \core\Database;
 use \PDO;
 
 class DatabaseManager

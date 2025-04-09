@@ -1,5 +1,5 @@
 <?php
 
-namespace class\models;
+namespace models;
 
 class Department {}
