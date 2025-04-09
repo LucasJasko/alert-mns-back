@@ -4,24 +4,24 @@ namespace models;
 
 class User
 {
-  private static int $id;
-  private string $name;
-  private ?string $surname;
-  private string $mail;
-  private string $password;
-  private ?string $picture;
-  private string $ipAddress;
-  private string $device;
-  private string $browser;
+  private static int $id = 0;
+  private string $name = "";
+  private ?string $surname = "";
+  private string $mail = "";
+  private string $password = "";
+  private ?string $picture = "";
+  private string $ip = "";
+  private string $device = "";
+  private string $browser = "";
 
-  public function __construct($row = false)
+  public function __construct(array $row)
   {
     $row ? $this->hydrate($row) : null;
   }
 
-  public function hydrate($data)
+  public function hydrate($row)
   {
-    foreach ($data as $key => $value) {
+    foreach ($row as $key => $value) {
       $method = "set" . ucfirst(str_replace("user_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
@@ -55,7 +55,7 @@ class User
   }
   public function setIpAddress(string $ipAddress)
   {
-    $this->ipAddress = $ipAddress;
+    $this->ip = $ipAddress;
   }
   public function setDevice(string $device)
   {
@@ -92,7 +92,7 @@ class User
   }
   public function getIpAddress()
   {
-    return $this->ipAddress;
+    return $this->ip;
   }
   public function getDevice()
   {

@@ -18,20 +18,37 @@ class Database
     $this->dbName = $dbName;
     $this->dbUsername = $dbUsername;
     $this->dbPassword = $dbPassword;
-    if ($this->pdo === null) {
-      $this->pdo = $this->getPDO();
-    }
-    return $this->pdo;
-  }
 
-  public function getPDO()
-  {
     try {
-      $stmt = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
-      $pdo = new PDO($stmt, $this->dbUsername, $this->dbPassword);
-      return $pdo;
+      if ($this->pdo === null) {
+        $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
+        $this->pdo = new PDO($dsn, $this->dbUsername, $this->dbPassword);
+      }
     } catch (\PDOException $e) {
       return $e->getMessage();
     }
+  }
+
+  public function selectUser($email)
+  {
+    $stmt = $this->pdo->prepare("SELECT user_password FROM user WHERE user_mail = :user_mail");
+    $stmt->bindValue(":user_mail", $email);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    return $row;
+  }
+
+  public function selectAll(string $table)
+  {
+    $stmt = $this->pdo->prepare("SELECT * FROM " . $table);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getFields(string $table)
+  {
+    $stmt = $this->pdo->prepare("DESCRIBE " . $table);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }
