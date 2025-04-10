@@ -19,14 +19,28 @@ $fields = $db->getFields("user");
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../styles/index.css">
+  <link rel="stylesheet" href="../index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <title>Tableau de bord - Gestion des utilisateurs</title>
 </head>
 
 <body>
 
-  <h1>Tableau de bord - Gestion des utilisateurs</h1>
+  <h1>Alert MNS - Tableau de bord: Gestion des utilisateurs</h1>
+
+  <nav class="navbar">
+    <ul>
+      <li>
+        <a href="../group/">Groupes</a>
+      </li>
+      <li>
+        <a href="../user/">Utilisateurs</a>
+      </li>
+      <li>
+        <a href="../params/">Paramétrages</a>
+      </li>
+    </ul>
+  </nav>
 
   <main class="main-container">
 
@@ -62,6 +76,9 @@ $fields = $db->getFields("user");
     </aside>
 
   </main>
+
+  <input type="text" class="target" value="user" hidden>
+  <script src="../script.js"></script>
 
 </body>
 
