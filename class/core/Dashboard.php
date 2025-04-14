@@ -89,7 +89,7 @@ class Dashboard
     $row = "<tr>";
     foreach ($dataField as $key => $value) {
       if ($this->TargetTable == "user") $userId = $dataField["user_id"];
-      if (in_array($key, $this->fields)) $row .= "<td>" . $value . "</td>";
+      if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
     }
     $row .= $this->getManageButtons($userId);
     $row .= "</tr>";
