@@ -12,12 +12,6 @@ body {
   margin: 0;
 }
 
-.btn-container {
-  padding: 20px 0;
-  margin: 0 auto;
-  max-width: 1600px;
-}
-
 .main-container {
   width: 100%;
 }
@@ -48,13 +42,19 @@ h2 {
   margin-top: 0;
 }
 
-.user-btn {
+.btn-container {
+  padding: 20px 0;
+  margin: 0 auto;
+  max-width: 1600px;
+}
+
+.btn {
   display: flex;
   justify-content: center;
   text-decoration: none;
 }
 
-.dashboard .user-btn__container {
+.dashboard .btn__container {
   min-width: 0px;
   padding: 10px 3px 10px 10px;
   border-radius: 5px;
@@ -62,10 +62,10 @@ h2 {
   background-color: white;
 }
 
-.user-btn__update {
+.btn__update {
   color: rgb(0, 173, 0);
 }
-.user-btn__delete {
+.btn__delete {
   cursor: pointer;
   color: red;
 }

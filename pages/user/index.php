@@ -7,7 +7,7 @@ Autoloader::autoload();
 use core\Dashboard;
 use core\NavBar;
 
-$dashboard = new Dashboard("user");
+$dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "user_browser"]);
 ?>
 
 

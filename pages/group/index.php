@@ -27,10 +27,6 @@ $db = new Database();
 
   <?= NavBar::getNavBar() ?>
 
-  <?php
-
-  ?>
-
   <input type="text" class="target" value="Groupes" hidden>
   <script src="../script.js"></script>
 </body>

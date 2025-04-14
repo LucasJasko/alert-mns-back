@@ -13,11 +13,11 @@ class Dashboard
   private $data;
   private $tableOpen;
   private $tableClose;
-  private $table;
   private $thead;
   private $tbody;
+  private $displayNames;
 
-  public function __construct($TargetTable)
+  public function __construct($TargetTable, array $exceptions = [])
   {
     $this->db = new Database();
     $this->TargetTable = $TargetTable;
@@ -25,6 +25,30 @@ class Dashboard
     $this->data = $this->db->getAll($TargetTable);
     $this->tableOpen = '<table class="dashboard">';
     $this->tableClose = '</table>';
+
+    if (count($exceptions) != 0) {
+      $displayableFields = array_diff($this->fields, $exceptions);
+      $this->fields = $displayableFields;
+    }
+
+    if ($this->TargetTable == "user" && count($exceptions) != 0) {
+      $this->displayNames = [
+        "user_id" => "ID",
+        "user_name" => "Prénom",
+        "user_surname" => "Nom",
+        "user_mail" => "Mail",
+        "user_password" => "Mot de passe",
+        "user_picture" => "Photo de profil",
+        "user_ip" => "Adresse IP",
+        "user_device" => "OS",
+        "user_browser" => "Navigateur",
+        "langue_id" => "Langue",
+        "theme_id" => "N° thème",
+        "statut_id" => "Etat",
+        "situation_id" => "Situation",
+        "role_id" => "Rôle"
+      ];
+    }
   }
 
   public function openTable()
@@ -44,10 +68,8 @@ class Dashboard
   private function displayFields($fields)
   {
     $selectedFields = "";
-    for ($i = 0; $i < count($fields); $i++) {
-      if ($fields[$i] != "user_picture" && $fields[$i] != "user_device") {
-        $selectedFields .= "<th>" . str_replace("user_", "", str_replace("_id", "", $fields[$i])) . "</th>";
-      }
+    foreach ($fields as $field) {
+      if (isset($field)) ($selectedFields .= "<th>" . $this->displayNames[$field] . "</th>");
     }
     return $selectedFields;
   }
@@ -62,12 +84,12 @@ class Dashboard
     return $this->tbody;
   }
 
-  public function getRow($index)
+  public function getRow($dataField)
   {
     $row = "<tr>";
-    foreach ($index as $key => $value) {
-      $userId = $index["user_id"];
-      $row .= "<td>" . $value . "</td>";
+    foreach ($dataField as $key => $value) {
+      if ($this->TargetTable == "user") $userId = $dataField["user_id"];
+      if (in_array($key, $this->fields)) $row .= "<td>" . $value . "</td>";
     }
     $row .= $this->getManageButtons($userId);
     $row .= "</tr>";
@@ -77,8 +99,8 @@ class Dashboard
 
   private function getManageButtons($userId)
   {
-    $updateBtn = "<td class='user-btn__container'> <a class='user-btn user-btn__update' href='../form.php?id=" . $userId . "'> <i class='fa-solid fa-pen'></i></a> </td>";
-    $deleteBtn = "<td class='user-btn__container'> <a class='user-btn user-btn__delete user-btn__delete__" . $userId . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?id=" . $userId . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $userId . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }
 }
