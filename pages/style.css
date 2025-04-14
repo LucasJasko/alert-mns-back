@@ -72,14 +72,16 @@ h2 {
 
 .navbar {
   display: flex;
+  justify-content: center;
   border-bottom: 1px solid grey;
   margin-bottom: 20px;
-  padding: 20px;
 }
 .navbar ul {
+  width: 100%;
   display: flex;
   padding: 0;
-  margin: 0;
+  margin: 20px auto;
+  max-width: 1600px;
 }
 .navbar li {
   list-style: none;

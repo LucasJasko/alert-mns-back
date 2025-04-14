@@ -32,7 +32,6 @@ class Database
 
   public function createOne(string $table, array $fields, array $data)
   {
-    var_dump($data);
     $sql = "INSERT INTO " . $table . " ( ";
     foreach ($fields as $key => $value) {
       $sql .= $value . ", ";

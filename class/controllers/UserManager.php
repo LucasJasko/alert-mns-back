@@ -3,6 +3,7 @@
 namespace controllers;
 
 use core\Database;
+use core\Log;
 
 class UserManager
 {
@@ -22,6 +23,7 @@ class UserManager
       if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
     }
     $this->db->createOne("user", $fields, $data);
+    Log::writeLog("Un utilisateur a été ajouté à la base de donnée.");
   }
 
   public function getUser(int $id)
@@ -40,6 +42,7 @@ class UserManager
   public function deleteUser(int $id)
   {
     $this->db->deleteOne("user", "user_id", $id);
+    Log::writeLog("L'utilisateur " . $id . " a été supprimé de la base de donnée.");
   }
 
   public function getUserPassword($email)

@@ -5,6 +5,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
 Autoloader::autoload();
 
 use core\Database;
+use core\NavBar;
 
 $db = new Database();
 
@@ -26,22 +27,7 @@ $db = new Database();
 
   <h1>Alert MNS - Tableau de bord: Statistiques de l'application</h1>
 
-  <nav class="navbar">
-    <ul>
-      <li>
-        <a href="../group/">Groupes</a>
-      </li>
-      <li>
-        <a href="../user/">Utilisateurs</a>
-      </li>
-      <li>
-        <a href="../params/">Paramétrages</a>
-      </li>
-      <li>
-        <a href="../stats/">Statistiques</a>
-      </li>
-    </ul>
-  </nav>
+  <?= NavBar::getNavBar() ?>
 
   <input type="text" class="target" value="Statistiques" hidden>
   <script src="../script.js"></script>

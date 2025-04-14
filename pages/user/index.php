@@ -4,12 +4,10 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
 Autoloader::autoload();
 
-use core\Database;
+use core\Dashboard;
+use core\NavBar;
 
-$db = new Database();
-$fields = $db->getFieldsOfTable("user");
-$raw = $db->getAll("user");
-
+$dashboard = new Dashboard("user");
 ?>
 
 
@@ -28,22 +26,7 @@ $raw = $db->getAll("user");
 
   <h1>Alert MNS - Tableau de bord: Gestion des utilisateurs</h1>
 
-  <nav class="navbar">
-    <ul>
-      <li>
-        <a href="../group/">Groupes</a>
-      </li>
-      <li>
-        <a href="../user/">Utilisateurs</a>
-      </li>
-      <li>
-        <a href="../params/">Paramétrages</a>
-      </li>
-      <li>
-        <a href="../stats/">Statistiques</a>
-      </li>
-    </ul>
-  </nav>
+  <?= NavBar::getNavBar() ?>
 
   <div class="btn-container">
     <a class="valid-button add-button" href="../form.php">Ajouter un utilisateur</a>
@@ -51,34 +34,10 @@ $raw = $db->getAll("user");
 
   <main class="main-container">
 
-    <table class="dashboard">
-
-      <thead>
-        <?php for ($i = 0; $i < count($fields); $i++) { ?>
-          <th>
-            <?php
-            $fields[$i] = str_replace("user_", "", $fields[$i]);
-            echo str_replace("_id", "", $fields[$i]);
-            ?>
-          </th>
-        <?php } ?>
-      </thead>
-
-      <tbody>
-        <?php for ($i = 0; $i < count($raw); $i++) { ?>
-          <tr>
-            <?php foreach ($raw[$i] as $key => $value) {
-              $userId = $raw[$i]["user_id"];
-            ?>
-              <td><?= $value ?> </td>
-            <?php } ?>
-            <td class="user-btn__container"> <a class="user-btn user-btn__update" href="../form.php?id=<?= $userId ?>"><i class="fa-solid fa-pen"></i></a> </td>
-            <td class="user-btn__container"> <a class="user-btn user-btn__delete user-btn__delete__<?= $userId ?>"><i class="fa-solid fa-trash-can"></i></a> </td>
-          </tr>
-        <?php } ?>
-      </tbody>
-
-    </table>
+    <?= $dashboard->openTable() ?>
+    <?= $dashboard->getTHead() ?>
+    <?= $dashboard->getTBody() ?>
+    <?= $dashboard->closeTable() ?>
 
     <div class="delete-container"></div>
   </main>
