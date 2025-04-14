@@ -2,31 +2,49 @@
 
 namespace controllers;
 
-use models\User;
+use core\Database;
 
 class UserManager
 {
 
-  public $db;
-  private static $instance;
-  private $userList = [];
+  private $db;
+  private $data;
 
-  private function __construct() {}
-
-  public static function getInstance()
+  public function __construct()
   {
-    if (is_null(self::$instance)) {
-      self::$instance = new UserManager();
+    $this->db = new Database();
+  }
+
+  public function createUser(array $data)
+  {
+    $fields =  $this->db->getFieldsOfTable("user");
+    for ($i = 0; $i < count($fields); $i++) {
+      if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
     }
-    return self::$instance;
+    $this->db->createOne("user", $fields, $data);
   }
 
-  public function getUser()
+  public function getUser(int $id)
   {
-    $this->db = "yes";
+    $row = $this->db->getAllWhere("user", "user_id", $id);
+    return $row;
   }
 
-  public function createUser(int $uid = null) {}
+  public function updateUser(int $id, array $newData)
+  {
+    $param = "user_id";
+    $this->data = $newData;
+    $res = $this->db->updateOne("user", $this->data, $param, $id);
+  }
 
-  public function updateUser(string $target, string $value) {}
+  public function deleteUser(int $id)
+  {
+    $this->db->deleteOne("user", "user_id", $id);
+  }
+
+  public function getUserPassword($email)
+  {
+    $row = $this->db->getWhere("user", "user_password", "user_mail", $email);
+    return $row;
+  }
 }

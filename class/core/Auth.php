@@ -2,6 +2,8 @@
 
 namespace core;
 
+use controllers\UserManager;
+
 class Auth
 {
   private static array $response;
@@ -9,8 +11,8 @@ class Auth
 
   public static function login(string $email, string $pwd)
   {
-    $db = new Database();
-    $row = $db->selectUser($email);
+    $manager = new UserManager();
+    $row = $manager->getUserPassword($email);
 
     if ($row && $pwd == $row["user_password"]) {
       self::$response = ['success' => true, 'message' => 'Utilisateur connecté'];

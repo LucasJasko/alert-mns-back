@@ -23,39 +23,90 @@ class Database
       if ($this->pdo === null) {
         $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
         $this->pdo = new PDO($dsn, $this->dbUsername, $this->dbPassword);
+        return $this->pdo;
       }
     } catch (\PDOException $e) {
       return $e->getMessage();
     }
   }
 
-  public function selectUser($email)
+  public function createOne(string $table, array $fields, array $data)
   {
-    $stmt = $this->pdo->prepare("SELECT user_password FROM user WHERE user_mail = :user_mail");
-    $stmt->bindValue(":user_mail", $email);
+    var_dump($data);
+    $sql = "INSERT INTO " . $table . " ( ";
+    foreach ($fields as $key => $value) {
+      $sql .= $value . ", ";
+    }
+    $sql .= ") VALUES ( ";
+    foreach ($fields as $key => $value) {
+      $sql .= ":" . $value . ", ";
+    }
+    $sql .= ")";
+    $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
+    $sql = str_replace(", )", " )", $sql);
+
+    $stmt = $this->pdo->prepare($sql);
+    foreach ($data as $key => $value) {
+      $stmt->bindValue(":" . $key, $value);
+    }
     $stmt->execute();
-    $row = $stmt->fetch();
-    return $row;
   }
 
-  public function selectAll(string $table)
+  public function getAll(string $table)
   {
     $stmt = $this->pdo->prepare("SELECT * FROM " . $table);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function selectAllWhere(string $table, string $field, int $id)
+  public function getAllWhere(string $table, string $field, int $id)
   {
     $stmt = $this->pdo->prepare("SELECT * FROM " . $table . " WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getFields(string $table)
+  public function getWhere(string $table, string $target, string $field, $param)
+  {
+    $stmt = $this->pdo->prepare("SELECT " . $target . " FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt->execute([":" . $field => $param]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function getFieldsOfTable(string $table)
   {
     $stmt = $this->pdo->prepare("DESCRIBE " . $table);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $fields = [];
+    for ($i = 0; $i < count($raw); $i++) {
+      array_push($fields, array_filter($raw[$i], function ($key) {
+        return $key == 'Field';
+      }, ARRAY_FILTER_USE_KEY)["Field"]);
+    }
+    return $fields;
+  }
+
+  public function updateOne(string $table, array $data, string $param, int $id)
+  {
+    $sql = "UPDATE " . $table . " SET ";
+    foreach ($data as $key => $value) {
+      $sql .= $key . " = :" . $key . ", ";
+    }
+    $sql .= "WHERE " . $param . " = :" . $param;
+    $sql = str_replace(", WHERE", " WHERE", $sql);
+
+    $stmt = $this->pdo->prepare($sql);
+    foreach ($data as $key => $value) {
+      $stmt->bindValue(":" . $key, $value);
+    }
+    $stmt->bindValue(":" . $param, $id);
+    $stmt->execute();
+  }
+
+  public function deleteOne(string $table, string $field, int $param)
+  {
+    $stmt = $this->pdo->prepare("DELETE FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt->execute([":" . $field => $param]);
   }
 }

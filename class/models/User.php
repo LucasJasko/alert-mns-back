@@ -2,9 +2,10 @@
 
 namespace models;
 
+
 class User
 {
-  private static int $id = 0;
+  private static int $id = false;
   private string $name = "";
   private ?string $surname = "";
   private string $mail = "";
@@ -14,7 +15,7 @@ class User
   private string $device = "";
   private string $browser = "";
 
-  public function __construct(array $row)
+  public function __construct(array $row = false)
   {
     $row ? $this->hydrate($row) : null;
   }
