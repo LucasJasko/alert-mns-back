@@ -18,17 +18,17 @@ class UserManager
 
   public function createUser(array $data)
   {
-    $fields =  $this->db->getFieldsOfTable("user");
+    $fields =  $this->db->getFieldsOfTable("_user");
     for ($i = 0; $i < count($fields); $i++) {
       if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
     }
-    $this->db->createOne("user", $fields, $data);
+    $this->db->createOne("_user", $fields, $data);
     Log::writeLog("Un utilisateur a été ajouté à la base de donnée.");
   }
 
   public function getUser(int $id)
   {
-    $row = $this->db->getAllWhere("user", "user_id", $id);
+    $row = $this->db->getAllWhere("_user", "user_id", $id);
     return $row;
   }
 
@@ -36,18 +36,18 @@ class UserManager
   {
     $param = "user_id";
     $this->data = $newData;
-    $res = $this->db->updateOne("user", $this->data, $param, $id);
+    $res = $this->db->updateOne("_user", $this->data, $param, $id);
   }
 
   public function deleteUser(int $id)
   {
-    $this->db->deleteOne("user", "user_id", $id);
+    $this->db->deleteOne("_user", "user_id", $id);
     Log::writeLog("L'utilisateur " . $id . " a été supprimé de la base de donnée.");
   }
 
   public function getUserPassword($email)
   {
-    $row = $this->db->getWhere("user", "user_password", "user_mail", $email);
+    $row = $this->db->getWhere("_user", "user_password", "user_mail", $email);
     return $row;
   }
 }

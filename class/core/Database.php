@@ -53,7 +53,7 @@ class Database
 
   public function getAll(string $table)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM " . $table);
+    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "`");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -74,14 +74,12 @@ class Database
 
   public function getFieldsOfTable(string $table)
   {
-    $stmt = $this->pdo->prepare("DESCRIBE " . $table);
+    $stmt = $this->pdo->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
     $stmt->execute();
     $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $fields = [];
     for ($i = 0; $i < count($raw); $i++) {
-      array_push($fields, array_filter($raw[$i], function ($key) {
-        return $key == 'Field';
-      }, ARRAY_FILTER_USE_KEY)["Field"]);
+      array_push($fields, $raw[$i]["COLUMN_NAME"]);
     }
     return $fields;
   }

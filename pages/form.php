@@ -31,7 +31,7 @@ if (count($_POST) != 0) {
 </head>
 
 <body>
-  <main class="user-form__container">
+  <main class="form__container">
 
     <?php
     if (isset($_GET["uid"]) && is_numeric($_GET["uid"]) && $_GET["uid"] != 0) {
@@ -45,7 +45,7 @@ if (count($_POST) != 0) {
     <?php  } else { ?>
 
       <h1>Création d'un nouvel utilisateur</h1>
-      <?= $form->getEmptyUserForm(); ?>
+      <?= $form->getEmptyUserForm(['user_id', 'user_picture', 'user_ip', 'user_device', 'user_browser', 'user_language_id', 'user_theme_id', 'user_status_id']); ?>
 
     <?php
     }

@@ -7,7 +7,7 @@ use core\Database;
 class Dashboard
 {
 
-  private $TargetTable;
+  private string $TargetTable;
   private $db;
   private $fields;
   private $data;
@@ -31,7 +31,7 @@ class Dashboard
       $this->fields = $displayableFields;
     }
 
-    if ($this->TargetTable == "user" && count($exceptions) != 0) {
+    if ($this->TargetTable == "_user") {
       $this->displayNames = [
         "user_id" => "ID",
         "user_name" => "Prénom",
@@ -42,11 +42,20 @@ class Dashboard
         "user_ip" => "Adresse IP",
         "user_device" => "OS",
         "user_browser" => "Navigateur",
-        "langue_id" => "Langue",
-        "theme_id" => "Thème",
-        "statut_id" => "Etat",
-        "situation_id" => "Situation",
-        "role_id" => "Rôle"
+        "user_language_id" => "Langue",
+        "user_theme_id" => "Thème",
+        "user_status_id" => "Etat",
+        "user_situation_id" => "Situation",
+        "user_role_id" => "Rôle"
+      ];
+    }
+    if ($this->TargetTable == "group") {
+      $this->displayNames = [
+        "group_id" => "ID",
+        "group_name" => "Nom",
+        "group_last_message" => "Dernier message",
+        "group_state_id" => "Etat",
+        "group_type_id" => "Type"
       ];
     }
   }
@@ -88,19 +97,20 @@ class Dashboard
   {
     $row = "<tr>";
     foreach ($dataField as $key => $value) {
-      if ($this->TargetTable == "user") $userId = $dataField["user_id"];
+      if ($this->TargetTable == "_user") $id = $dataField["user_id"];
+      if ($this->TargetTable == "group") $id = $dataField["group_id"];
       if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
     }
-    $row .= $this->getManageButtons($userId);
+    $row .= $this->getManageButtons($id);
     $row .= "</tr>";
     return $row;
   }
 
 
-  private function getManageButtons($userId)
+  private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?uid=" . $userId . "'> <i class='fa-solid fa-pen'></i></a> </td>";
-    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $userId . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?uid=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }
 }

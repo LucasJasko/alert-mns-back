@@ -7,7 +7,7 @@ Autoloader::autoload();
 use core\Dashboard;
 use core\NavBar;
 
-$dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "user_browser"]);
+$dashboard = new Dashboard("_user", ["user_password", "user_ip", "user_device", "user_browser"]);
 ?>
 
 
@@ -44,6 +44,7 @@ $dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "
 
   <input type="text" class="target" value="Utilisateurs" hidden>
   <script src="../script.js"></script>
+  <script src="./script.js"></script>
 
 </body>
 
