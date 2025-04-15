@@ -143,6 +143,7 @@ h2 {
   border: 1px solid rgb(41, 155, 41);
   transition: 0.2s ease;
   text-decoration: none;
+  font-size: 1rem;
 }
 
 .add-button {

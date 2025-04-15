@@ -43,7 +43,7 @@ class Dashboard
         "user_device" => "OS",
         "user_browser" => "Navigateur",
         "langue_id" => "Langue",
-        "theme_id" => "N° thème",
+        "theme_id" => "Thème",
         "statut_id" => "Etat",
         "situation_id" => "Situation",
         "role_id" => "Rôle"
@@ -99,7 +99,7 @@ class Dashboard
 
   private function getManageButtons($userId)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?id=" . $userId . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?uid=" . $userId . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $userId . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

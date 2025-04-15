@@ -4,10 +4,7 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
 Autoloader::autoload();
 
-use core\Database;
 use core\NavBar;
-
-$db = new Database();
 
 ?>
 
@@ -26,6 +23,10 @@ $db = new Database();
   <h1>Alert MNS - Tableau de bord: Gestion des groupes</h1>
 
   <?= NavBar::getNavBar() ?>
+
+  <div class="btn-container">
+    <a class="valid-button add-button" href="../form.php?gid=2">Ajouter un groupe</a>
+  </div>
 
   <input type="text" class="target" value="Groupes" hidden>
   <script src="../script.js"></script>

@@ -2,6 +2,7 @@
 
 namespace core;
 
+use controllers\GroupManager;
 use controllers\UserManager;
 use core\Database;
 
@@ -9,6 +10,9 @@ class Form
 {
 
   private array $stmt;
+  private string $table;
+  private $manager;
+  private $db;
   private array $userFieldsLabel = [
     'user_id' => "Identifiant de l'utilisateur",
     'user_name' => "Nom de l'utilisateur",
@@ -25,6 +29,11 @@ class Form
     'situation_id' => "Situation de l'utilisateur",
     'role_id' => "Rôle de l'utilisateur"
   ];
+
+  public function __construct()
+  {
+    $this->db = new Database();
+  }
 
   public function getUserForm(int $id)
   {
@@ -46,8 +55,7 @@ class Form
 
   public function getEmptyUserForm(array $except = ["user_id", 'user_picture', 'user_ip', 'user_device', 'user_browser', 'langue_id', 'theme_id', 'statut_id'])
   {
-    $db = new Database();
-    $this->stmt = $db->getFieldsOfTable("user");
+    $this->stmt = $this->db->getFieldsOfTable("user");
     $this->stmt = array_diff($this->stmt, $except);
 
     $html = '
@@ -60,9 +68,11 @@ class Form
       <br> ";
     }
     $html .= '
-        <input class="valid-button" type="submit" value="Sauvegarder les modifications">
+        <input class="valid-button" type="submit" value="Ajouter l\'utilisateur">
         </form>
         ';
     return $html;
   }
+
+  public function getGroupForm() {}
 }

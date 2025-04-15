@@ -2,4 +2,4 @@
 
 namespace models;
 
-class Department {}
+class UserDepartment {}

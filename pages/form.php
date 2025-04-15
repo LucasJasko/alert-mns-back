@@ -34,13 +34,13 @@ if (count($_POST) != 0) {
   <main class="user-form__container">
 
     <?php
-    if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
+    if (isset($_GET["uid"]) && is_numeric($_GET["uid"]) && $_GET["uid"] != 0) {
       $manager = new UserManager();
-      $data = $manager->getUser($_GET["id"]);
+      $data = $manager->getUser($_GET["uid"]);
     ?>
 
       <h1>Fiche d'information de <?= $data["user_name"] ?></h1>
-      <?= $form->getUserForm($_GET["id"]); ?>
+      <?= $form->getUserForm($_GET["uid"]); ?>
 
     <?php  } else { ?>
 
