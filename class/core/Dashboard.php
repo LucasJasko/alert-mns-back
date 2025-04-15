@@ -6,8 +6,6 @@ use core\Database;
 
 class Dashboard
 {
-
-  private string $TargetTable;
   private $db;
   private $fields;
   private $data;
@@ -16,22 +14,24 @@ class Dashboard
   private $thead;
   private $tbody;
   private $displayNames;
+  private $targetTable;
+  private $targetTableClean;
 
-  public function __construct($TargetTable, array $exceptions = [])
+  public function __construct($targetTable, array $exceptions = [])
   {
     $this->db = new Database();
-    $this->TargetTable = $TargetTable;
-    $this->fields = $this->db->getFieldsOfTable($TargetTable);
-    $this->data = $this->db->getAll($TargetTable);
-    $this->tableOpen = '<table class="dashboard">';
-    $this->tableClose = '</table>';
-
-    if (count($exceptions) != 0) {
-      $displayableFields = array_diff($this->fields, $exceptions);
-      $this->fields = $displayableFields;
-    }
-
-    if ($this->TargetTable == "_user") {
+    $this->targetTableClean = $targetTable;
+    if ($targetTable == "group") {
+      $this->targetTable = str_replace("group", "_group", $targetTable);
+      $this->displayNames = [
+        "group_id" => "ID",
+        "group_name" => "Nom",
+        "group_last_message" => "Dernier message",
+        "group_state_id" => "Etat",
+        "group_type_id" => "Type"
+      ];
+    } else if ($targetTable == "user") {
+      $this->targetTable = str_replace("user", "_user", $targetTable);
       $this->displayNames = [
         "user_id" => "ID",
         "user_name" => "Prénom",
@@ -48,15 +48,17 @@ class Dashboard
         "user_situation_id" => "Situation",
         "user_role_id" => "Rôle"
       ];
+    } else {
+      $this->targetTable = $targetTable;
     }
-    if ($this->TargetTable == "group") {
-      $this->displayNames = [
-        "group_id" => "ID",
-        "group_name" => "Nom",
-        "group_last_message" => "Dernier message",
-        "group_state_id" => "Etat",
-        "group_type_id" => "Type"
-      ];
+    $this->fields = $this->db->getFieldsOfTable($this->targetTable);
+    $this->data = $this->db->getAll($this->targetTable);
+    $this->tableOpen = '<table class="dashboard">';
+    $this->tableClose = '</table>';
+
+    if (count($exceptions) != 0) {
+      $displayableFields = array_diff($this->fields, $exceptions);
+      $this->fields = $displayableFields;
     }
   }
 
@@ -97,8 +99,7 @@ class Dashboard
   {
     $row = "<tr>";
     foreach ($dataField as $key => $value) {
-      if ($this->TargetTable == "_user") $id = $dataField["user_id"];
-      if ($this->TargetTable == "group") $id = $dataField["group_id"];
+      $id = $dataField[$this->targetTableClean . "_id"];
       if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
     }
     $row .= $this->getManageButtons($id);
@@ -109,7 +110,7 @@ class Dashboard
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?uid=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->targetTableClean . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

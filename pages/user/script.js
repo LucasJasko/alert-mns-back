@@ -1,5 +1,3 @@
-console.log(tableLines);
-
 for (let i = 0; i < tableLines.length; i++) {
   const userName = tableLines[i].querySelector(".user_name").innerHTML;
   const userSurname = tableLines[i].querySelector(".user_surname").innerHTML;

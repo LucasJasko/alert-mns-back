@@ -29,7 +29,7 @@ $dashboard = new Dashboard("group");
   <?= NavBar::getNavBar() ?>
 
   <div class="btn-container">
-    <a class="valid-button add-button" href="../form.php?type=group">Ajouter un groupe</a>
+    <a class="valid-button add-button" href="../form.php?form_type=group">Ajouter un groupe</a>
   </div>
 
   <main class="main-container">
