@@ -4,7 +4,7 @@ const tableLines = document.querySelectorAll(".dashboard tbody tr");
 
 // Affichage du tableau modulo
 for (let i = 0; i < tableLines.length; i++) {
-  if (i % 2 == 0) tableLines[i].style.backgroundColor = "rgb(215, 215, 215)";
+  if (i % 2 == 0) tableLines[i].style.backgroundColor = "rgb(215, 225, 215)";
 }
 
 // Affichage de la navigation
