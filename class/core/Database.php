@@ -70,7 +70,14 @@ class Database
 
   public function getAll(string $table)
   {
-    $id = str_replace("_", "", $table) . "_id";
+    if ($table == "_group") {
+      $fieldTable = str_replace("_group", "group", $table);
+    } else if ($table == "_user") {
+      $fieldTable = str_replace("_user", "user", $table);
+    } else {
+      $fieldTable = $table;
+    }
+    $id = $fieldTable . "_id";
     $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` ORDER BY " . $id . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

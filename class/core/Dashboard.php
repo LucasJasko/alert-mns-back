@@ -15,12 +15,13 @@ class Dashboard
   private $tbody;
   private $displayNames;
   private $targetTable;
-  private $targetTableClean;
+  private $fieldTable;
 
   public function __construct($targetTable, array $exceptions = [])
   {
     $this->db = new Database();
-    $this->targetTableClean = $targetTable;
+    $this->targetTable = $targetTable;
+    $this->fieldTable = $targetTable;
     if ($targetTable == "group") {
       $this->targetTable = str_replace("group", "_group", $targetTable);
       $this->displayNames = [
@@ -30,7 +31,8 @@ class Dashboard
         "group_state_id" => "Etat",
         "group_type_id" => "Type"
       ];
-    } else if ($targetTable == "user") {
+    }
+    if ($targetTable == "user") {
       $this->targetTable = str_replace("user", "_user", $targetTable);
       $this->displayNames = [
         "user_id" => "ID",
@@ -46,11 +48,57 @@ class Dashboard
         "user_theme_id" => "Thème",
         "user_status_id" => "Etat",
         "user_situation_id" => "Situation",
+        "user_department_id" => "Département",
         "user_role_id" => "Rôle"
       ];
-    } else {
-      $this->targetTable = $targetTable;
     }
+    if ($targetTable == "user_theme") {
+      $this->displayNames = [
+        "user_theme_id" => "ID",
+        "user_theme_name" => "Nom",
+        "user_theme_color1" => "Couleur 1",
+        "user_theme_color2" => "Couleur 2",
+        "user_theme_color3" => "Couleur 3",
+        "user_theme_color4" => "Couleur 4",
+      ];
+    }
+
+    if ($targetTable == "user_language") {
+      $this->displayNames = [
+        "user_language_id" => "ID",
+        "user_language_name" => "Nom",
+      ];
+    }
+
+    if ($targetTable == "user_role") {
+      $this->displayNames = [
+        "user_role_id" => "ID",
+        "user_role_name" => "Nom",
+      ];
+    }
+
+    if ($targetTable == "user_status") {
+      $this->displayNames = [
+        "user_status_id" => "ID",
+        "user_status_name" => "Nom",
+      ];
+    }
+
+    if ($targetTable == "user_situation") {
+      $this->displayNames = [
+        "user_situation_id" => "ID",
+        "user_situation_name" => "Nom",
+        "user_department_id" => "Département",
+      ];
+    }
+
+    if ($targetTable == "user_department") {
+      $this->displayNames = [
+        "user_department_id" => "ID",
+        "user_department_name" => "Nom",
+      ];
+    }
+
     $this->fields = $this->db->getFieldsOfTable($this->targetTable);
     $this->data = $this->db->getAll($this->targetTable);
     $this->tableOpen = '<table class="dashboard">';
@@ -66,6 +114,7 @@ class Dashboard
   {
     return $this->tableOpen;
   }
+
   public function closeTable()
   {
     return $this->tableClose;
@@ -76,6 +125,7 @@ class Dashboard
     $this->thead = "<thead>" . $this->displayFields($this->fields) . "</thead>";
     return $this->thead;
   }
+
   private function displayFields($fields)
   {
     $selectedFields = "";
@@ -99,7 +149,7 @@ class Dashboard
   {
     $row = "<tr>";
     foreach ($dataField as $key => $value) {
-      $id = $dataField[$this->targetTableClean . "_id"];
+      $id = $dataField[$this->fieldTable . "_id"];
       if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
     }
     $row .= $this->getManageButtons($id);
@@ -110,7 +160,7 @@ class Dashboard
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->targetTableClean . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->fieldTable . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

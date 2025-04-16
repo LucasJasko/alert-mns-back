@@ -31,6 +31,7 @@ class Form
     'user_theme_id' => "Thème de préférence de l'utilisateur",
     'user_status_id' => "Statut de préférence de l'utilisateur",
     'user_situation_id' => "Situation de l'utilisateur",
+    'user_department_id' => "Département de l'utilisateur",
     'user_role_id' => "Rôle de l'utilisateur"
   ];
   private array $groupFieldsLabel =  [

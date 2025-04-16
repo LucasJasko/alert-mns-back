@@ -28,11 +28,11 @@ $dashboard = new Dashboard("group");
 
   <?= NavBar::getNavBar() ?>
 
-  <div class="btn-container">
-    <a class="valid-button add-button" href="../form.php?form_type=group">Ajouter un groupe</a>
-  </div>
 
   <main class="main-container">
+    <div class="btn-container">
+      <a class="valid-button add-button" href="../form.php?form_type=group">Ajouter un groupe</a>
+    </div>
 
     <?= $dashboard->openTable() ?>
     <?= $dashboard->getTHead() ?>

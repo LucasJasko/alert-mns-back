@@ -28,11 +28,11 @@ $dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "
 
   <?= NavBar::getNavBar() ?>
 
-  <div class="btn-container">
-    <a class="valid-button add-button" href="../form.php?form_type=user">Ajouter un utilisateur</a>
-  </div>
 
   <main class="main-container">
+    <div class="btn-container">
+      <a class="valid-button add-button" href="../form.php?form_type=user">Ajouter un utilisateur</a>
+    </div>
 
     <?= $dashboard->openTable() ?>
     <?= $dashboard->getTHead() ?>
