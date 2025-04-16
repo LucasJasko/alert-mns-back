@@ -1,7 +1,6 @@
 <?php
 
-use \class\Autoloader;
-use \class\core\Auth;
+use core\Auth;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/include/clientAccess.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
