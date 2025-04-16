@@ -7,13 +7,15 @@ use core\Database;
 class Form
 {
 
-  private array $stmt;
   private string $targetTable;
   private string $targetTableClean;
-  private $manager;
-  private $pageTitle;
-  private $db;
+  private array $stmt;
   private array $fieldsLabel;
+  private $manager;
+  private $db;
+
+  private static string $staticTargetTableClean;
+  private static $staticManager;
 
   private array $userFieldsLabel = [
     'user_id' => "Identifiant de l'utilisateur",
@@ -76,7 +78,6 @@ class Form
       $this->stmt = $newStmt;
     }
     if ($id == 0) {
-
       $this->stmt = $this->db->getFieldsOfTable($this->targetTable);
       $this->stmt = array_values(array_diff($this->stmt, $except));
     }
@@ -86,24 +87,31 @@ class Form
       <a class="return-link" href="./' . $this->targetTableClean . '/index.php"><i class="fa-solid fa-arrow-left"></i></a>
       ';
     foreach ($this->stmt as $key => $value) {
+      if ($id == 0) $key = $value;
       $html .= "<label for=" . $key . ">" . ($id != 0 ? $this->fieldsLabel[$key] : $this->fieldsLabel[$value]) . ":</label>
       <input type='text' placeholder='Un champ ici' name=" . $key . " id=" . $key . ($id != 0 ? " value=" . $value : "") . ">
       <br> ";
     }
+    $html .= '<input class="table" type="text" name="target_table" value="' . $this->targetTableClean . '" hidden>';
     $html .= '<input class="valid-button" type="submit" value="Sauvegarder les modifications">
       </form>';
     return $html;
   }
 
-  public function submitData()
+  public static function submitData(array $data)
   {
-    if (isset($_POST["user_id"])) {
-      $method = "update" . ucfirst($this->targetTable);
-      $this->manager->$method($_POST["user_id"], $_POST);
-      header("Location:/pages/user/index.php");
+    self::$staticTargetTableClean = $data["target_table"];
+    array_pop($data);
+    $manager = "controllers\\" . ucfirst(self::$staticTargetTableClean) . "Manager";
+    self::$staticManager = new $manager();
+
+    if (isset($_POST[self::$staticTargetTableClean . "_id"])) {
+      $method = "update" . ucfirst(self::$staticTargetTableClean);
+      self::$staticManager->$method($_POST[self::$staticTargetTableClean . "_id"], $data);
     } else {
-      $method = "create" . ucfirst($this->targetTable);
-      $this->manager->createUser($_POST);
+      $method = "create" . ucfirst(self::$staticTargetTableClean);
+      self::$staticManager->$method($data);
     }
+    header("Location:/pages/" . self::$staticTargetTableClean . "/index.php");
   }
 }

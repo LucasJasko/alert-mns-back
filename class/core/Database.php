@@ -51,9 +51,27 @@ class Database
     $stmt->execute();
   }
 
+  public function updateOne(string $table, array $data, string $param, int $id)
+  {
+    $sql = "UPDATE " . $table . " SET ";
+    foreach ($data as $key => $value) {
+      $sql .= $key . " = :" . $key . ", ";
+    }
+    $sql .= "WHERE " . $param . " = :" . $param;
+    $sql = str_replace(", WHERE", " WHERE", $sql);
+
+    $stmt = $this->pdo->prepare($sql);
+    foreach ($data as $key => $value) {
+      $stmt->bindValue(":" . $key, $value);
+    }
+    $stmt->bindValue(":" . $param, $id);
+    $stmt->execute();
+  }
+
   public function getAll(string $table)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "`");
+    $id = str_replace("_", "", $table) . "_id";
+    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` ORDER BY " . $id . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -84,22 +102,6 @@ class Database
     return $fields;
   }
 
-  public function updateOne(string $table, array $data, string $param, int $id)
-  {
-    $sql = "UPDATE " . $table . " SET ";
-    foreach ($data as $key => $value) {
-      $sql .= $key . " = :" . $key . ", ";
-    }
-    $sql .= "WHERE " . $param . " = :" . $param;
-    $sql = str_replace(", WHERE", " WHERE", $sql);
-
-    $stmt = $this->pdo->prepare($sql);
-    foreach ($data as $key => $value) {
-      $stmt->bindValue(":" . $key, $value);
-    }
-    $stmt->bindValue(":" . $param, $id);
-    $stmt->execute();
-  }
 
   public function deleteOne(string $table, string $field, int $param)
   {
