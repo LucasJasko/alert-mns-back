@@ -5,12 +5,11 @@ Autoloader::autoload();
 
 use core\Form;
 
-if (isset($_GET["form_type"])) {
-  var_dump($_GET["form_type"]);
-  $form = new Form($_GET["form_type"]);
-  $managerName = "controllers\\" . ucfirst($_GET["form_type"]) . "Manager";
+if (isset($_GET["form_type"]) && isset($_GET["class_name"])) {
+  $form = new Form($_GET["form_type"],  $_GET["class_name"]);
+  $managerName = "controllers\\" .  $_GET["class_name"] . "Manager";
   $manager = new $managerName();
-  $method = "get" . ucfirst($_GET["form_type"]);
+  $method = "get" . $_GET["class_name"];
 ?>
 
   <!DOCTYPE html>
@@ -29,36 +28,61 @@ if (isset($_GET["form_type"])) {
 
       <?php
 
-      if ($_GET["form_type"] == "user") {
-        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
-          $data = $manager->$method($_GET["id"]); ?>
+      switch ($_GET["form_type"]) {
 
-          <h1>Fiche d'information de <?= $data["user_name"] ?></h1>
-          <?= $form->getForm($_GET["id"], ['user_picture', 'user_ip', 'user_device', 'user_browser', 'user_language_id', 'user_theme_id', 'user_status_id']); ?>
+        case "user":
+          if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
+            $data = $manager->$method($_GET["id"]); ?>
 
-        <?php } else { ?>
+            <h1>Fiche d'information de <?= $data["user_name"] ?></h1>
+          <?= $form->getForm($_GET["id"], ['user_picture', 'user_ip', 'user_device', 'user_browser', 'user_language_id', 'user_theme_id', 'user_status_id']);
+          } else { ?>
 
-          <h1>Création d'un nouvel utilisateur</h1>
-          <?= $form->getForm(0, ['user_id', 'user_picture', 'user_ip', 'user_device', 'user_browser', 'user_language_id', 'user_theme_id', 'user_status_id']); ?>
+            <h1>Création d'un nouvel utilisateur</h1>
+            <?= $form->getForm(0, ['user_id', 'user_picture', 'user_ip', 'user_device', 'user_browser', 'user_language_id', 'user_theme_id', 'user_status_id']); ?>
 
-        <?php
-        }
+          <?php
+          }
+          break;
+
+        case "group":
+          if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
+            $data = $manager->$method($_GET["id"]); ?>
+
+            <h1>Fiche d'information du groupe <?= $data["group_name"] ?></h1>
+          <?= $form->getForm($_GET["id"]);
+          } else { ?>
+            <h1>Création d'un nouveau groupe</h1>
+          <?= $form->getForm(0, ["group_id", "group_last_message"]);
+          }
+          break;
+
+        case "user_department":
+          if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
+            $data = $manager->$method($_GET["id"]); ?>
+
+            <h1>Fiche d'information du département <?= $data["user_department_name"] ?></h1>
+          <?= $form->getForm($_GET["id"]);
+          } else { ?>
+            <h1>Création d'un nouveau groupe</h1>
+          <?= $form->getForm(0, ["user_department_id"]);
+          }
+          break;
+
+        case "user_situation":
+          if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
+            $data = $manager->$method($_GET["id"]); ?>
+
+            <h1>Modification de la situation <?= $data["user_situation_name"] ?></h1>
+          <?= $form->getForm($_GET["id"]);
+          } else { ?>
+            <h1>Ajout d'une nouvelle situation</h1>
+            <?= $form->getForm(0, ["user_situation_id"]); ?>
+      <?php
+          }
+          break;
       }
-
-      if ($_GET["form_type"] == "group") {
-        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_GET["id"] != 0) {
-          $data = $manager->$method($_GET["id"]); ?>
-
-          <h1>Fiche d'information du groupe <?= $data["group_name"] ?></h1>
-          <?= $form->getForm($_GET["id"]); ?>
-
-        <?php } else { ?>
-
-          <h1>Création d'un nouveau groupe</h1>
-          <?= $form->getForm(0, ["group_id", "group_last_message"]); ?>
-
-      <?php }
-      } ?>
+      ?>
 
     </main>
   </body>
