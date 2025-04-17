@@ -13,91 +13,79 @@ class Dashboard
   private $tableClose;
   private $thead;
   private $tbody;
-  private $displayNames;
   private $targetTable;
   private $fieldTable;
+  private string $className;
+  private array $fieldsName;
 
-  public function __construct($targetTable, array $exceptions = [])
+  private array $groupFieldsName = [
+    "group_id" => "ID",
+    "group_name" => "Nom",
+    "group_last_message" => "Dernier message",
+    "group_state_id" => "Etat",
+    "group_type_id" => "Type"
+  ];
+  private array $userFieldsName = [
+    "user_id" => "ID",
+    "user_name" => "Prénom",
+    "user_surname" => "Nom",
+    "user_mail" => "Mail",
+    "user_password" => "Mot de passe",
+    "user_picture" => "Photo de profil",
+    "user_ip" => "Adresse IP",
+    "user_device" => "OS",
+    "user_browser" => "Navigateur",
+    "user_language_id" => "Langue",
+    "user_theme_id" => "Thème",
+    "user_status_id" => "Etat",
+    "user_situation_id" => "Situation",
+    "user_department_id" => "Département",
+    "user_role_id" => "Rôle"
+  ];
+  private array $userThemeFieldsName = [
+    "user_theme_id" => "ID",
+    "user_theme_name" => "Nom",
+    "user_theme_color1" => "Couleur 1",
+    "user_theme_color2" => "Couleur 2",
+    "user_theme_color3" => "Couleur 3",
+    "user_theme_color4" => "Couleur 4",
+  ];
+  private array $userLanguageFieldsName = [
+    "user_language_id" => "ID",
+    "user_language_name" => "Nom",
+  ];
+  private array $userRoleFieldsName = [
+    "user_role_id" => "ID",
+    "user_role_name" => "Nom",
+  ];
+  private array $userStatusFieldsName = [
+    "user_status_id" => "ID",
+    "user_status_name" => "Nom",
+  ];
+  private array $userSituationFieldsName = [
+    "user_situation_id" => "ID",
+    "user_situation_name" => "Nom",
+    "user_department_id" => "Département",
+  ];
+  private array $userDepartmentFieldsName = [
+    "user_department_id" => "ID",
+    "user_department_name" => "Nom",
+  ];
+
+  public function __construct($targetTable, string $className = "", array $exceptions = [])
   {
     $this->db = new Database();
     $this->targetTable = $targetTable;
     $this->fieldTable = $targetTable;
+    $this->className = $className;
     if ($targetTable == "group") {
       $this->targetTable = str_replace("group", "_group", $targetTable);
-      $this->displayNames = [
-        "group_id" => "ID",
-        "group_name" => "Nom",
-        "group_last_message" => "Dernier message",
-        "group_state_id" => "Etat",
-        "group_type_id" => "Type"
-      ];
     }
     if ($targetTable == "user") {
       $this->targetTable = str_replace("user", "_user", $targetTable);
-      $this->displayNames = [
-        "user_id" => "ID",
-        "user_name" => "Prénom",
-        "user_surname" => "Nom",
-        "user_mail" => "Mail",
-        "user_password" => "Mot de passe",
-        "user_picture" => "Photo de profil",
-        "user_ip" => "Adresse IP",
-        "user_device" => "OS",
-        "user_browser" => "Navigateur",
-        "user_language_id" => "Langue",
-        "user_theme_id" => "Thème",
-        "user_status_id" => "Etat",
-        "user_situation_id" => "Situation",
-        "user_department_id" => "Département",
-        "user_role_id" => "Rôle"
-      ];
     }
-    if ($targetTable == "user_theme") {
-      $this->displayNames = [
-        "user_theme_id" => "ID",
-        "user_theme_name" => "Nom",
-        "user_theme_color1" => "Couleur 1",
-        "user_theme_color2" => "Couleur 2",
-        "user_theme_color3" => "Couleur 3",
-        "user_theme_color4" => "Couleur 4",
-      ];
-    }
-
-    if ($targetTable == "user_language") {
-      $this->displayNames = [
-        "user_language_id" => "ID",
-        "user_language_name" => "Nom",
-      ];
-    }
-
-    if ($targetTable == "user_role") {
-      $this->displayNames = [
-        "user_role_id" => "ID",
-        "user_role_name" => "Nom",
-      ];
-    }
-
-    if ($targetTable == "user_status") {
-      $this->displayNames = [
-        "user_status_id" => "ID",
-        "user_status_name" => "Nom",
-      ];
-    }
-
-    if ($targetTable == "user_situation") {
-      $this->displayNames = [
-        "user_situation_id" => "ID",
-        "user_situation_name" => "Nom",
-        "user_department_id" => "Département",
-      ];
-    }
-
-    if ($targetTable == "user_department") {
-      $this->displayNames = [
-        "user_department_id" => "ID",
-        "user_department_name" => "Nom",
-      ];
-    }
+    $fieldsName = lcfirst($this->className) . "FieldsName";
+    $this->fieldsName = $this->$fieldsName;
 
     $this->fields = $this->db->getFieldsOfTable($this->targetTable);
     $this->data = $this->db->getAll($this->targetTable);
@@ -130,7 +118,7 @@ class Dashboard
   {
     $selectedFields = "";
     foreach ($fields as $field) {
-      if (isset($field)) ($selectedFields .= "<th>" . $this->displayNames[$field] . "</th>");
+      if (isset($field)) ($selectedFields .= "<th>" . $this->fieldsName[$field] . "</th>");
     }
     return $selectedFields;
   }
@@ -160,7 +148,7 @@ class Dashboard
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->fieldTable . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->fieldTable . "&class_name=" . $this->className . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

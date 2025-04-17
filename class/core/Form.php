@@ -8,14 +8,18 @@ class Form
 {
 
   private string $targetTable;
-  private string $targetTableClean;
+  private string $className;
+  private string $targetReturnPage;
   private array $stmt;
   private array $fieldsLabel;
   private $manager;
   private $db;
 
-  private static string $staticTargetTableClean;
   private static $staticManager;
+  private static string $staticTargetTable;
+  private static string $staticClassName;
+  private static string $staticFieldName;
+  private static string $staticRedirectPage;
 
   private array $userFieldsLabel = [
     'user_id' => "Identifiant de l'utilisateur",
@@ -41,21 +45,32 @@ class Form
     "group_state_id" => "Etat du groupe",
     "group_type_id" => "Type de groupe"
   ];
+  private array $userSituationFieldsLabel =  [
+    "user_situation_id" => "Identifiant de la situation",
+    "user_situation_name" => "Nom de la situation"
+  ];
+  private array $userDepartmentFieldsLabel =  [
+    "user_department_id" => "Identifiant du département",
+    "user_department_name" => "Nom du département"
+  ];
 
-  public function __construct(string $targetTable)
+  public function __construct(string $targetTable, string $className = "")
   {
     $this->db = new Database();
-    $this->targetTableClean = $targetTable;
+    $this->targetTable = $targetTable;
+    $this->className = $className;
     if ($targetTable == "group") {
+      $this->targetReturnPage = $targetTable;
       $this->targetTable = str_replace("group", "_group", $targetTable);
     } else if ($targetTable == "user") {
+      $this->targetReturnPage = $targetTable;
       $this->targetTable = str_replace("user", "_user", $targetTable);
     } else {
-      $this->targetTable = $targetTable;
+      $this->targetReturnPage = "params";
     }
-    $managerName = "controllers\\" . ucfirst($this->targetTableClean) . "Manager";
+    $managerName = "controllers\\" . $this->className . "Manager";
     $this->manager = new $managerName();
-    $labels = $this->targetTableClean . "FieldsLabel";
+    $labels = lcfirst($this->className) . "FieldsLabel";
     $this->fieldsLabel = $this->$labels;
   }
 
@@ -63,7 +78,7 @@ class Form
   {
     if ($id != 0) {
 
-      $getTable = "get" . ucfirst($this->targetTableClean);
+      $getTable = "get" . $this->className;
       $this->stmt = $this->manager->$getTable($id);
 
       $exceptFilled = [];
@@ -85,7 +100,7 @@ class Form
 
     $html = '
       <form class="form" action="form.php" method="post">
-      <a class="return-link" href="./' . $this->targetTableClean . '/index.php"><i class="fa-solid fa-arrow-left"></i></a>
+      <a class="return-link" href="./' . $this->targetReturnPage . '/index.php"><i class="fa-solid fa-arrow-left"></i></a>
       ';
     foreach ($this->stmt as $key => $value) {
       if ($id == 0) $key = $value;
@@ -93,7 +108,8 @@ class Form
       <input type='text' placeholder='Un champ ici' name=" . $key . " id=" . $key . ($id != 0 ? " value=" . $value : "") . ">
       <br> ";
     }
-    $html .= '<input class="table" type="text" name="target_table" value="' . $this->targetTableClean . '" hidden>';
+    $html .= '<input class="table" type="text" name="target_table" value="' . $this->targetTable . '" hidden>';
+    $html .= '<input class="table" type="text" name="class_name" value="' . $this->className . '" hidden>';
     $html .= '<input class="valid-button" type="submit" value="Sauvegarder les modifications">
       </form>';
     return $html;
@@ -101,18 +117,31 @@ class Form
 
   public static function submitData(array $data)
   {
-    self::$staticTargetTableClean = $data["target_table"];
+    self::$staticTargetTable = $data["target_table"];
+    self::$staticClassName = $data["class_name"];
+    self::$staticRedirectPage = lcfirst(self::$staticClassName);
     array_pop($data);
-    $manager = "controllers\\" . ucfirst(self::$staticTargetTableClean) . "Manager";
+    array_pop($data);
+    if (self::$staticTargetTable == "_user") {
+      self::$staticFieldName = str_replace("_user", "user", self::$staticTargetTable);
+    } else if (self::$staticTargetTable == "_group") {
+      self::$staticFieldName = str_replace("_group", "group", self::$staticTargetTable);
+    } else {
+      self::$staticFieldName = self::$staticTargetTable;
+      self::$staticRedirectPage = "params";
+    }
+
+    $manager = "controllers\\" . self::$staticClassName . "Manager";
     self::$staticManager = new $manager();
 
-    if (isset($_POST[self::$staticTargetTableClean . "_id"])) {
-      $method = "update" . ucfirst(self::$staticTargetTableClean);
-      self::$staticManager->$method($_POST[self::$staticTargetTableClean . "_id"], $data);
+    if (isset($data[self::$staticFieldName . "_id"])) {
+      $method = "update" . self::$staticClassName;
+      self::$staticManager->$method($data[self::$staticFieldName . "_id"], $data);
     } else {
-      $method = "create" . ucfirst(self::$staticTargetTableClean);
+      var_dump("here");
+      $method = "create" . self::$staticClassName;
       self::$staticManager->$method($data);
     }
-    header("Location:/pages/" . self::$staticTargetTableClean . "/index.php");
+    header("Location:/pages/" . self::$staticRedirectPage . "/index.php");
   }
 }
