@@ -110,7 +110,7 @@ class Form
     }
     $html .= '<input class="table" type="text" name="target_table" value="' . $this->targetTable . '" hidden>';
     $html .= '<input class="table" type="text" name="class_name" value="' . $this->className . '" hidden>';
-    $html .= '<input class="valid-button" type="submit" value="Sauvegarder les modifications">
+    $html .= '<input class="valid-button" type="submit" value="' . ($id != 0 ? "Sauvegarder les modifications" : "Enregistrer") . '">
       </form>';
     return $html;
   }

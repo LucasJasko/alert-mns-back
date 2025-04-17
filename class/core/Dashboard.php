@@ -135,7 +135,7 @@ class Dashboard
 
   public function getRow($dataField)
   {
-    $row = "<tr>";
+    $row = "<tr class=\"" . $this->targetTable . " " . $this->className . "\">";
     foreach ($dataField as $key => $value) {
       $id = $dataField[$this->fieldTable . "_id"];
       if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";

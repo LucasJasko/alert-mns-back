@@ -1,11 +1,8 @@
-const paramWindows = document.querySelectorAll(".param-window");
-for (let i = 0; i < paramWindows.length; i++) {
-  console.log(paramWindows[i].classList[1]);
-}
-
 for (let i = 0; i < tableLines.length; i++) {
   const lineId = tableLines[i].children[0].innerHTML;
   const lineName = tableLines[i].children[1].innerHTML;
+  const tableName = tableLines[i].classList[0];
+  const className = tableLines[i].classList[1];
 
   const deleteIcon = tableLines[i].querySelector(".btn__delete");
 
@@ -20,7 +17,7 @@ for (let i = 0; i < tableLines.length; i++) {
         <p class="delete-window__warning-text">Attention: Cette action est irréversible !</p>
         <div class="delete-window__btn-container">
           <button class="delete-window__btn-cancel valid-button">Annuler</button>
-          <a class="delete-window__delete-link" href="../delete.php?form_type=qqchs&class_name=Qqchs&id=${lineId}">Supprimer</a>
+          <a class="delete-window__delete-link" href="../delete.php?form_type=${tableName}&class_name=${className}&id=${lineId}">Supprimer</a>
     </div>
   `;
     wrapper.classList.add("delete-window");
