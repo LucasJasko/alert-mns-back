@@ -7,7 +7,7 @@ Autoloader::autoload();
 use core\Dashboard;
 use core\NavBar;
 
-$dashboard = new Dashboard("group");
+$dashboard = new Dashboard("group", "Group");
 
 ?>
 
@@ -31,7 +31,7 @@ $dashboard = new Dashboard("group");
 
   <main class="main-container">
     <div class="btn-container">
-      <a class="valid-button add-button" href="../form.php?form_type=group">Ajouter un groupe</a>
+      <a class="valid-button add-button" href="../form.php?form_type=group&class_name=Group">Ajouter un groupe</a>
     </div>
 
     <?= $dashboard->openTable() ?>

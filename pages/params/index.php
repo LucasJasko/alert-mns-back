@@ -9,12 +9,12 @@ use core\NavBar;
 $db = new Database();
 
 $displayedTables = [
-  "user_situation" => ["user_situation", "Situations des utilisateurs", "une situation", "situation"],
-  "user_department" => ["user_department", "Départements de l'entreprise", "un département", "language"],
-  "user_theme" => ["user_theme", "Thèmes de l'application", "un thème", "theme"],
-  "user_status" => ["user_status", "Statuts d'activité", "un statut", "status"],
-  "user_role" => ["user_role", "Rôles d'utilisateurs", "un role", "role"],
-  "user_language" => ["user_language", "Langues de l'application", "une langue", "language"],
+  "user_situation" => ["user_situation", "Situations des utilisateurs", "une situation", "UserSituation"],
+  "user_department" => ["user_department", "Départements de l'entreprise", "un département", "UserDepartment"],
+  "user_theme" => ["user_theme", "Thèmes de l'application", "un thème", "UserTheme"],
+  "user_status" => ["user_status", "Statuts d'activité", "un statut", "UserStatus"],
+  "user_role" => ["user_role", "Rôles d'utilisateurs", "un role", "UserRole"],
+  "user_language" => ["user_language", "Langues de l'application", "une langue", "UserLanguage"],
 ]
 ?>
 
@@ -42,12 +42,12 @@ $displayedTables = [
       <?php
       foreach ($displayedTables as $table) {
       ?>
-        <div class="param-window param-window_<?= $table[0] ?>">
+        <div class="param-window <?= $table[0] ?>">
           <h2 class="param-title"><?= $table[1] ?></h2>
           <div class="btn-container">
-            <a class="valid-button add-button" href="../form.php?form_type=<?= $table[3] ?>">Ajouter <?= $table[2] ?></a>
+            <a class="valid-button add-button" href="../form.php?form_type=<?= $table[0] ?>&class_name=<?= $table[3] ?>">Ajouter <?= $table[2] ?></a>
           </div>
-          <?php $dashboard = new Dashboard($table[0]) ?>
+          <?php $dashboard = new Dashboard($table[0], $table[3]) ?>
           <?= $dashboard->openTable() ?>
           <?= $dashboard->getTHead() ?>
           <?= $dashboard->getTBody() ?>
@@ -57,10 +57,12 @@ $displayedTables = [
 
     </div>
 
+    <div class="delete-container"></div>
   </main>
 
   <input type="text" class="target" value="Paramétrages" hidden>
   <script src="../script.js"></script>
+  <script src="./script.js"></script>
 </body>
 
 </html>

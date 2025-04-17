@@ -7,7 +7,7 @@ Autoloader::autoload();
 use core\Dashboard;
 use core\NavBar;
 
-$dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "user_browser"]);
+$dashboard = new Dashboard("user", "User", ["user_password", "user_ip", "user_device", "user_browser"]);
 ?>
 
 
@@ -31,7 +31,7 @@ $dashboard = new Dashboard("user", ["user_password", "user_ip", "user_device", "
 
   <main class="main-container">
     <div class="btn-container">
-      <a class="valid-button add-button" href="../form.php?form_type=user">Ajouter un utilisateur</a>
+      <a class="valid-button add-button" href="../form.php?form_type=user&class_name=User">Ajouter un utilisateur</a>
     </div>
 
     <?= $dashboard->openTable() ?>
