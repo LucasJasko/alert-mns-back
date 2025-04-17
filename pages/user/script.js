@@ -13,7 +13,7 @@ for (let i = 0; i < tableLines.length; i++) {
         <p class="delete-window__warning-text">Attention: Cette action est irréversible !</p>
         <div class="delete-window__btn-container">
           <button class="delete-window__btn-cancel valid-button">Annuler</button>
-          <a class="delete-window__delete-link" href="../delete.php?form_type=user&id=${userId}">Supprimer l'utilisateur</a>
+          <a class="delete-window__delete-link" href="../delete.php?form_type=user&class_name=User&id=${userId}">Supprimer l'utilisateur</a>
     </div>
   `;
     wrapper.classList.add("delete-window");

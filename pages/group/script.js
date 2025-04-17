@@ -12,16 +12,10 @@ for (let i = 0; i < tableLines.length; i++) {
         <p class="delete-window__warning-text">Attention: Cette action est irréversible ! Tous les messages associés à ce groupe seront perdus !</p>
         <div class="delete-window__btn-container">
           <button class="delete-window__btn-cancel valid-button">Annuler</button>
-          <a class="delete-window__delete-link" href="../delete.php?form_type=group&id=${groupId}">Supprimer le groupe</a>
+          <a class="delete-window__delete-link" href="../delete.php?form_type=group&class_name=Group&id=${groupId}">Supprimer le groupe</a>
     </div>
   `;
     wrapper.classList.add("delete-window");
     contextWindow.appendChild(wrapper);
-
-    const cancelBtn = document.querySelector(".delete-window__btn-cancel");
-    cancelBtn.addEventListener("click", () => {
-      contextWindow.innerHTML = "";
-      contextWindow.classList.remove("delete-active");
-    });
   });
 }
