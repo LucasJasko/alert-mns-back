@@ -53,6 +53,26 @@ class Form
     "user_department_id" => "Identifiant du département",
     "user_department_name" => "Nom du département"
   ];
+  private array $userStatusFieldsLabel =  [
+    "user_status_id" => "Identifiant du statut",
+    "user_status_name" => "Description du statut"
+  ];
+  private array $userRoleFieldsLabel =  [
+    "user_role_id" => "Identifiant du rôle",
+    "user_role_name" => "Description du rôle"
+  ];
+  private array $userLanguageFieldsLabel =  [
+    "user_language_id" => "Identifiant de la langue",
+    "user_language_name" => "Nom de la langue"
+  ];
+  private array $userThemeFieldsLabel =  [
+    "user_theme_id" => "Identifiant du thème",
+    "user_theme_name" => "Nom du thème",
+    "user_theme_color_1" => "Couleur 1 (format hexadécimal, ex: #AAABB111)",
+    "user_theme_color_2" => "Couleur 2 (format hexadécimal, ex: #AAABB111)",
+    "user_theme_color_3" => "Couleur 3 (format hexadécimal, ex: #AAABB111)",
+    "user_theme_color_4" => "Couleur 4 (format hexadécimal, ex: #AAABB111)"
+  ];
 
   public function __construct(string $targetTable, string $className = "")
   {
@@ -138,7 +158,6 @@ class Form
       $method = "update" . self::$staticClassName;
       self::$staticManager->$method($data[self::$staticFieldName . "_id"], $data);
     } else {
-      var_dump("here");
       $method = "create" . self::$staticClassName;
       self::$staticManager->$method($data);
     }

@@ -45,10 +45,10 @@ class Dashboard
   private array $userThemeFieldsName = [
     "user_theme_id" => "ID",
     "user_theme_name" => "Nom",
-    "user_theme_color1" => "Couleur 1",
-    "user_theme_color2" => "Couleur 2",
-    "user_theme_color3" => "Couleur 3",
-    "user_theme_color4" => "Couleur 4",
+    "user_theme_color_1" => "Couleur 1",
+    "user_theme_color_2" => "Couleur 2",
+    "user_theme_color_3" => "Couleur 3",
+    "user_theme_color_4" => "Couleur 4",
   ];
   private array $userLanguageFieldsName = [
     "user_language_id" => "ID",
