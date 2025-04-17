@@ -30,14 +30,16 @@ $dashboard = new Dashboard("group", "Group");
 
 
   <main class="main-container">
-    <div class="btn-container">
-      <a class="valid-button add-button" href="../form.php?form_type=group&class_name=Group">Ajouter un groupe</a>
-    </div>
+    <div class="param-window">
+      <div class="btn-container">
+        <a class="valid-button add-button" href="../form.php?form_type=group&class_name=Group">Ajouter un groupe</a>
+      </div>
 
-    <?= $dashboard->openTable() ?>
-    <?= $dashboard->getTHead() ?>
-    <?= $dashboard->getTBody() ?>
-    <?= $dashboard->closeTable() ?>
+      <?= $dashboard->openTable() ?>
+      <?= $dashboard->getTHead() ?>
+      <?= $dashboard->getTBody() ?>
+      <?= $dashboard->closeTable() ?>
+    </div>
 
     <div class="delete-container"></div>
   </main>

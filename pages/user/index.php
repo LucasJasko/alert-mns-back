@@ -30,14 +30,15 @@ $dashboard = new Dashboard("user", "User", ["user_password", "user_ip", "user_de
 
 
   <main class="main-container">
-    <div class="btn-container">
-      <a class="valid-button add-button" href="../form.php?form_type=user&class_name=User">Ajouter un utilisateur</a>
+    <div class="param-window">
+      <div class="btn-container">
+        <a class="valid-button add-button" href="../form.php?form_type=user&class_name=User">Ajouter un utilisateur</a>
+      </div>
+      <?= $dashboard->openTable() ?>
+      <?= $dashboard->getTHead() ?>
+      <?= $dashboard->getTBody() ?>
+      <?= $dashboard->closeTable() ?>
     </div>
-
-    <?= $dashboard->openTable() ?>
-    <?= $dashboard->getTHead() ?>
-    <?= $dashboard->getTBody() ?>
-    <?= $dashboard->closeTable() ?>
 
     <div class="delete-container"></div>
   </main>
