@@ -13,7 +13,7 @@ logOutCont.addEventListener("mouseleave", () => {
 
 // Affichage du tableau modulo
 for (let i = 0; i < tableLines.length; i++) {
-  if (i % 2 == 0) tableLines[i].style.backgroundColor = "rgb(215, 225, 215)";
+  if (i % 2 == 0) tableLines[i].style.backgroundColor = "var(--palegreen)";
 }
 
 // Affichage de la navigation
