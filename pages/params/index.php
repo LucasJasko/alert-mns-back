@@ -12,8 +12,8 @@ $displayedTables = [
   "user_situation" => ["user_situation", "Situations des utilisateurs", "une situation", "UserSituation"],
   "user_department" => ["user_department", "Départements de l'entreprise", "un département", "UserDepartment"],
   "user_theme" => ["user_theme", "Thèmes de l'application", "un thème", "UserTheme"],
-  "user_status" => ["user_status", "Statuts d'activité", "un statut", "UserStatus"],
-  "user_role" => ["user_role", "Rôles d'utilisateurs", "un role", "UserRole"],
+  "user_status" => ["user_status", "Statuts d'activité des utilisateurs", "un statut", "UserStatus"],
+  "user_role" => ["user_role", "Rôles de l'application", "un role", "UserRole"],
   "user_language" => ["user_language", "Langues de l'application", "une langue", "UserLanguage"],
 ]
 ?>
