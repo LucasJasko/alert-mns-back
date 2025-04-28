@@ -1,6 +1,6 @@
 <?php
 
-namespace models;
+namespace src\model;
 
 class UserRole
 {
@@ -9,38 +9,23 @@ class UserRole
   private $db;
   private $data;
 
+  public array $modelInfos =  [
+    "form_infos" => [
+      "form_title" => "Modification du rôle ",
+      "fields_labels" => [
+        "user_role_id" => "Identifiant du rôle",
+        "user_role_name" => "Description du rôle"
+      ]
+    ],
+    "dashboard_infos" => [
+      "user_role_id" => "ID",
+      "user_role_name" => "Nom",
+    ]
+  ];
+
   public function __construct()
   {
-    $this->db = new \core\Database();
+    $this->db = new \core\controller\Database();
     $this->tableName = "user_role";
-  }
-
-  public function createUserRole(array $data)
-  {
-    $fields =  $this->db->getFieldsOfTable($this->tableName);
-    for ($i = 0; $i < count($fields); $i++) {
-      if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
-    }
-    $this->db->createOne($this->tableName, $fields, $data);
-    \core\Log::writeLog("Un rôle a été ajouté à la base de donnée.");
-  }
-
-  public function getUserRole(int $id)
-  {
-    $row = $this->db->getAllWhere($this->tableName, $this->tableName . "_id", $id);
-    return $row;
-  }
-
-  public function updateUserRole(int $id, array $newData)
-  {
-    $param = $this->tableName . "_id";
-    $this->data = $newData;
-    $res = $this->db->updateOne($this->tableName, $this->data, $param, $id);
-  }
-
-  public function deleteUserRole(int $id)
-  {
-    $this->db->deleteOne($this->tableName, $this->tableName . "_id", $id);
-    \core\Log::writeLog("Le rôle " . $id . " a été supprimé de la base de donnée.");
   }
 }

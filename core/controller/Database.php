@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace core\controller;
 
 use \PDO;
 
@@ -102,10 +102,14 @@ class Database
     $stmt = $this->pdo->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
     $stmt->execute();
     $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     $fields = [];
     for ($i = 0; $i < count($raw); $i++) {
-      array_push($fields, $raw[$i]["COLUMN_NAME"]);
+      foreach ($raw[$i] as $k => $v) {
+        $fields[$i] = $v;
+      }
     }
+
     return $fields;
   }
 

@@ -10,10 +10,8 @@ class Autoloader
 
   private static function loadClass($class)
   {
-    $str = __DIR__ . "\\" . $class . ".php";
-    var_dump($str);
+    $str = str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "\\" . $class . ".php";
+    // var_dump($str);
     require_once $str;
   }
 }
-
-Autoloader::autoload();

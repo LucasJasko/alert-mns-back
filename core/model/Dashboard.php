@@ -1,96 +1,46 @@
 <?php
 
-namespace core;
-
-use core\Database;
+namespace core\model;
 
 class Dashboard
 {
   private $db;
+  private $dashboard;
   private $fields;
   private $data;
-  private $tableOpen;
-  private $tableClose;
-  private $thead;
-  private $tbody;
-  private $targetTable;
-  private $fieldTable;
-  private string $className;
-  private array $fieldsName;
+  private $tableName;
+  private $clearedTableName;
+  private $page;
+  private $model;
+  private array $dashboardInfos;
 
-  private array $groupFieldsName = [
-    "group_id" => "ID",
-    "group_name" => "Nom",
-    "group_last_message" => "Dernier message",
-    "group_state_id" => "Etat",
-    "group_type_id" => "Type"
-  ];
-  private array $userFieldsName = [
-    "user_id" => "ID",
-    "user_name" => "Prénom",
-    "user_surname" => "Nom",
-    "user_mail" => "Mail",
-    "user_password" => "Mot de passe",
-    "user_picture" => "Photo de profil",
-    "user_ip" => "Adresse IP",
-    "user_device" => "OS",
-    "user_browser" => "Navigateur",
-    "user_language_id" => "Langue",
-    "user_theme_id" => "Thème",
-    "user_status_id" => "Etat",
-    "user_situation_id" => "Situation",
-    "user_department_id" => "Département",
-    "user_role_id" => "Rôle"
-  ];
-  private array $userThemeFieldsName = [
-    "user_theme_id" => "ID",
-    "user_theme_name" => "Nom",
-    "user_theme_color_1" => "Couleur 1",
-    "user_theme_color_2" => "Couleur 2",
-    "user_theme_color_3" => "Couleur 3",
-    "user_theme_color_4" => "Couleur 4",
-  ];
-  private array $userLanguageFieldsName = [
-    "user_language_id" => "ID",
-    "user_language_name" => "Nom",
-  ];
-  private array $userRoleFieldsName = [
-    "user_role_id" => "ID",
-    "user_role_name" => "Nom",
-  ];
-  private array $userStatusFieldsName = [
-    "user_status_id" => "ID",
-    "user_status_name" => "Nom",
-  ];
-  private array $userSituationFieldsName = [
-    "user_situation_id" => "ID",
-    "user_situation_name" => "Nom",
-    "user_department_id" => "Département",
-  ];
-  private array $userDepartmentFieldsName = [
-    "user_department_id" => "ID",
-    "user_department_name" => "Nom",
-  ];
-
-  public function __construct($targetTable, string $className = "", array $exceptions = [])
+  public function __construct(string $tableName, string $modelName, array $dashboardInfos, array $exceptions = [])
   {
-    $this->db = new Database();
-    $this->targetTable = $targetTable;
-    $this->fieldTable = $targetTable;
-    $this->className = $className;
-    if ($targetTable == "group") {
-      $this->targetTable = str_replace("group", "_group", $targetTable);
-    }
-    if ($targetTable == "user") {
-      $this->targetTable = str_replace("user", "_user", $targetTable);
-    }
-    $fieldsName = lcfirst($this->className) . "FieldsName";
-    $this->fieldsName = $this->$fieldsName;
+    $this->db = new \core\controller\Database();
 
-    $this->fields = $this->db->getFieldsOfTable($this->targetTable);
-    $this->data = $this->db->getAll($this->targetTable);
-    $this->tableOpen = '<table class="dashboard">';
-    $this->tableClose = '</table>';
+    $this->tableName = $tableName;
+
+    switch ($tableName) {
+      case "_group":
+        $this->clearedTableName = "group";
+        $this->page = "group";
+        break;
+      case "_user":
+        $this->clearedTableName = "user";
+        $this->page = "user";
+        break;
+      default:
+        $this->clearedTableName = $tableName;
+        $this->page = "params";
+        break;
+    }
+
+    $this->dashboardInfos = $dashboardInfos;
+
+
+    $this->fields = $this->db->getFieldsOfTable($this->tableName);
+    $this->data = $this->db->getAll($this->tableName);
+
 
     if (count($exceptions) != 0) {
       $displayableFields = array_diff($this->fields, $exceptions);
@@ -98,46 +48,47 @@ class Dashboard
     }
   }
 
-  public function openTable()
+  public function getCompleteDashboard()
   {
-    return $this->tableOpen;
-  }
+    $this->dashboard = '<table class="dashboard">';
+    $this->dashboard .= $this->getTHead();
+    $this->dashboard .= $this->getTBody();
+    $this->dashboard .= '</table>';
 
-  public function closeTable()
-  {
-    return $this->tableClose;
+    return $this->dashboard;
   }
 
   public function getTHead()
   {
-    $this->thead = "<thead>" . $this->displayFields($this->fields) . "</thead>";
-    return $this->thead;
+    $thead = "<thead>" . $this->displayFields($this->fields) . "</thead>";
+    return $thead;
+  }
+
+  public function getTBody()
+  {
+    $tbody = "<tbody>";
+    for ($i = 0; $i < count($this->data); $i++) {
+      $tbody .= $this->getRow($this->data[$i]);
+    }
+    $tbody .= "</tbody>";
+    return $tbody;
   }
 
   private function displayFields($fields)
   {
     $selectedFields = "";
-    foreach ($fields as $field) {
-      if (isset($field)) ($selectedFields .= "<th>" . $this->fieldsName[$field] . "</th>");
+    foreach ($fields as $i => $fieldName) {
+      $selectedFields .= "<th>" . $this->dashboardInfos["dashboard_infos"][$fieldName] . "</th>";
     }
     return $selectedFields;
   }
 
-  public function getTBody()
-  {
-    $this->tbody = "<tbody>";
-    for ($i = 0; $i < count($this->data); $i++) {
-      $this->tbody .= $this->getRow($this->data[$i]);
-    }
-    $this->tbody .= "</tbody>";
-    return $this->tbody;
-  }
 
   public function getRow($dataField)
   {
-    $row = "<tr class=\"" . $this->targetTable . " " . $this->className . "\">";
+    $row = "<tr class=\"" . $this->tableName . " " . $this->model . "\">";
     foreach ($dataField as $key => $value) {
-      $id = $dataField[$this->fieldTable . "_id"];
+      $id = $dataField[$this->clearedTableName . "_id"];
       if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
     }
     $row .= $this->getManageButtons($id);
@@ -148,7 +99,7 @@ class Dashboard
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../form.php?form_type=" . $this->fieldTable . "&class_name=" . $this->className . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../index.php?page=" . $this->page . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

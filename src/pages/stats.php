@@ -1,24 +1,10 @@
-<?php
-
-
-require_once $_SERVER["DOCUMENT_ROOT"] . "/class/Autoloader.php";
-Autoloader::autoload();
-
-use core\Database;
-use core\NavBar;
-
-$db = new Database();
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <title>Tableau de bord: Statistiques de l'application</title>
 </head>
@@ -32,16 +18,16 @@ $db = new Database();
       <div class="navbar__container__left">
         <ul>
           <li>
-            <a href="../group/">Groupes</a>
+            <a href="index.php?page=group">Groupes</a>
           </li>
           <li>
-            <a href="../user/">Utilisateurs</a>
+            <a href="index.php?page=user">Utilisateurs</a>
           </li>
           <li>
-            <a href="../params/">Paramétrages</a>
+            <a href="index.php?page=params">Paramétrages</a>
           </li>
           <li>
-            <a href="../stats/">Statistiques</a>
+            <a href="index.php?page=stats">Statistiques</a>
           </li>
         </ul>
       </div>
@@ -54,7 +40,7 @@ $db = new Database();
   </nav>
 
   <input type="text" class="target" value="Statistiques" hidden>
-  <script src="../script.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>

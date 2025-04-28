@@ -1,14 +1,13 @@
 <?php
 
-namespace models;
+namespace src\model;
 
 
 class User
 {
 
   private $db;
-  private $data;
-  private static int $id = false;
+  private static int $id = 0;
   private string $name = "";
   private ?string $surname = "";
   private string $mail = "";
@@ -18,10 +17,51 @@ class User
   private string $device = "";
   private string $browser = "";
 
-  public function __construct(array $row = false)
+  public array $modelInfos = [
+    "form_infos" => [
+      "form_title" => "Modification de l'utilisateur ",
+      "fields_labels" => [
+        'user_id' => "Identifiant de l'utilisateur",
+        'user_name' => "Nom de l'utilisateur",
+        'user_surname' => "Prénom de l'utilisateur",
+        'user_mail' => "email de l'utilisateur",
+        'user_password' => "Mot de passe de l'utilisateur",
+        'user_picture' => "Photo de l'utilisateur",
+        'user_ip' => "Adresse IP de l'utilisateur",
+        'user_device' => "Appareil de l'utilisateur",
+        'user_browser' => "Navigateur de l'utilisateur",
+        'user_language_id' => "Langue de préférence de l'utilisateur",
+        'user_theme_id' => "Thème de préférence de l'utilisateur",
+        'user_status_id' => "Statut de préférence de l'utilisateur",
+        'user_situation_id' => "Situation de l'utilisateur",
+        'user_department_id' => "Département de l'utilisateur",
+        'user_role_id' => "Rôle de l'utilisateur"
+      ]
+    ],
+    "dashboard_infos" => [
+      "user_id" => "ID",
+      "user_name" => "Prénom",
+      "user_surname" => "Nom",
+      "user_mail" => "Mail",
+      "user_password" => "Mot de passe",
+      "user_picture" => "Photo de profil",
+      "user_ip" => "Adresse IP",
+      "user_device" => "OS",
+      "user_browser" => "Navigateur",
+      "user_language_id" => "Langue",
+      "user_theme_id" => "Thème",
+      "user_status_id" => "Etat",
+      "user_situation_id" => "Situation",
+      "user_department_id" => "Département",
+      "user_role_id" => "Rôle"
+    ]
+  ];
+
+  public function __construct(array $row = [])
   {
-    $this->db = new \core\Database();
-    $row ? $this->hydrate($row) : null;
+    if (count($row) != 0) {
+      $this->hydrate($row);
+    }
   }
 
   public function hydrate($row)
@@ -32,35 +72,6 @@ class User
         $this->{$method}($value);
       }
     }
-  }
-
-  public function createUser(array $data)
-  {
-    $fields =  $this->db->getFieldsOfTable("_user");
-    for ($i = 0; $i < count($fields); $i++) {
-      if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
-    }
-    $this->db->createOne("_user", $fields, $data);
-    \core\Log::writeLog("Un utilisateur a été ajouté à la base de donnée.");
-  }
-
-  public function getUser(int $id)
-  {
-    $row = $this->db->getAllWhere("_user", "user_id", $id);
-    return $row;
-  }
-
-  public function updateUser(int $id, array $newData)
-  {
-    $param = "user_id";
-    $this->data = $newData;
-    $res = $this->db->updateOne("_user", $this->data, $param, $id);
-  }
-
-  public function deleteUser(int $id)
-  {
-    $this->db->deleteOne("_user", "user_id", $id);
-    \core\Log::writeLog("L'utilisateur " . $id . " a été supprimé de la base de donnée.");
   }
 
   public function getUserPassword($email)

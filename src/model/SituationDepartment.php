@@ -6,7 +6,7 @@ namespace src\model;
 use core\Database;
 use core\Log;
 
-class UserLanguage
+class SituationDepartment
 {
   private $tableName;
   private $db;
@@ -14,21 +14,21 @@ class UserLanguage
 
   public array $modelInfos =  [
     "form_infos" => [
-      "form_title" => "Modification du langage ",
+      "form_title" => "Modification du département ",
       "fields_labels" => [
-        "user_language_id" => "ID",
-        "user_language_name" => "Nom",
+        "situation_department_id" => "Identifiant du département",
+        "situation_department_name" => "Nom du département"
       ]
     ],
     "dashboard_infos" => [
-      "user_language_id" => "Identifiant de la langue",
-      "user_language_name" => "Nom de la langue"
+      "situation_department_id" => "ID",
+      "situation_department_name" => "Nom",
     ]
   ];
 
   public function __construct()
   {
     $this->db = new \core\controller\Database();
-    $this->tableName = "user_language";
+    $this->tableName = "situation_department";
   }
 }

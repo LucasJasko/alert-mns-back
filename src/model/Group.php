@@ -1,25 +1,43 @@
 <?php
 
-namespace models;
+namespace src\model;
 
 
 class Group
 {
-
-  private $db;
-  private $data;
   private int $id;
   private string $name;
   private State $state;
   private Type $type;
+  private string $lastMessage;
 
-  public function __construct(int $id, string $name, State $state, Type $type)
+  public array $modelInfos =  [
+    "form_infos" => [
+      "form_title" => "Modification du groupe ",
+      "fields_labels" => [
+        "group_id" => "Identifiant du groupe",
+        "group_name" => "Nom du groupe",
+        "group_last_message" => "Dernier message",
+        "group_state_id" => "Etat du groupe",
+        "group_type_id" => "Type de groupe"
+      ]
+    ],
+    "dashboard_infos" => [
+      "group_id" => "ID",
+      "group_name" => "Nom",
+      "group_last_message" => "Dernier message",
+      "group_state_id" => "Etat",
+      "group_type_id" => "Type"
+
+    ]
+  ];
+
+  public function __construct(array $row = [])
   {
-    $this->db = new \core\Database();
-    $this->$id = $this->setId($id);
-    $this->$name = $this->setName($name);
-    $this->$state = $this->setState($state);
-    $this->$type = $this->setType($type);
+    if (count($row) != 0) {
+      $this->hydrate($row);
+      $this->modelInfos["form_infos"]["form_title"] .= $this->getName();
+    }
   }
 
   public function hydrate($row)
@@ -32,38 +50,14 @@ class Group
     }
   }
 
-  public function createGroup(array $data)
-  {
-    $fields =  $this->db->getFieldsOfTable("_group");
-    for ($i = 0; $i < count($fields); $i++) {
-      if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
-    }
-    $this->db->createOne("_group", $fields, $data);
-    \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
-  }
-
-  public function getGroup(int $id)
-  {
-    $row = $this->db->getAllWhere("_group", "group_id", $id);
-    return $row;
-  }
-
-  public function updateGroup(int $id, array $newData)
-  {
-    $param = "group_id";
-    $this->data = $newData;
-    $res = $this->db->updateOne("_group", $this->data, $param, $id);
-  }
-
-  public function deleteGroup(int $id)
-  {
-    $this->db->deleteOne("_group", "group_id", $id);
-    \core\Log::writeLog("Le groupe " . $id . " a été supprimé de la base de donnée.");
-  }
-
   public function setId(int $id)
   {
     $this->id = $id;
+  }
+
+  public function setLastMessage(string $lastMessage)
+  {
+    $this->lastMessage = $lastMessage;
   }
   public function setName(string $name)
   {
@@ -81,6 +75,10 @@ class Group
   public function getId()
   {
     return $this->id;
+  }
+  public function getLastMessage()
+  {
+    return $this->lastMessage;
   }
   public function getName()
   {

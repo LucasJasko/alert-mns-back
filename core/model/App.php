@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace core\model;
 
 class App
 {
@@ -12,8 +12,8 @@ class App
 
   public function userSearch()
   {
-    Auth::getClientAccess();
-    $db = new Database();
+    \core\controller\Auth::getClientAccess();
+    $db = new \core\controller\Database();
     $data        = json_decode(file_get_contents("php://input"), true);
     $inputSearch = $data['search'];
 

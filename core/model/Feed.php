@@ -1,11 +1,13 @@
 <?php
 
+namespace core\model;
+
 class Feed
 {
 
   public static function getConv()
   {
-    core\Auth::getClientAccess();
+    \core\controller\Auth::getClientAccess();
     $rawData = file_get_contents("php://input");
     $data    = json_decode($rawData, true);
 

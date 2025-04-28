@@ -1,17 +1,6 @@
 <?php
 
-require_once "../class/Autoloader.php";
-Autoloader::autoload();
-
-use core\Auth;
-
 $err = null;
-
-if (isset($_POST["email"])) {
-  $auth = new Auth();
-  $res = $auth->login($_POST["email"], $_POST["password"]);
-  $res["success"] ? header("Location:/index.php") : $err = "Email ou mot de passe incorrect";
-}
 
 ?>
 
