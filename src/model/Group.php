@@ -6,10 +6,8 @@ use core\model\ModelManager;
 
 class Group extends ModelManager
 {
-  private int $id;
-  private string $name;
-  private State $state;
-  private Type $type;
+  private $state;
+  private $type;
 
   public array $modelInfos =  [
     "form_infos" => [
@@ -31,7 +29,7 @@ class Group extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
       $this->modelInfos["form_infos"]["form_title"] .= $this->name();
@@ -48,14 +46,6 @@ class Group extends ModelManager
     }
   }
 
-  public function setId(int $id)
-  {
-    $this->id = $id;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
   public function setState(State $state)
   {
     $this->state = $state;
@@ -65,14 +55,6 @@ class Group extends ModelManager
     $this->type = $type;
   }
 
-  public function id()
-  {
-    return $this->id;
-  }
-  public function name()
-  {
-    return $this->name;
-  }
   public function state()
   {
     return $this->state;

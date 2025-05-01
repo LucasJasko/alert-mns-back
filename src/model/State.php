@@ -9,6 +9,6 @@ class State extends ModelManager
 
   function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
   }
 }

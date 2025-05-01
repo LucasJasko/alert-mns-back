@@ -8,8 +8,9 @@ abstract class ModelManager
   protected $tableName;
   protected $searchField;
   protected $data;
-  protected $id  = 0;
-  protected $name = "";
+
+  protected int $id;
+  protected string $name;
 
   public function initdb(string $tableName, string $searchField)
   {
@@ -24,16 +25,12 @@ abstract class ModelManager
     return $this->db->getFieldsOfTable($this->tableName);
   }
 
-  public function getAllModels()
-  {
-    return $this->db->getAll($this->tableName);
-  }
-
-  public function getModel(int $id)
+  public function getDBModel(int $id)
   {
     $row = $this->db->getAllWhere($this->tableName, $this->searchField, $id);
     return $row;
   }
+
 
   public function createNewModel(array $data)
   {

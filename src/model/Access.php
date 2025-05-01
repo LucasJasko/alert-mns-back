@@ -7,9 +7,6 @@ use core\model\ModelManager;
 class Access extends ModelManager
 {
 
-  private int $id;
-  private string $name;
-
   public array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du département ",
@@ -26,7 +23,7 @@ class Access extends ModelManager
 
   function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
       $this->modelInfos["form_infos"]["form_title"] .= $this->name();
@@ -41,22 +38,5 @@ class Access extends ModelManager
         $this->{$method}($value);
       }
     }
-  }
-
-  public function setId(int $id)
-  {
-    $this->id = $id;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
-  public function id()
-  {
-    return $this->id;
-  }
-  public function name()
-  {
-    return $this->name;
   }
 }

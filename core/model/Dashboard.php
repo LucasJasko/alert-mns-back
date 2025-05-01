@@ -4,7 +4,6 @@ namespace core\model;
 
 class Dashboard
 {
-  private $db;
   private $dashboard;
   private $data;
   private $tableName;
@@ -72,10 +71,10 @@ class Dashboard
   {
     $row = "<tr class=\"" . $this->tableName . "\">";
     $id = $dataArray[$this->tableName . "_id"];
-    foreach ($dataArray as $key => $value) {
-      if (isset($this->dashboardInfos[$key])) {
-        $row .= "<td class='" . $key . "'>" . $value . "</td>";
-      }
+    foreach ($this->dashboardInfos as $key => $value) {
+      $row .= "<td class='" . $key . "'>";
+      $row .= isset($dataArray[$key]) ? $dataArray[$key] : "";
+      $row .= "</td>";
     }
     $row .= $this->getManageButtons($id) . "</tr>";
     return $row;

@@ -15,6 +15,6 @@ class Message extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
   }
 }

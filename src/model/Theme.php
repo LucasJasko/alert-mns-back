@@ -23,20 +23,28 @@ class Theme extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $this->id = $id;
+    $this->tableName = "theme";
+    $this->searchField = "theme_id";
+    $this->initdb($this->tableName, $this->searchField);
+    $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("theme", "", $key));
+      $method = "set" . ucfirst(str_replace("theme_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
+  }
+
+  public function setFormName()
+  {
+    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

@@ -6,8 +6,6 @@ use core\model\ModelManager;
 
 class Role extends ModelManager
 {
-  private int $id;
-  private string $name;
 
   public array $modelInfos =  [
     "form_infos" => [
@@ -25,37 +23,28 @@ class Role extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $this->id = $id;
+    $this->tableName = "role";
+    $this->searchField = "role_id";
+    $this->initdb($this->tableName, $this->searchField);
+    $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("role", "", $key));
+      $method = "set" . ucfirst(str_replace("role_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
   }
 
-  public function setId(int $id)
+  public function setFormName()
   {
-    $this->id = $id;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
-  public function id()
-  {
-    return $this->id;
-  }
-  public function name()
-  {
-    return $this->name;
+    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

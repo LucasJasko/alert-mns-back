@@ -6,8 +6,6 @@ use core\model\ModelManager;
 
 class Department extends ModelManager
 {
-  private int $id;
-  private string $name;
 
   public array $modelInfos =  [
     "form_infos" => [
@@ -25,10 +23,9 @@ class Department extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
@@ -42,20 +39,8 @@ class Department extends ModelManager
     }
   }
 
-  public function setId(int $id)
+  public function setFormName()
   {
-    $this->id = $id;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
-  public function id()
-  {
-    return $this->id;
-  }
-  public function name()
-  {
-    return $this->name;
+    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

@@ -8,6 +8,6 @@ class Notif extends ModelManager
 {
   function __construct($id)
   {
-    $row = $this->getModel($id);
+    $row = $this->getDBModel($id);
   }
 }

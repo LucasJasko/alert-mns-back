@@ -23,20 +23,28 @@ class Status extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getModel($id);
+    $this->id = $id;
+    $this->tableName = "status";
+    $this->searchField = "status_id";
+    $this->initdb($this->tableName, $this->searchField);
+    $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("status", "", $key));
+      $method = "set" . ucfirst(str_replace("status_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
+  }
+
+  public function setFormName()
+  {
+    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

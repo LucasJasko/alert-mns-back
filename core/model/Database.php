@@ -83,7 +83,14 @@ class Database
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getWhere(string $table, string $target, string $field, $param)
+  public function getField(string $table, string $field)
+  {
+    $stmt = $this->pdo->prepare("SELECT " . $field . " FROM `" . $table . "` ORDER BY " . $field . " ASC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getFieldWhere(string $table, string $target, string $field, $param)
   {
     $stmt = $this->pdo->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $param]);
@@ -94,7 +101,7 @@ class Database
   {
     $stmt = $this->pdo->prepare("SELECT " . $field1 . " FROM " . $table . " WHERE " . $field2 . " = " . $value);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getFieldsOfTable(string $table)
@@ -112,7 +119,6 @@ class Database
 
     return $fields;
   }
-
 
   public function deleteOne(string $table, string $field, int $param)
   {

@@ -25,12 +25,17 @@ class ProfileController
 
   public function getProfileDashboard()
   {
-    $data = new Profile();
-    $data = $data->getAllModels();
-    var_dump($data);
+    $this->db = new Database();
+    $recordset = $this->db->getField("profile", "profile_id");
 
+    $models = [];
+    for ($i = 0; $i < count($recordset); $i++) {
+      $id = $recordset[$i]["profile_id"];
+      $model = new Profile($id);
+      $models[$i] = $model->all();
+    }
 
-    $this->dashboard = new \core\model\Dashboard("profile", $data, $this->dashboardInfos, $this->fieldsToNotRender);
+    $this->dashboard = new \core\model\Dashboard("profile", $models, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/profile.php";
   }
 

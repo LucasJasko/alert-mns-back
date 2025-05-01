@@ -21,28 +21,30 @@ class Language extends ModelManager
     ]
   ];
 
-  public function __construct()
+  public function __construct(int $id)
   {
+    $this->id = $id;
     $this->tableName = "language";
     $this->searchField = "language_id";
     $this->initdb($this->tableName, $this->searchField);
-
-    if ($this->id != 0) {
-      $row = $this->getModel($this->id);
-      if (count($row) != 0) {
-        $this->hydrate($row);
-        $this->modelInfos["form_infos"]["form_title"] .= $this->name();
-      }
+    $row = $this->getDBModel($this->id);
+    if (count($row) != 0) {
+      $this->hydrate($row);
     }
   }
 
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("language", "", $key));
+      $method = "set" . ucfirst(str_replace("language_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
+  }
+
+  public function setFormName()
+  {
+    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }
