@@ -1,8 +1,6 @@
 <?php
 
-namespace core\controller;
-
-use src\model\ModelManager;
+namespace core\model;
 
 class Auth
 {
@@ -11,7 +9,7 @@ class Auth
 
   public static function login(string $email, string $pwd)
   {
-    $manager = new ModelManager("_user", "user_id");
+    $manager = new ModelManager("user", "User", "user_id");
     $model = $manager->getModelInstance();
     $row = $model->getUserPassword($email);
 

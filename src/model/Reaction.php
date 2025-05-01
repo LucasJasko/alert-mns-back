@@ -4,7 +4,7 @@ namespace src\model;
 
 use core\model\ModelManager;
 
-class Notif extends ModelManager
+class Reaction extends ModelManager
 {
   function __construct($id)
   {

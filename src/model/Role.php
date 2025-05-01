@@ -4,27 +4,26 @@ namespace src\model;
 
 use core\model\ModelManager;
 
-class Access extends ModelManager
+class Role extends ModelManager
 {
-
   private int $id;
   private string $name;
 
   public array $modelInfos =  [
     "form_infos" => [
-      "form_title" => "Modification du département ",
+      "form_title" => "Modification du rôle ",
       "fields_labels" => [
-        "access_id" => "Identifiant du département",
-        "access_name" => "Nom du département"
+        "role_id" => "Identifiant du rôle",
+        "role_name" => "Description du rôle"
       ]
     ],
     "dashboard_infos" => [
-      "access_id" => "ID",
-      "access_name" => "Nom",
+      "role_id" => "ID",
+      "role_name" => "Nom",
     ]
   ];
 
-  function __construct($id)
+  public function __construct($id)
   {
     $row = $this->getModel($id);
     if (count($row) != 0) {
@@ -36,7 +35,7 @@ class Access extends ModelManager
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("department", "", $key));
+      $method = "set" . ucfirst(str_replace("role", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }

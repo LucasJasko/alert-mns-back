@@ -4,8 +4,9 @@ namespace src\model;
 
 use core\model\ModelManager;
 
-class Notif extends ModelManager
+class State extends ModelManager
 {
+
   function __construct($id)
   {
     $row = $this->getModel($id);

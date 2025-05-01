@@ -6,45 +6,29 @@ class Dashboard
 {
   private $db;
   private $dashboard;
-  private $fields;
   private $data;
   private $tableName;
-  private $clearedTableName;
   private $page;
-  private $model;
+  private $tab;
+  private $modelName;
   private array $dashboardInfos;
 
-  public function __construct(string $tableName, string $modelName, array $dashboardInfos, array $exceptions = [])
+  public function __construct(string $tableName, array $data, array $dashboardInfos, array $exceptions = [])
   {
-    $this->db = new \core\controller\Database();
-
     $this->tableName = $tableName;
+    $this->modelName = ucfirst($this->tableName);
 
-    switch ($tableName) {
-      case "_group":
-        $this->clearedTableName = "group";
-        $this->page = "group";
-        break;
-      case "_user":
-        $this->clearedTableName = "user";
-        $this->page = "user";
-        break;
-      default:
-        $this->clearedTableName = $tableName;
-        $this->page = "params";
-        break;
-    }
+    $this->page = "params";
+    $this->data = $data;
 
     $this->dashboardInfos = $dashboardInfos;
 
-
-    $this->fields = $this->db->getFieldsOfTable($this->tableName);
-    $this->data = $this->db->getAll($this->tableName);
-
-
     if (count($exceptions) != 0) {
-      $displayableFields = array_diff($this->fields, $exceptions);
-      $this->fields = $displayableFields;
+      foreach ($exceptions as $index => $field) {
+        if ($this->dashboardInfos[$field]) {
+          unset($this->dashboardInfos[$field]);
+        }
+      }
     }
   }
 
@@ -60,7 +44,7 @@ class Dashboard
 
   public function getTHead()
   {
-    $thead = "<thead>" . $this->displayFields($this->fields) . "</thead>";
+    $thead = "<thead>" . $this->displayFields($this->dashboardInfos) . "</thead>";
     return $thead;
   }
 
@@ -77,29 +61,30 @@ class Dashboard
   private function displayFields($fields)
   {
     $selectedFields = "";
-    foreach ($fields as $i => $fieldName) {
-      $selectedFields .= "<th>" . $this->dashboardInfos["dashboard_infos"][$fieldName] . "</th>";
+    foreach ($fields as $fieldName => $label) {
+      $selectedFields .= "<th>" . $label . "</th>";
     }
     return $selectedFields;
   }
 
 
-  public function getRow($dataField)
+  public function getRow($dataArray)
   {
-    $row = "<tr class=\"" . $this->tableName . " " . $this->model . "\">";
-    foreach ($dataField as $key => $value) {
-      $id = $dataField[$this->clearedTableName . "_id"];
-      if (in_array($key, $this->fields)) $row .= "<td class='" . $key . "'>" . $value . "</td>";
+    $row = "<tr class=\"" . $this->tableName . "\">";
+    $id = $dataArray[$this->tableName . "_id"];
+    foreach ($dataArray as $key => $value) {
+      if (isset($this->dashboardInfos[$key])) {
+        $row .= "<td class='" . $key . "'>" . $value . "</td>";
+      }
     }
-    $row .= $this->getManageButtons($id);
-    $row .= "</tr>";
+    $row .= $this->getManageButtons($id) . "</tr>";
     return $row;
   }
 
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../index.php?page=" . $this->page . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../index.php?page=" . $this->page . ($this->page == "params" ? "&tab=" . $this->tab : "") . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
     $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }

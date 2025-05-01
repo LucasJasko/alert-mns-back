@@ -2,7 +2,9 @@
 
 namespace src\model;
 
-class Message
+use core\model\ModelManager;
+
+class Message extends ModelManager
 {
 
   private int $exp;
@@ -11,5 +13,8 @@ class Message
   private string $date;
   private string | array $file;
 
-  public function __construct(int $exp, int $dest) {}
+  public function __construct($id)
+  {
+    $row = $this->getModel($id);
+  }
 }

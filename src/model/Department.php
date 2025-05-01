@@ -4,9 +4,8 @@ namespace src\model;
 
 use core\model\ModelManager;
 
-class Access extends ModelManager
+class Department extends ModelManager
 {
-
   private int $id;
   private string $name;
 
@@ -14,17 +13,17 @@ class Access extends ModelManager
     "form_infos" => [
       "form_title" => "Modification du département ",
       "fields_labels" => [
-        "access_id" => "Identifiant du département",
-        "access_name" => "Nom du département"
+        "department_id" => "Identifiant du département",
+        "department_name" => "Nom du département"
       ]
     ],
     "dashboard_infos" => [
-      "access_id" => "ID",
-      "access_name" => "Nom",
+      "department_id" => "ID",
+      "department_name" => "Nom",
     ]
   ];
 
-  function __construct($id)
+  public function __construct($id)
   {
     $row = $this->getModel($id);
     if (count($row) != 0) {

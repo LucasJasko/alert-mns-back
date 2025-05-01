@@ -27,6 +27,12 @@
 
       <?php  } ?>
 
+      <?php
+      if ($this->redirectPage == "params") {
+      ?>
+        <input class=" table" type="text" name="table_name" value="<?= $this->tableName ?>" hidden>
+      <?php } ?>
+
       <input class=" table" type="text" value="<?= $this->redirectPage ?> " hidden>
       <input class="valid-button" type="submit" value="Enregistrer">
     </form>

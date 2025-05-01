@@ -21,7 +21,7 @@
             <a href="index.php?page=group">Groupes</a>
           </li>
           <li>
-            <a href="index.php?page=user">Utilisateurs</a>
+            <a href="index.php?page=profile">Utilisateurs</a>
           </li>
           <li>
             <a href="index.php?page=params">Paramétrages</a>
@@ -42,7 +42,7 @@
   <main class="main-container">
     <div class="param-window">
       <div class="btn-container">
-        <a class="valid-button add-button" href="../index.php?page=user&id=0">Ajouter un utilisateur</a>
+        <a class="valid-button add-button" href="../index.php?page=profile&id=0">Ajouter un utilisateur</a>
       </div>
       <?= $this->dashboard->getCompleteDashboard() ?>
     </div>
@@ -52,7 +52,7 @@
 
   <input type="text" class="target" value="Utilisateurs" hidden>
   <script src="js/index.js"></script>
-  <script src="js/user.js"></script>
+  <script src="js/profile.js"></script>
 
 </body>
 

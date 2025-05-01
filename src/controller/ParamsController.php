@@ -19,51 +19,52 @@ class ParamsController
   private string $userLanguageInfos;
 
   private array $ParamsConfig = [
-    "user_situation" => [
-      "field_name" => "user_situation",
-      "class_name" => "UserSituation",
+    "situation" => [
+      "field_name" => "situation",
+      "class_name" => "Situation",
       "field_desc" => "Situations des utilisateurs",
       "field_p" => "une situation",
     ],
-    "situation_department" => [
-      "field_name" => "situation_department",
+    "department" => [
+      "field_name" => "department",
+      "class_name" => "Department",
       "field_desc" => "Départements de l'entreprise",
       "field_p" => "un département",
-      "class_name" => "SituationDepartment"
     ],
-    "user_theme" => [
-      "field_name" => "user_theme",
-      "class_name" => "UserTheme",
+    "theme" => [
+      "field_name" => "theme",
+      "class_name" => "Theme",
       "field_desc" => "Thèmes de l'application",
       "field_p" => "un thème",
     ],
-    "user_status" => [
-      "field_name" => "user_status",
-      "class_name" => "UserStatus",
+    "status" => [
+      "field_name" => "status",
+      "class_name" => "Status",
       "field_desc" => "Statuts d'activité des utilisateurs",
       "field_p" => "un statut",
     ],
-    "user_role" => [
-      "field_name" => "user_role",
-      "class_name" => "UserRole",
+    "role" => [
+      "field_name" => "role",
+      "class_name" => "Role",
       "field_desc" => "Rôles de l'application",
       "field_p" => "un role",
     ],
-    "user_language" => [
-      "field_name" => "user_language",
-      "class_name" => "UserLanguage",
+    "language" => [
+      "field_name" => "language",
+      "class_name" => "Language",
       "field_desc" => "Langues de l'application",
       "field_p" => "une langue",
     ],
   ];
 
   private $dashboard;
+  private $form;
 
   public function __construct()
   {
 
     foreach ($this->ParamsConfig as $k => $v) {
-      $this->ParamsConfig[$k]["instance"] = new \src\model\ModelManager($this->ParamsConfig[$k]["field_name"], $this->ParamsConfig[$k]["class_name"], $this->ParamsConfig[$k]["field_name"] . "_id");
+      $this->ParamsConfig[$k]["instance"] = new \core\model\ModelManager($this->ParamsConfig[$k]["field_name"], $this->ParamsConfig[$k]["class_name"], $this->ParamsConfig[$k]["field_name"] . "_id");
       $this->ParamsConfig[$k]["infos"] = $this->ParamsConfig[$k]["instance"]->getModelInfos();
     }
   }
@@ -71,5 +72,32 @@ class ParamsController
   public function getView()
   {
     require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/params.php";
+  }
+
+  public function getEmptyForm(string $tab)
+  {
+    $this->form = new \core\model\Form($this->ParamsConfig[$tab]["field_name"], "params", $this->ParamsConfig[$tab]["infos"]["form_infos"]);
+    $fieldsOfTable = $this->ParamsConfig[$tab]["instance"]->getFIeldsOfTable();
+    return $this->form->getEmptyForm($fieldsOfTable);
+  }
+
+  public function getForm(string $tab, int $id)
+  {
+    $this->ParamsConfig[$tab]["instance"]->getModelData($id);
+
+    $this->form = new \core\model\Form($this->ParamsConfig[$tab]["field_name"], "params", $this->ParamsConfig[$tab]["infos"]["form_infos"]);
+
+    return $this->form->getForm($this->ParamsConfig[$tab]["instance"]->getModelData($id));
+  }
+
+
+  public function submitData(array $data, string $tab)
+  {
+    unset($data["table_name"]);
+    if (!empty($data[$tab . "_id"])) {
+      $this->ParamsConfig[$tab]["instance"]->updateModel($data[$tab . "_id"], $data);
+    } else {
+      $this->ParamsConfig[$tab]["instance"]->createNewModel($data);
+    }
   }
 }

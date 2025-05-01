@@ -1,8 +1,6 @@
 <?php
 
-namespace core\controller;
-
-use src\model\ModelManager;
+namespace core\model;
 
 class Form
 {
@@ -27,9 +25,7 @@ class Form
       $except[$v] = $k;
       unset($except[$k]);
     }
-
     $this->compareData($except);
-
     require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/form.php";
   }
 
@@ -38,9 +34,7 @@ class Form
     foreach ($fieldsOfTable as $key => $value) {
       $this->displayedData[$value] = "";
     }
-
     $this->compareData($except);
-
     require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/form.php";
   }
 

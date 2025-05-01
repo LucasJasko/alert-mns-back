@@ -9,3 +9,7 @@ A chaque commit:
 - git commit -a -m "version X.X.X"
 
 si patch, git tag avant
+
+TO DO:
+
+- [ ] Revoir BDD par rapport à la nouvelle version du shéma looping

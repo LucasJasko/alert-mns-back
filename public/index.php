@@ -3,8 +3,7 @@
 require_once "../core/Autoloader.php";
 Autoloader::autoload();
 
-$page = isset($_GET["page"]) ? $_GET["page"] : "user";
-
+$page = isset($_GET["page"]) ? $_GET["page"] : "profile";
 
 
 switch ($page) {
@@ -12,67 +11,87 @@ switch ($page) {
 
   case "group":
 
-    $groupController = new src\controller\GroupController();
+    $controller = new src\controller\GroupController();
 
     if ($_POST) {
-      $groupController->submitData($_POST);
+      $controller->submitData($_POST);
     }
 
     if (isset($_GET["id"])) {
       if ($_GET["id"] != 0) {
-        $groupController->getForm($_GET["id"]);
+        $controller->getForm($_GET["id"]);
       } else {
-        $groupController->getEmptyForm();
+        $controller->getEmptyForm();
       }
     } else {
-      $groupController->getView();
+      $controller->getView();
     }
 
     break;
 
 
-  case "user":
+  case "profile":
 
-    $userController = new src\controller\UserController();
+    $controller = new src\controller\ProfileController();
 
     if ($_POST) {
-      $userController->submitData($_POST);
+      $controller->submitData($_POST);
     }
 
     if (isset($_GET["id"])) {
       if ($_GET["id"] != 0) {
-        $userController->getForm($_GET["id"]);
+        $controller->getForm($_GET["id"]);
       } else {
-        $userController->getEmptyForm();
+        $controller->getEmptyForm();
       }
     } else {
-      $userController->getView();
+      $controller->getProfileDashboard();
     }
     break;
 
 
   case "params":
 
-    $paramsController = new src\controller\ParamsController();
-    $paramsController->getView();
+    $controller = new src\controller\ParamsController();
+
+    if ($_POST) {
+      $controller->submitData($_POST, $_POST["table_name"]);
+    }
+
+    if (isset($_GET["id"]) && isset($_GET["tab"])) {
+
+      if ($_GET["id"] != 0) {
+        $controller->getForm($_GET["tab"], $_GET["id"]);
+      } else {
+        $controller->getEmptyForm($_GET["tab"]);
+      }
+    } else {
+      $controller->getView();
+    }
+
     break;
 
 
   case "stats":
 
-    $statsController = new src\controller\StatsController();
-    $statsController->getView();
+    $controller = new src\controller\StatsController();
+    $controller->getView();
     break;
 
 
   case "login":
 
-    $loginController = new src\controller\LoginController();
+    $controller = new src\controller\LoginController();
 
     if (isset($_POST["email"]) && isset($_POST["password"])) {
-      $loginController->checkAuth($_POST["email"], $_POST["password"]);
+      $controller->checkAuth($_POST["email"], $_POST["password"]);
     } else {
-      $loginController->getLoginPage();
+      $controller->getLoginPage();
     }
     break;
+}
+
+if (isset($_GET["api"])) {
+  switch ($_GET["api"]) {
+  }
 }

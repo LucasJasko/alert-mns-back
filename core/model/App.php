@@ -12,8 +12,8 @@ class App
 
   public function userSearch()
   {
-    \core\controller\Auth::getClientAccess();
-    $db = new \core\controller\Database();
+    Auth::getClientAccess();
+    $db = new Database();
     $data        = json_decode(file_get_contents("php://input"), true);
     $inputSearch = $data['search'];
 

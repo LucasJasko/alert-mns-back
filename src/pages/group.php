@@ -21,7 +21,7 @@
             <a href="index.php?page=group">Groupes</a>
           </li>
           <li>
-            <a href="index.php?page=user">Utilisateurs</a>
+            <a href="index.php?page=profile">Utilisateurs</a>
           </li>
           <li>
             <a href="index.php?page=params">Paramétrages</a>

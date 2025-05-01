@@ -21,7 +21,7 @@
             <a href="index.php?page=group">Groupes</a>
           </li>
           <li>
-            <a href="index.php?page=user">Utilisateurs</a>
+            <a href="index.php?page=profile">Utilisateurs</a>
           </li>
           <li>
             <a href="index.php?page=params">Paramétrages</a>
@@ -45,8 +45,8 @@
 
       <?php
       foreach ($this->ParamsConfig as $table) {
-        if ($table["field_name"] == "user_situation") {
-          $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["class_name"], $table["infos"], ["situation_department_id"]);
+        if ($table["field_name"] == "situation") {
+          $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["class_name"], $table["infos"], ["department_id"]);
         } else {
           $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["class_name"], $table["infos"]);
         }
@@ -54,7 +54,7 @@
         <div class="param-window <?= $table["field_name"] ?>">
           <h2 class="param-title"><?= $table["field_desc"] ?></h2>
           <div class="btn-container">
-            <a class="valid-button add-button" href="../index.php?page=<?= $table["field_name"] ?>&id=0">Ajouter <?= $table["field_p"] ?></a>
+            <a class="valid-button add-button" href="../index.php?page=params&tab=<?= $table["field_name"] ?>&id=0">Ajouter <?= $table["field_p"] ?></a>
           </div>
           <?= $this->dashboard->getCompleteDashboard() ?>
         </div>

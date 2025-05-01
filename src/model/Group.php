@@ -2,14 +2,14 @@
 
 namespace src\model;
 
+use core\model\ModelManager;
 
-class Group
+class Group extends ModelManager
 {
   private int $id;
   private string $name;
   private State $state;
   private Type $type;
-  private string $lastMessage;
 
   public array $modelInfos =  [
     "form_infos" => [
@@ -17,26 +17,24 @@ class Group
       "fields_labels" => [
         "group_id" => "Identifiant du groupe",
         "group_name" => "Nom du groupe",
-        "group_last_message" => "Dernier message",
-        "group_state_id" => "Etat du groupe",
-        "group_type_id" => "Type de groupe"
+        "state_id" => "Etat du groupe",
+        "type_id" => "Type de groupe"
       ]
     ],
     "dashboard_infos" => [
       "group_id" => "ID",
       "group_name" => "Nom",
-      "group_last_message" => "Dernier message",
-      "group_state_id" => "Etat",
-      "group_type_id" => "Type"
-
+      "state_id" => "Etat",
+      "type_id" => "Type"
     ]
   ];
 
-  public function __construct(array $row = [])
+  public function __construct($id)
   {
+    $row = $this->getModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->getName();
+      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
@@ -54,11 +52,6 @@ class Group
   {
     $this->id = $id;
   }
-
-  public function setLastMessage(string $lastMessage)
-  {
-    $this->lastMessage = $lastMessage;
-  }
   public function setName(string $name)
   {
     $this->name = $name;
@@ -72,23 +65,19 @@ class Group
     $this->type = $type;
   }
 
-  public function getId()
+  public function id()
   {
     return $this->id;
   }
-  public function getLastMessage()
-  {
-    return $this->lastMessage;
-  }
-  public function getName()
+  public function name()
   {
     return $this->name;
   }
-  public function getState()
+  public function state()
   {
     return $this->state;
   }
-  public function getType()
+  public function type()
   {
     return $this->type;
   }

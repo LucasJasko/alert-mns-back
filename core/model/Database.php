@@ -1,6 +1,6 @@
 <?php
 
-namespace core\controller;
+namespace core\model;
 
 use \PDO;
 
@@ -70,14 +70,7 @@ class Database
 
   public function getAll(string $table)
   {
-    if ($table == "_group") {
-      $fieldTable = str_replace("_group", "group", $table);
-    } else if ($table == "_user") {
-      $fieldTable = str_replace("_user", "user", $table);
-    } else {
-      $fieldTable = $table;
-    }
-    $id = $fieldTable . "_id";
+    $id = $table . "_id";
     $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` ORDER BY " . $id . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -85,15 +78,22 @@ class Database
 
   public function getAllWhere(string $table, string $field, int $id)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getWhere(string $table, string $target, string $field, $param)
   {
-    $stmt = $this->pdo->prepare("SELECT " . $target . " FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt = $this->pdo->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $param]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function getRelationBetween(string $table, string $field1, string $field2, string $value)
+  {
+    $stmt = $this->pdo->prepare("SELECT " . $field1 . " FROM " . $table . " WHERE " . $field2 . " = " . $value);
+    $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
