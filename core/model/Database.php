@@ -90,16 +90,16 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getFieldWhere(string $table, string $target, string $field, $param)
+  public function getFieldWhere(string $table, string $target, string $field, $value)
   {
     $stmt = $this->pdo->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    $stmt->execute([":" . $field => $param]);
+    $stmt->execute([":" . $field => $value]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getRelationBetween(string $table, string $field1, string $field2, string $value)
+  public function getRelationBetween(string $table, string $targetField, string $field, string $value)
   {
-    $stmt = $this->pdo->prepare("SELECT " . $field1 . " FROM " . $table . " WHERE " . $field2 . " = " . $value);
+    $stmt = $this->pdo->prepare("SELECT " . $targetField . " FROM " . $table . " WHERE " . $field . " = " . $value);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }

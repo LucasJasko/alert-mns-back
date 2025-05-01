@@ -1,6 +1,8 @@
 <?php
 
-namespace core\model;
+namespace core\controller;
+
+use src\model\Profile;
 
 class Auth
 {
@@ -9,8 +11,8 @@ class Auth
 
   public static function login(string $email, string $pwd)
   {
-    $manager = new ModelManager("user", "User", "user_id");
-    $model = $manager->getModelInstance();
+    $manager = new Profile(1);
+    $model = $manager->getDBModel(1);
     $row = $model->getUserPassword($email);
 
     if ($row && $pwd == $row["user_password"]) {

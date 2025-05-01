@@ -42,12 +42,6 @@ abstract class ModelManager
     // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
   }
 
-  public function getModelRelation(string $table, string $field1, string $field2, string $value)
-  {
-    $row = $this->db->getRelationBetween($table, $field1, $field2, $value);
-    return $row;
-  }
-
   public function updateModel(int $id, array $newData)
   {
     $this->data = $newData;

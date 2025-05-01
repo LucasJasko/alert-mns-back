@@ -23,6 +23,13 @@ class Situation extends ModelManager
 
   public function __construct($id)
   {
+
+    $this->id = $id;
+    $this->tableName = "situation";
+    $this->searchField = "situation_id";
+
+    $this->initdb($this->tableName, $this->searchField);
+
     $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
@@ -39,11 +46,7 @@ class Situation extends ModelManager
     }
   }
 
-  public function situationList()
-  {
-    $relation = $this->db->getRelationBetween("profile__situation", "situation_id", "profile_id", $this->id);
-    return $relation;
-  }
+
 
   public function setFormName()
   {

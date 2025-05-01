@@ -73,7 +73,17 @@ class Dashboard
     $id = $dataArray[$this->tableName . "_id"];
     foreach ($this->dashboardInfos as $key => $value) {
       $row .= "<td class='" . $key . "'>";
-      $row .= isset($dataArray[$key]) ? $dataArray[$key] : "";
+
+      if (isset($dataArray[$key])) {
+        if (is_array($dataArray[$key])) {
+          for ($i = 0; $i < count($dataArray[$key]); $i++) {
+            $row .= $dataArray[$key][$i];
+            $row .= "</br>";
+          }
+        } else {
+          $row .= $dataArray[$key];
+        }
+      }
       $row .= "</td>";
     }
     $row .= $this->getManageButtons($id) . "</tr>";

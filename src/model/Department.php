@@ -23,6 +23,13 @@ class Department extends ModelManager
 
   public function __construct($id)
   {
+
+    $this->id = $id;
+    $this->tableName = "department";
+    $this->searchField = "department_id";
+
+    $this->initdb($this->tableName, $this->searchField);
+
     $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
@@ -32,7 +39,7 @@ class Department extends ModelManager
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("department", "", $key));
+      $method = "set" . ucfirst(str_replace("department_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }

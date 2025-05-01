@@ -6,6 +6,7 @@ use core\model\ModelManager;
 
 class Profile extends ModelManager
 {
+
   private string $surname;
   private string $mail;
   private string $password;
@@ -14,8 +15,8 @@ class Profile extends ModelManager
   private string $theme;
   private string $status;
   private string $role;
-  private $situation;
-  private $department;
+  private array $situation;
+  private array $department;
 
   public static array $modelInfos = [
     "form_infos" => [
@@ -53,9 +54,11 @@ class Profile extends ModelManager
 
   public function __construct($id)
   {
+
     $this->id = $id;
     $this->tableName = "profile";
     $this->searchField = "profile_id";
+
     $this->initdb($this->tableName, $this->searchField);
 
     $row = $this->getDBModel($this->id);
@@ -78,6 +81,8 @@ class Profile extends ModelManager
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
+      $this->setSituation($this->id);
+      $this->setDepartment($this->id);
     }
   }
 
@@ -121,16 +126,21 @@ class Profile extends ModelManager
     $instance = new Role($roleID);
     $this->role = $instance->name();
   }
-  public function setSituation(int $situationID)
+  public function setSituation(int $profileId)
   {
-    $instance = new Situation($situationID);
-
-    $this->situation = $instance->name();
+    $relation =  $this->db->getRelationBetween("profile__situation", "situation_id", "profile_id", $profileId);
+    for ($i = 0; $i < count($relation); $i++) {
+      $situation = new Situation($relation[$i]["situation_id"]);
+      $this->situation[$i] = $situation->name();
+    }
   }
-  public function setDepartment(int $departmentID)
+  public function setDepartment(int $profileId)
   {
-    $instance = new Department($departmentID);
-    $this->department = $instance->name();
+    $relation =  $this->db->getRelationBetween("profile__department", "department_id", "profile_id", $profileId);
+    for ($i = 0; $i < count($relation); $i++) {
+      $department = new Department($relation[$i]["department_id"]);
+      $this->department[$i] = $department->name();
+    }
   }
 
   public function all()
