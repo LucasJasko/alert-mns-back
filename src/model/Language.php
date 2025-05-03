@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Language extends ModelManager
 {
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du langage ",
       "fields_labels" => [
@@ -41,6 +41,14 @@ class Language extends ModelManager
         $this->{$method}($value);
       }
     }
+  }
+
+  public function all()
+  {
+    return [
+      "language_id" => $this->id(),
+      "language_name" =>  $this->name(),
+    ];
   }
 
   public function setFormName()

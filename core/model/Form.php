@@ -9,12 +9,15 @@ class Form
   private array $formInfos;
   private $displayedData = [];
   private string $redirectPage;
+  private $db;
+  private $fieldName;
 
   public function __construct(string $tableName, string $redirectPage, array $formInfos)
   {
     $this->tableName = $tableName;
     $this->formInfos = $formInfos;
     $this->redirectPage = $redirectPage;
+    $this->db = new Database();
   }
 
 
@@ -45,5 +48,12 @@ class Form
         $this->displayedData[$key] = $value;
       }
     }
+  }
+
+  public function getValuesOfField($field)
+  {
+    $table = str_replace("_id", "", $field);
+    $this->fieldName = str_replace("_id", "_name", $field);
+    return $this->db->getField($table, $this->fieldName);
   }
 }

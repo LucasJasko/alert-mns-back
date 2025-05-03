@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Status extends ModelManager
 {
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du statut ",
       "fields_labels" => [
@@ -41,6 +41,14 @@ class Status extends ModelManager
         $this->{$method}($value);
       }
     }
+  }
+
+  public function all()
+  {
+    return [
+      "status_id" => $this->id(),
+      "status_name" =>  $this->name(),
+    ];
   }
 
   public function setFormName()

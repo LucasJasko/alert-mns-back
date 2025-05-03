@@ -17,7 +17,8 @@ class Dashboard
     $this->tableName = $tableName;
     $this->modelName = ucfirst($this->tableName);
 
-    $this->page = "params";
+    $this->page = $_GET["page"];
+    $this->tab = $tableName;
     $this->data = $data;
 
     $this->dashboardInfos = $dashboardInfos;
@@ -73,11 +74,10 @@ class Dashboard
     $id = $dataArray[$this->tableName . "_id"];
     foreach ($this->dashboardInfos as $key => $value) {
       $row .= "<td class='" . $key . "'>";
-
       if (isset($dataArray[$key])) {
         if (is_array($dataArray[$key])) {
-          for ($i = 0; $i < count($dataArray[$key]); $i++) {
-            $row .= $dataArray[$key][$i];
+          foreach ($dataArray[$key] as $key => $value) {
+            $row .=  $key . " de " . $value;
             $row .= "</br>";
           }
         } else {

@@ -9,7 +9,7 @@ class Group extends ModelManager
   private $state;
   private $type;
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du groupe ",
       "fields_labels" => [
@@ -29,30 +29,53 @@ class Group extends ModelManager
 
   public function __construct($id)
   {
-    $row = $this->getDBModel($id);
+    $this->id = $id;
+    $this->tableName = "group";
+    $this->searchField = "group_id";
+
+    $this->initdb($this->tableName, $this->searchField);
+
+    $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("user_", "", $key));
+      if (str_contains($key, "group_")) {
+        $key = str_replace("group_", "", $key);
+      }
+      if (!str_contains($key, "group_")) {
+        $key = str_replace("_id", "", $key);
+      }
+      $method = "set" . $key;
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
   }
 
-  public function setState(State $state)
+  public function all()
   {
-    $this->state = $state;
+    return [
+      "group_id" => $this->id(),
+      "group_name" =>  $this->name(),
+      "state_id" => $this->state(),
+      "type_id" =>  $this->type(),
+    ];
   }
-  public function setType(Type $type)
+
+  public function setState(int $stateID)
   {
-    $this->type = $type;
+    $instance = new State($stateID);
+    $this->state = $instance->name();
+  }
+  public function setType(int $typeID)
+  {
+    $instance = new Type($typeID);
+    $this->type = $instance->name();
   }
 
   public function state()

@@ -15,8 +15,7 @@ class Profile extends ModelManager
   private string $theme;
   private string $status;
   private string $role;
-  private array $situation;
-  private array $department;
+  private array $situation = [];
 
   public static array $modelInfos = [
     "form_infos" => [
@@ -32,7 +31,6 @@ class Profile extends ModelManager
         'theme_id' => "Thème de préférence de l'utilisateur",
         'status_id' => "Statut de préférence de l'utilisateur",
         'situation_id' => "Situation de l'utilisateur",
-        'department_id' => "Département de l'utilisateur",
         'role_id' => "Rôle de l'utilisateur"
       ]
     ],
@@ -47,7 +45,6 @@ class Profile extends ModelManager
       "theme_id" => "Thème",
       "status_id" => "Etat",
       "situation_id" => "Situation",
-      "department_id" => "Département",
       "role_id" => "Rôle"
     ]
   ];
@@ -82,7 +79,6 @@ class Profile extends ModelManager
         $this->{$method}($value);
       }
       $this->setSituation($this->id);
-      $this->setDepartment($this->id);
     }
   }
 
@@ -128,19 +124,13 @@ class Profile extends ModelManager
   }
   public function setSituation(int $profileId)
   {
-    $relation =  $this->db->getRelationBetween("profile__situation", "situation_id", "profile_id", $profileId);
+    $relation =  $this->db->getFieldsWhere("profile__situation", ["post_id", "department_id"], "profile_id", $profileId);
     for ($i = 0; $i < count($relation); $i++) {
-      $situation = new Situation($relation[$i]["situation_id"]);
-      $this->situation[$i] = $situation->name();
-    }
-  }
-  public function setDepartment(int $profileId)
-  {
-    $relation =  $this->db->getRelationBetween("profile__department", "department_id", "profile_id", $profileId);
-    for ($i = 0; $i < count($relation); $i++) {
+      $post = new Post($relation[$i]["post_id"]);
       $department = new Department($relation[$i]["department_id"]);
-      $this->department[$i] = $department->name();
+      $this->situation += [$post->name() => $department->name()];
     }
+    // var_dump($this->situation());
   }
 
   public function all()
@@ -156,7 +146,6 @@ class Profile extends ModelManager
       "theme_id" => $this->theme(),
       "status_id" => $this->status(),
       "situation_id" => $this->situation(),
-      "department_id" =>  $this->department(),
       "role_id" =>  $this->role(),
     ];
   }
@@ -196,9 +185,5 @@ class Profile extends ModelManager
   public function situation()
   {
     return $this->situation;
-  }
-  public function department()
-  {
-    return $this->department;
   }
 }

@@ -24,7 +24,7 @@ switch ($page) {
         $controller->getEmptyForm();
       }
     } else {
-      $controller->getView();
+      $controller->getGroupDashboard();
     }
 
     break;
@@ -66,7 +66,7 @@ switch ($page) {
         $controller->getEmptyForm($_GET["tab"]);
       }
     } else {
-      $controller->getView();
+      $controller->getParamsDashboard();
     }
 
     break;

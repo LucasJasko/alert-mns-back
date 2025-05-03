@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Access extends ModelManager
 {
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du département ",
       "fields_labels" => [

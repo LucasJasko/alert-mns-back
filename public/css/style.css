@@ -42,6 +42,9 @@ body {
   background-color: var(--paperwhite);
   box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.151);
 }
+.param-window-small {
+  width: calc(33% - 30px);
+}
 
 .param-window > .dashboard {
   min-height: 300px;
@@ -194,12 +197,27 @@ h2 {
   margin-bottom: 5px;
 }
 
-.form input[type="text"] {
+.form input[type="text"],
+select {
   margin-bottom: 30px;
   border: 1px solid var(--limitgrey);
   border-radius: 5px;
   padding: 10px;
   width: 100%;
+}
+
+.dbl-select__container {
+  display: flex;
+  align-items: start;
+}
+
+.dbl-select__container select {
+  margin-right: 5px;
+}
+
+.dbl-select {
+  display: inline-block;
+  width: calc(50% - 20px);
 }
 
 .valid-button {
@@ -213,6 +231,14 @@ h2 {
   transition: 0.2s ease;
   text-decoration: none;
   font-size: 1rem;
+}
+
+.plus-btn {
+  display: inline-block;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
 }
 
 .add-button {

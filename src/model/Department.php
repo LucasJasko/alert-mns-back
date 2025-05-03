@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Department extends ModelManager
 {
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du département ",
       "fields_labels" => [
@@ -45,6 +45,15 @@ class Department extends ModelManager
       }
     }
   }
+
+  public function all()
+  {
+    return [
+      "department_id" => $this->id(),
+      "department_name" =>  $this->name(),
+    ];
+  }
+
 
   public function setFormName()
   {

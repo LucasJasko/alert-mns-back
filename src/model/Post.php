@@ -4,30 +4,33 @@ namespace src\model;
 
 use core\model\ModelManager;
 
-class State extends ModelManager
+class Post extends ModelManager
 {
 
   public static array $modelInfos =  [
     "form_infos" => [
-      "form_title" => "Modification de l'état ",
+      "form_title" => "Modification du poste ",
       "fields_labels" => [
-        "state_id" => "ID",
-        "state_name" => "Nom",
+        "post_id" => "Identifiant du poste",
+        "post_name" => "Nom du poste"
       ]
     ],
     "dashboard_infos" => [
-      "state_id" => "Identifiant de l'état",
-      "state_name" => "Nom de l'état"
+      "post_id" => "ID",
+      "post_name" => "Nom",
     ]
   ];
 
-  public function __construct(int $id)
+  public function __construct($id)
   {
+
     $this->id = $id;
-    $this->tableName = "state";
-    $this->searchField = "state_id";
+    $this->tableName = "post";
+    $this->searchField = "post_id";
+
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($this->id);
+
+    $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
     }
@@ -36,11 +39,19 @@ class State extends ModelManager
   public function hydrate($row)
   {
     foreach ($row as $key => $value) {
-      $method = "set" . ucfirst(str_replace("state_", "", $key));
+      $method = "set" . ucfirst(str_replace("post_", "", $key));
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
+  }
+
+  public function all()
+  {
+    return [
+      "post_id" => $this->id(),
+      "post_name" =>  $this->name(),
+    ];
   }
 
   public function setFormName()

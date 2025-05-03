@@ -19,48 +19,59 @@ class ProfileController
 
   public function __construct()
   {
+    $this->db = new Database();
+
     $this->formInfos = Profile::$modelInfos["form_infos"];
     $this->dashboardInfos = Profile::$modelInfos["dashboard_infos"];
+    $this->formInfos = Profile::$modelInfos["form_infos"];
   }
 
   public function getProfileDashboard()
   {
-    $this->db = new Database();
     $recordset = $this->db->getField("profile", "profile_id");
 
-    $models = [];
+    $clearedRecordset = [];
     for ($i = 0; $i < count($recordset); $i++) {
-      $id = $recordset[$i]["profile_id"];
-      $model = new Profile($id);
-      $models[$i] = $model->all();
+      $clearedRecordset[$i] = $recordset[$i]["profile_id"];
     }
 
-    $this->dashboard = new \core\model\Dashboard("profile", $models, $this->dashboardInfos, $this->fieldsToNotRender);
+    $profiles = [];
+    for ($i = 0; $i < count($clearedRecordset); $i++) {
+      $id = $clearedRecordset[$i];
+      $profile = new Profile($id);
+      $profiles[$i] = $profile->all();
+    }
+
+
+    $this->dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/profile.php";
   }
 
   public function getEmptyForm()
   {
-    $this->form = new \core\model\Form("profile", "profile", $this->profileInfos["form_infos"]);
-    $fieldsOfTable = $this->profileManager->getFieldsOfTable();
+    $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
+    $fieldsOfTable = $this->db->getFieldsOfTable("profile");
     return $this->form->getEmptyForm($fieldsOfTable);
   }
 
   public function getForm(int $id)
   {
     $this->profileInstance = new Profile($id);
+    $profileData = $this->profileInstance->all();
 
-    $this->form = new \core\model\Form("profile", "Profile", $this->profileInfos["form_infos"]);
-    return $this->form->getForm($this->profileInstance);
+
+    $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
+    return $this->form->getForm($profileData);
   }
 
 
   public function submitData(array $data)
   {
+    $this->profileInstance = new Profile($data["profile_id"]);
     if (!empty($data["profile_id"])) {
-      $this->profileManager->updateModel($data["profile_id"], $data);
+      $this->profileInstance->updateModel($data["profile_id"], $data);
     } else {
-      $this->profileManager->createNewModel($data);
+      $this->profileInstance->createNewModel("profile", $data);
     }
   }
 }

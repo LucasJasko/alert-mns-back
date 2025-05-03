@@ -45,13 +45,9 @@
 
       <?php
       foreach ($this->ParamsConfig as $table) {
-        if ($table["field_name"] == "situation") {
-          $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["class_name"], $table["infos"], ["department_id"]);
-        } else {
-          $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["class_name"], $table["infos"]);
-        }
+        $this->dashboard = new \core\model\Dashboard($table["field_name"], $table["recordset"], $table["dashboard_infos"]);
       ?>
-        <div class="param-window <?= $table["field_name"] ?>">
+        <div class="param-window param-window-small <?= $table["field_name"] ?>">
           <h2 class="param-title"><?= $table["field_desc"] ?></h2>
           <div class="btn-container">
             <a class="valid-button add-button" href="../index.php?page=params&tab=<?= $table["field_name"] ?>&id=0">Ajouter <?= $table["field_p"] ?></a>

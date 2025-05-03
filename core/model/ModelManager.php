@@ -20,9 +20,9 @@ abstract class ModelManager
     $this->tableName = $tableName;
   }
 
-  public function getFieldsOfModel()
+  public function getFieldsOfModel($table)
   {
-    return $this->db->getFieldsOfTable($this->tableName);
+    return $this->db->getFieldsOfTable($table);
   }
 
   public function getDBModel(int $id)
@@ -32,9 +32,9 @@ abstract class ModelManager
   }
 
 
-  public function createNewModel(array $data)
+  public function createNewModel(string $table, array $data)
   {
-    $fields =  $this->getFieldsOfModel();
+    $fields =  $this->getFieldsOfModel($table);
     for ($i = 0; $i < count($fields); $i++) {
       if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
     }
@@ -45,7 +45,7 @@ abstract class ModelManager
   public function updateModel(int $id, array $newData)
   {
     $this->data = $newData;
-    $res = $this->db->updateOne($this->tableName, $this->data, $this->searchField, $id);
+    $this->db->updateOne($this->tableName, $this->data, $this->searchField, $id);
   }
 
   public function deleteModel(int $id)

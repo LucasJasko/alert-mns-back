@@ -15,26 +15,79 @@
     <h1><?= $this->formInfos["form_title"] ?></h1>
 
     <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
+
       <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
-      <?php
 
-
-      foreach ($this->displayedData as $key => $value) { ?>
+      <?php foreach ($this->displayedData as $key => $value) { ?>
 
         <label for="<?= $key ?>"> <?= $this->formInfos["fields_labels"][$key] ?> :</label>
-        <input type='text' placeholder='Un champ ici' name="<?= $key ?>" id="<?= $key ?>" value="<?= $this->displayedData[$key] ?>">
-        <br>
 
-      <?php  } ?>
+        <?php if (str_contains($key, $this->tableName)) { ?>
 
-      <?php
-      if ($this->redirectPage == "params") {
-      ?>
+          <input type='text' placeholder='Un champ ici' name="<?= $key ?>" id="<?= $key ?>" value="<?= $this->displayedData[$key] ?>">
+
+          <?php } else {
+
+          if ($key == "situation_id") {
+
+            $options = $this->getValuesOfField("post_id");
+          ?>
+            <div class="dbl-select__container">
+
+              <select class="dbl-select" name="<?= $key ?>">
+
+                <option value="">-- Poste --</option>
+                <?php
+                for ($i = 0; $i < count($options); $i++) { ?>
+                  <option value="<?= $options[$i][$this->fieldName] ?>"><?= $options[$i][$this->fieldName] ?></option>
+                <?php } ?>
+
+              </select>
+
+              <?php
+              $options = $this->getValuesOfField("department_id"); ?>
+
+              <select class="dbl-select" name="<?= $key ?>">
+
+                <option value="">-- Département --</option>
+                <?php
+                for ($i = 0; $i < count($options); $i++) { ?>
+                  <option value="<?= $options[$i][$this->fieldName] ?>"><?= $options[$i][$this->fieldName] ?></option>
+                <?php } ?>
+
+              </select>
+              <div class="valid-button plus-btn">+</div>
+            </div>
+
+          <?php } else { ?>
+
+            <select name="<?= $key ?>">
+
+              <?php
+              $options = $this->getValuesOfField($key);
+              for ($i = 0; $i < count($options); $i++) { ?>
+                <option value="<?= $options[$i][$this->fieldName] ?>"><?= $options[$i][$this->fieldName] ?></option>
+              <?php } ?>
+
+            </select>
+
+
+          <?php } ?>
+
+
+        <?php
+        }
+      }
+
+      if ($this->redirectPage == "params") { ?>
+
         <input class=" table" type="text" name="table_name" value="<?= $this->tableName ?>" hidden>
+
       <?php } ?>
 
       <input class=" table" type="text" value="<?= $this->redirectPage ?> " hidden>
       <input class="valid-button" type="submit" value="Enregistrer">
+
     </form>
 
   </main>

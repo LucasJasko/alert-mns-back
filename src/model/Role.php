@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Role extends ModelManager
 {
 
-  public array $modelInfos =  [
+  public static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du rôle ",
       "fields_labels" => [
@@ -41,6 +41,14 @@ class Role extends ModelManager
         $this->{$method}($value);
       }
     }
+  }
+
+  public function all()
+  {
+    return [
+      "role_id" => $this->id(),
+      "role_name" =>  $this->name(),
+    ];
   }
 
   public function setFormName()

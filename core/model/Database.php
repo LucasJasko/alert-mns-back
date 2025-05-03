@@ -30,7 +30,7 @@ class Database
     }
   }
 
-  public function createOne(string $table, array $fields, array $data)
+  public function createOne(string $table, array $data, array $fields)
   {
     $sql = "INSERT INTO " . $table . " ( ";
     foreach ($fields as $key => $value) {
@@ -97,10 +97,19 @@ class Database
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getRelationBetween(string $table, string $targetField, string $field, string $value)
+  public function getFieldsWhere(string $table, array $target, string $field, $value)
   {
-    $stmt = $this->pdo->prepare("SELECT " . $targetField . " FROM " . $table . " WHERE " . $field . " = " . $value);
-    $stmt->execute();
+    $sql = "SELECT ";
+    for ($i = 0; $i < count($target); $i++) {
+      if ($i != count($target) - 1) {
+        $sql .= $target[$i] . ", ";
+      } else {
+        $sql .= $target[$i];
+      }
+    }
+    $sql .= " FROM `" . $table . "` WHERE " . $field . " = :" . $field;
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([":" . $field => $value]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
