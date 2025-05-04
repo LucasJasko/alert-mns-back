@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Role extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification du rôle ",
       "fields_labels" => [
@@ -49,10 +49,5 @@ class Role extends ModelManager
       "role_id" => $this->id(),
       "role_name" =>  $this->name(),
     ];
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

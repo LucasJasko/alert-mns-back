@@ -9,7 +9,7 @@ class Group extends ModelManager
   private $state;
   private $type;
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS = [
     "form_infos" => [
       "form_title" => "Modification du groupe ",
       "fields_labels" => [

@@ -17,7 +17,7 @@ class Dashboard
     $this->tableName = $tableName;
     $this->modelName = ucfirst($this->tableName);
 
-    $this->page = $_GET["page"];
+    $this->page = isset($_GET["page"]) ?  $_GET["page"] : "";
     $this->tab = $tableName;
     $this->data = $data;
 

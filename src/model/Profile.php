@@ -17,7 +17,7 @@ class Profile extends ModelManager
   private string $role;
   private array $situation = [];
 
-  public static array $modelInfos = [
+  const MODEL_INFOS = [
     "form_infos" => [
       "form_title" => "Modification de l'utilisateur ",
       "fields_labels" => [

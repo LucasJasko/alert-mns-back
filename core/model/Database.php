@@ -53,7 +53,7 @@ class Database
 
   public function updateOne(string $table, array $data, string $param, int $id)
   {
-    $sql = "UPDATE " . $table . " SET ";
+    $sql = "UPDATE `" . $table . "` SET ";
     foreach ($data as $key => $value) {
       $sql .= $key . " = :" . $key . ", ";
     }
@@ -65,6 +65,7 @@ class Database
       $stmt->bindValue(":" . $key, $value);
     }
     $stmt->bindValue(":" . $param, $id);
+    var_dump($stmt);
     $stmt->execute();
   }
 

@@ -19,10 +19,10 @@ class GroupController
 
   public function __construct()
   {
-    $this->formInfos = Group::$modelInfos["form_infos"];
-    $this->dashboardInfos = Group::$modelInfos["dashboard_infos"];
+    $this->formInfos = Group::MODEL_INFOS["form_infos"];
+    $this->dashboardInfos = Group::MODEL_INFOS["dashboard_infos"];
     $this->db = new Database();
-    $this->formInfos = Group::$modelInfos["form_infos"];
+    $this->formInfos = Group::MODEL_INFOS["form_infos"];
   }
 
   public function getGroupDashboard()

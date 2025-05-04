@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Type extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification du type ",
       "fields_labels" => [
@@ -41,10 +41,5 @@ class Type extends ModelManager
         $this->{$method}($value);
       }
     }
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

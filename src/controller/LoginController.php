@@ -9,7 +9,7 @@ class LoginController
 
   public function __construct()
   {
-    $this->auth = new \core\model\Auth();
+    $this->auth = new \core\controller\Auth();
   }
 
   public function checkAuth(string $email, string $pwd)

@@ -72,8 +72,8 @@ class ParamsController
 
     foreach ($this->ParamsConfig as $k => $v) {
       $model = "\src\model\\" . ucfirst($k);
-      $this->ParamsConfig[$k]["form_infos"] = $model::$modelInfos["form_infos"];
-      $this->ParamsConfig[$k]["dashboard_infos"] = $model::$modelInfos["dashboard_infos"];
+      $this->ParamsConfig[$k]["form_infos"] = $model::MODEL_INFOS["form_infos"];
+      $this->ParamsConfig[$k]["dashboard_infos"] = $model::MODEL_INFOS["dashboard_infos"];
     }
   }
 
@@ -115,8 +115,9 @@ class ParamsController
     $model = "\src\model\\" . ucfirst($tab);
     $this->paramInstance = new $model($id);
     $profileData = $this->paramInstance->all();
+    $formInfos = $this->paramInstance::MODEL_INFOS["form_infos"];
 
-    $this->form = new \core\model\Form($tab, $tab, $this->paramInstance::$modelInfos["form_infos"]);
+    $this->form = new \core\model\Form($tab, $tab, $formInfos);
     return $this->form->getForm($profileData);
   }
 

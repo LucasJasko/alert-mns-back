@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class State extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification de l'état ",
       "fields_labels" => [
@@ -41,10 +41,5 @@ class State extends ModelManager
         $this->{$method}($value);
       }
     }
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

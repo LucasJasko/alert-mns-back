@@ -21,9 +21,9 @@ class ProfileController
   {
     $this->db = new Database();
 
-    $this->formInfos = Profile::$modelInfos["form_infos"];
-    $this->dashboardInfos = Profile::$modelInfos["dashboard_infos"];
-    $this->formInfos = Profile::$modelInfos["form_infos"];
+    $this->formInfos = Profile::MODEL_INFOS["form_infos"];
+    $this->dashboardInfos = Profile::MODEL_INFOS["dashboard_infos"];
+    $this->formInfos = Profile::MODEL_INFOS["form_infos"];
   }
 
   public function getProfileDashboard()
@@ -68,10 +68,15 @@ class ProfileController
   public function submitData(array $data)
   {
     $this->profileInstance = new Profile($data["profile_id"]);
-    if (!empty($data["profile_id"])) {
-      $this->profileInstance->updateModel($data["profile_id"], $data);
-    } else {
+    if (empty($data["profile_id"])) {
       $this->profileInstance->createNewModel("profile", $data);
+    } else {
+      //  ICI ===============
+      $profileSituation = [$data["profile_id"], $data["post_id"], $data["department_id"]];
+
+      var_dump($data);
+
+      // $this->profileInstance->updateModel($data["profile_id"], $data);
     }
   }
 }

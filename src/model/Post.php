@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Post extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification du poste ",
       "fields_labels" => [
@@ -52,10 +52,5 @@ class Post extends ModelManager
       "post_id" => $this->id(),
       "post_name" =>  $this->name(),
     ];
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

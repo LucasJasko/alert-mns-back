@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Theme extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification du thème ",
       "fields_labels" => [
@@ -49,10 +49,5 @@ class Theme extends ModelManager
       "theme_id" => $this->id(),
       "theme_name" =>  $this->name(),
     ];
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }

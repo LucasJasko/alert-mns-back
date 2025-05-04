@@ -46,10 +46,6 @@ body {
   width: calc(33% - 30px);
 }
 
-.param-window > .dashboard {
-  min-height: 300px;
-}
-
 .user_language {
   width: 50%;
 }

@@ -10,12 +10,13 @@ class Form
   private $displayedData = [];
   private string $redirectPage;
   private $db;
-  private $fieldName;
 
   public function __construct(string $tableName, string $redirectPage, array $formInfos)
   {
     $this->tableName = $tableName;
+    var_dump($this->tableName);
     $this->formInfos = $formInfos;
+    var_dump($this->formInfos);
     $this->redirectPage = $redirectPage;
     $this->db = new Database();
   }
@@ -50,10 +51,8 @@ class Form
     }
   }
 
-  public function getValuesOfField($field)
+  public function getDataOfTable($table)
   {
-    $table = str_replace("_id", "", $field);
-    $this->fieldName = str_replace("_id", "_name", $field);
-    return $this->db->getField($table, $this->fieldName);
+    return $this->db->getAll($table);
   }
 }

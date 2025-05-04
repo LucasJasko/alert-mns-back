@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Access extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS =  [
     "form_infos" => [
       "form_title" => "Modification du département ",
       "fields_labels" => [
@@ -26,7 +26,6 @@ class Access extends ModelManager
     $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row);
-      $this->modelInfos["form_infos"]["form_title"] .= $this->name();
     }
   }
 
@@ -38,5 +37,10 @@ class Access extends ModelManager
         $this->{$method}($value);
       }
     }
+  }
+
+  public function applyModelName()
+  {
+    self::MODEL_INFOS["form_infos"]["form_title"] .= $this->name();
   }
 }

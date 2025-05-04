@@ -30,8 +30,6 @@ abstract class ModelManager
     $row = $this->db->getAllWhere($this->tableName, $this->searchField, $id);
     return $row;
   }
-
-
   public function createNewModel(string $table, array $data)
   {
     $fields =  $this->getFieldsOfModel($table);

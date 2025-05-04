@@ -7,7 +7,7 @@ use core\model\ModelManager;
 class Status extends ModelManager
 {
 
-  public static array $modelInfos =  [
+  const MODEL_INFOS = [
     "form_infos" => [
       "form_title" => "Modification du statut ",
       "fields_labels" => [
@@ -49,10 +49,5 @@ class Status extends ModelManager
       "status_id" => $this->id(),
       "status_name" =>  $this->name(),
     ];
-  }
-
-  public function setFormName()
-  {
-    $this->modelInfos["form_infos"]["form_title"] .= $this->name();
   }
 }
