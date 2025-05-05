@@ -1,7 +1,8 @@
 <?php
 
-require_once "../core/Autoloader.php";
-Autoloader::autoload();
+require_once "../config/config.php";
+require_once "../class/Src/App.php";
+
 
 use \core\controller\Auth;
 
@@ -13,7 +14,7 @@ switch ($page) {
   case "group":
 
     Auth::protect();
-    $controller = new src\controller\GroupController();
+    $controller = new Src\Controller\Group();
 
     if ($_POST) {
       $controller->submitData($_POST);
@@ -35,7 +36,7 @@ switch ($page) {
   case "profile":
 
     Auth::protect();
-    $controller = new src\controller\ProfileController();
+    $controller = new Src\Controller\Profile();
 
     if ($_POST) {
       $controller->submitData($_POST);
@@ -56,7 +57,7 @@ switch ($page) {
   case "params":
 
     Auth::protect();
-    $controller = new src\controller\ParamsController();
+    $controller = new Src\Controller\Params();
 
     if ($_POST) {
       $controller->submitData($_POST, $_POST["table_name"]);
@@ -79,14 +80,14 @@ switch ($page) {
   case "stats":
 
     Auth::protect();
-    $controller = new src\controller\StatsController();
+    $controller = new Src\Controller\Stats();
     $controller->getView();
     break;
 
 
   case "login":
 
-    $controller = new src\controller\LoginController();
+    $controller = new Src\Controller\Login();
 
     if (isset($_POST["email"]) && isset($_POST["password"])) {
       $controller->checkAuth($_POST["email"], $_POST["password"]);
