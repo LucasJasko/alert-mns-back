@@ -84,6 +84,15 @@ class Database
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
+  {
+    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
+    $stmt->bindValue(":" . $field1, $field1Value);
+    $stmt->bindValue(":" . $field2, $field2Value);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getField(string $table, string $field)
   {
     $stmt = $this->pdo->prepare("SELECT " . $field . " FROM `" . $table . "` ORDER BY " . $field . " ASC");

@@ -7,7 +7,8 @@ class Feed
 
   public static function getConv()
   {
-    \core\controller\Auth::getClientAccess();
+    $auth = new \core\controller\Auth();
+    $auth->getClientAccess();
     $rawData = file_get_contents("php://input");
     $data    = json_decode($rawData, true);
 

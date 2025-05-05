@@ -2,42 +2,60 @@
 
 namespace core\controller;
 
+use core\model\Database;
 use src\model\Profile;
 
 class Auth
 {
-  private static array $response;
+  private array $response;
+  private $db;
 
 
-  public static function login(string $email, string $pwd)
+  public function __construct()
   {
-    $manager = new Profile(1);
-    $model = $manager->getDBModel(1);
-    $row = $model->getUserPassword($email);
-
-    if ($row && $pwd == $row["user_password"]) {
-      self::$response = ['success' => true, 'message' => 'Utilisateur connecté'];
-      \core\model\Log::writeLog("Lucas s'est connecté.");
-    } else {
-      self::$response = ['success' => false, 'message' => 'Échec de la connexion : email ou mot de passe incorrect.'];
-    }
-
-    return self::$response;
+    $this->db = new Database();
   }
 
-  public static function clientLogin()
+  private function checkAuth(string $email, string $pwd)
+  {
+    return $this->db->getAllWhereAnd("profile", "profile_mail", $email, "profile_password", $pwd);
+  }
+
+  public function tryLogin(string $email, string $pwd)
+  {
+    $res = $this->checkAuth($email, $pwd);
+
+    if ($res && $pwd == $res["profile_password"]) {
+
+      if ($res["role_id"] == 1) {
+
+        session_start();
+        $_SESSION["logged"] = "OK";
+        $this->response = ['success' => true, 'message' => 'Utilisateur connecté'];
+        \core\model\Log::writeLog("L'administrateur [" . $res["profile_id"] .  "]" . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+      } else {
+        $this->response = ['success' => false, 'message' => "Vous n'etes pas autorisé à vous connecté."];
+      }
+    } else {
+      $this->response = ['success' => false, 'message' => 'Échec de la connexion : email ou mot de passe incorrect.'];
+    }
+
+    return $this->response;
+  }
+
+  public function clientLogin()
   {
     // Réception des données client
     $rawData = file_get_contents("php://input");
     $data = json_decode($rawData, true);
 
     if ($data) {
-      $res = Auth::login($data["user_mail"], $data["user_password"]);
+      $res = $this->tryLogin($data["profile_mail"], $data["profile_password"]);
       echo json_encode($res);
     }
   }
 
-  public static function getClientAccess()
+  public function getClientAccess()
   {
     // Plutôt que l'étoile il faudra donner l'adresse du client ici
     return [
@@ -49,13 +67,12 @@ class Auth
 
   public static function protect()
   {
-    self::getClientAccess();
     session_start();
-
-    if (!isset($_SESSION["is_logged"]) || $_SESSION["is_logged"] != "oui") {
-      echo json_encode(false);
-    } else {
-      echo json_encode($_SESSION);
-    };
+    if (!isset($_SESSION["logged"]) || $_SESSION["logged"] != "OK") {
+      header("Location:/index.php?page=login");
+      exit();
+    }
   }
+
+  public static function destroy() {}
 }

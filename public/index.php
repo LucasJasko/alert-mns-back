@@ -3,14 +3,16 @@
 require_once "../core/Autoloader.php";
 Autoloader::autoload();
 
-$page = isset($_GET["page"]) ? $_GET["page"] : "profile";
+use \core\controller\Auth;
 
+$page = isset($_GET["page"]) ? $_GET["page"] : "login";
 
 switch ($page) {
 
 
   case "group":
 
+    Auth::protect();
     $controller = new src\controller\GroupController();
 
     if ($_POST) {
@@ -32,6 +34,7 @@ switch ($page) {
 
   case "profile":
 
+    Auth::protect();
     $controller = new src\controller\ProfileController();
 
     if ($_POST) {
@@ -52,6 +55,7 @@ switch ($page) {
 
   case "params":
 
+    Auth::protect();
     $controller = new src\controller\ParamsController();
 
     if ($_POST) {
@@ -74,6 +78,7 @@ switch ($page) {
 
   case "stats":
 
+    Auth::protect();
     $controller = new src\controller\StatsController();
     $controller->getView();
     break;

@@ -21,8 +21,8 @@ class GroupController
   {
     $this->formInfos = Group::MODEL_INFOS["form_infos"];
     $this->dashboardInfos = Group::MODEL_INFOS["dashboard_infos"];
-    $this->db = new Database();
     $this->formInfos = Group::MODEL_INFOS["form_infos"];
+    $this->db = new Database();
   }
 
   public function getGroupDashboard()

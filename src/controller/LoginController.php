@@ -14,13 +14,18 @@ class LoginController
 
   public function checkAuth(string $email, string $pwd)
   {
-    $res = $this->auth->login($email, $pwd);
+    $res = $this->auth->tryLogin($email, $pwd);
     if ($res["success"]) {
-      header("Location:/index.php?page=user");
+      $this->redirect("profile");
     } else {
       $err = "Email ou mot de passe incorrect";
       return $err;
     }
+  }
+
+  public function redirect($page)
+  {
+    header("Location:/index.php?page=" . $page);
   }
 
   public function getLoginPage()
