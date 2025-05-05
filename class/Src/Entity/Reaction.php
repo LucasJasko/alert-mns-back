@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Model;
+namespace Src\Entity;
 
 use Src\Model\Model;
 
-class Room extends Model
+class Reaction extends Model
 {
   function __construct($id)
   {

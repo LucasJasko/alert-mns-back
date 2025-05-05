@@ -1,30 +1,30 @@
 <?php
 
-namespace core\model;
+namespace Core\Database;
 
 use \PDO;
 
 class Database
 {
-  private string $dbHost = "localhost";
-  private string $dbName = "alertmns";
-  private string $dbUsername = "root";
-  private string $dbPassword = "";
-  private $pdo;
+  private string $dbHost;
+  private string $dbName;
+  private string $dbUsername;
+  private string $dbPassword;
+  private $db;
 
-  public function __construct(string $dbName = "alertmns", string $dbUsername = "root", string $dbPassword = "", string $dbHost = "localhost")
+  public function __construct(string $dbhost, string $dbname, string $dbuser, string $dbpass)
   {
-    $this->dbHost = $dbHost;
-    $this->dbName = $dbName;
-    $this->dbUsername = $dbUsername;
-    $this->dbPassword = $dbPassword;
+    $this->dbHost = $dbhost;
+    $this->dbName = $dbname;
+    $this->dbUsername = $dbuser;
+    $this->dbPassword = $dbpass;
 
     try {
-      if ($this->pdo === null) {
+      if ($this->db === null) {
         $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
-        $this->pdo = new PDO($dsn, $this->dbUsername, $this->dbPassword);
-        return $this->pdo;
+        $this->db = new \PDO($dsn, $this->dbUsername, $this->dbPassword);
       }
+      return $this->db;
     } catch (\PDOException $e) {
       return $e->getMessage();
     }
@@ -44,7 +44,7 @@ class Database
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
     $sql = str_replace(", )", " )", $sql);
 
-    $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->db->prepare($sql);
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);
     }
@@ -60,7 +60,7 @@ class Database
     $sql .= "WHERE " . $param . " = :" . $param;
     $sql = str_replace(", WHERE", " WHERE", $sql);
 
-    $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->db->prepare($sql);
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);
     }
@@ -72,21 +72,21 @@ class Database
   public function getAll(string $table)
   {
     $id = $table . "_id";
-    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` ORDER BY " . $id . " ASC");
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` ORDER BY " . $id . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getAllWhere(string $table, string $field, int $id)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {
-    $stmt = $this->pdo->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
     $stmt->execute();
@@ -95,14 +95,14 @@ class Database
 
   public function getField(string $table, string $field)
   {
-    $stmt = $this->pdo->prepare("SELECT " . $field . " FROM `" . $table . "` ORDER BY " . $field . " ASC");
+    $stmt = $this->db->prepare("SELECT " . $field . " FROM `" . $table . "` ORDER BY " . $field . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getFieldWhere(string $table, string $target, string $field, $value)
   {
-    $stmt = $this->pdo->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
+    $stmt = $this->db->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $value]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
@@ -118,14 +118,14 @@ class Database
       }
     }
     $sql .= " FROM `" . $table . "` WHERE " . $field . " = :" . $field;
-    $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->db->prepare($sql);
     $stmt->execute([":" . $field => $value]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getFieldsOfTable(string $table)
   {
-    $stmt = $this->pdo->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
+    $stmt = $this->db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
     $stmt->execute();
     $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -141,7 +141,7 @@ class Database
 
   public function deleteOne(string $table, string $field, int $param)
   {
-    $stmt = $this->pdo->prepare("DELETE FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt = $this->db->prepare("DELETE FROM " . $table . " WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $param]);
   }
 }

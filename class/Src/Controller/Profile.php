@@ -3,7 +3,7 @@
 namespace Src\Controller;
 
 use Core\Model\Database;
-use Src\Model\Profile as ProfileModel;
+use Src\Entity\Profile as ProfileModel;
 
 class Profile
 {

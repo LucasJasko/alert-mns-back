@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Model;
+namespace Src\Entity;
 
 use Src\Model\Model;
 

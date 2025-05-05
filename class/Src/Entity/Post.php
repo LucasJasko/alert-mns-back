@@ -1,34 +1,36 @@
 <?php
 
-namespace Src\Model;
+namespace Src\Entity;
 
 use Src\Model\Model;
 
-class Role extends Model
+class Post extends Model
 {
 
   const MODEL_INFOS =  [
     "form_infos" => [
-      "form_title" => "Modification du rôle ",
+      "form_title" => "Modification du poste ",
       "fields_labels" => [
-        "role_id" => "Identifiant du rôle",
-        "role_name" => "Description du rôle"
+        "post_id" => "Identifiant du poste",
+        "post_name" => "Nom du poste"
       ]
     ],
     "dashboard_infos" => [
-      "role_id" => "ID",
-      "role_name" => "Nom",
+      "post_id" => "ID",
+      "post_name" => "Nom",
     ]
   ];
 
   public function __construct($id)
   {
+
     $this->id = $id;
-    $this->tableName = "role";
-    $this->searchField = "role_id";
+    $this->tableName = "post";
+    $this->searchField = "post_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($this->id);
+
+    $row = $this->getDBModel($id);
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
@@ -37,8 +39,8 @@ class Role extends Model
   public function all()
   {
     return [
-      "role_id" => $this->id(),
-      "role_name" =>  $this->name(),
+      "post_id" => $this->id(),
+      "post_name" =>  $this->name(),
     ];
   }
 }

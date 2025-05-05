@@ -1,31 +1,31 @@
 <?php
 
-namespace Src\Model;
+namespace Src\Entity;
 
 use Src\Model\Model;
 
-class Theme extends Model
+class Status extends Model
 {
 
-  const MODEL_INFOS =  [
+  const MODEL_INFOS = [
     "form_infos" => [
-      "form_title" => "Modification du thème ",
+      "form_title" => "Modification du statut ",
       "fields_labels" => [
-        "theme_id" => "Identifiant du thème",
-        "theme_name" => "Nom du thème",
+        "status_id" => "Identifiant du statut",
+        "status_name" => "Description du statut"
       ]
     ],
     "dashboard_infos" => [
-      "theme_id" => "ID",
-      "theme_name" => "Nom",
+      "status_id" => "ID",
+      "status_name" => "Nom",
     ]
   ];
 
   public function __construct($id)
   {
     $this->id = $id;
-    $this->tableName = "theme";
-    $this->searchField = "theme_id";
+    $this->tableName = "status";
+    $this->searchField = "status_id";
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
@@ -36,8 +36,8 @@ class Theme extends Model
   public function all()
   {
     return [
-      "theme_id" => $this->id(),
-      "theme_name" =>  $this->name(),
+      "status_id" => $this->id(),
+      "status_name" =>  $this->name(),
     ];
   }
 }

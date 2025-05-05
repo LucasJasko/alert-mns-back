@@ -71,7 +71,7 @@ class Params
     $this->db = new Database();
 
     foreach ($this->ParamsConfig as $k => $v) {
-      $model = "\src\model\\" . ucfirst($k);
+      $model = "\Src\Entity\\" . ucfirst($k);
       $this->ParamsConfig[$k]["form_infos"] = $model::MODEL_INFOS["form_infos"];
       $this->ParamsConfig[$k]["dashboard_infos"] = $model::MODEL_INFOS["dashboard_infos"];
     }
@@ -81,7 +81,7 @@ class Params
   {
     foreach ($this->ParamsConfig as $k => $v) {
       $this->ParamsConfig[$k]["recordset"] = [];
-      $model = "\src\model\\" . ucfirst($k);
+      $model = "\Src\Entity\\" . ucfirst($k);
       $fielId = $k . "_id";
 
       $recordset = $this->db->getField($k, $fielId);
@@ -112,7 +112,7 @@ class Params
 
   public function getForm(string $tab, int $id)
   {
-    $model = "\src\model\\" . ucfirst($tab);
+    $model = "\Src\Entity\\" . ucfirst($tab);
     $this->paramInstance = new $model($id);
     $profileData = $this->paramInstance->all();
     $formInfos = $this->paramInstance::MODEL_INFOS["form_infos"];

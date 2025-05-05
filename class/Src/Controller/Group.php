@@ -3,7 +3,7 @@
 namespace Src\Controller;
 
 use Core\Model\Database;
-use Src\Model\Group as GroupModel;
+use Src\Entity\Group as GroupModel;
 
 class Group
 {
@@ -59,7 +59,7 @@ class Group
     $groupData = $this->groupInstance->all();
 
 
-    $this->form = new \core\model\Form("group", "group", $this->formInfos);
+    $this->form = new \Core\Model\Form("group", "group", $this->formInfos);
     return $this->form->getForm($groupData);
   }
 
