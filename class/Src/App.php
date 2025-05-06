@@ -2,6 +2,8 @@
 
 namespace Src;
 
+use Core\Database\Database;
+
 class App
 {
 
@@ -21,14 +23,15 @@ class App
 
   private static function loadClass($class)
   {
-    $str = str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "\\" . $class . ".php";
+    $str = ROOT . "\class\\" . $class . ".php";
     require_once $str;
   }
 
-  private static function db()
+  public static function db()
   {
     if (self::$db === null) {
-      // New PDO
+      self::$db = new Database(DB_HOST, DB_NAME, DB_USER, DB_PASS);
     }
+    return self::$db;
   }
 }

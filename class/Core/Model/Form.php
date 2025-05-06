@@ -14,11 +14,9 @@ class Form
   public function __construct(string $tableName, string $redirectPage, array $formInfos)
   {
     $this->tableName = $tableName;
-    var_dump($this->tableName);
     $this->formInfos = $formInfos;
-    var_dump($this->formInfos);
     $this->redirectPage = $redirectPage;
-    $this->db = new Database();
+    $this->db = \Src\App::db();
   }
 
 
@@ -30,7 +28,7 @@ class Form
       unset($except[$k]);
     }
     $this->compareData($except);
-    require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/form.php";
+    require ROOT . "/pages/form.php";
   }
 
   public function getEmptyForm(array $fieldsOfTable, array $except = [])
@@ -39,7 +37,7 @@ class Form
       $this->displayedData[$value] = "";
     }
     $this->compareData($except);
-    require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/form.php";
+    require ROOT . "/pages/form.php";
   }
 
   private function compareData(array $except)

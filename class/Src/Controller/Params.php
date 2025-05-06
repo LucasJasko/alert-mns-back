@@ -68,12 +68,12 @@ class Params
 
   public function __construct()
   {
-    $this->db = new Database();
+    $this->db = \Src\App::db();
 
     foreach ($this->ParamsConfig as $k => $v) {
       $model = "\Src\Entity\\" . ucfirst($k);
-      $this->ParamsConfig[$k]["form_infos"] = $model::MODEL_INFOS["form_infos"];
-      $this->ParamsConfig[$k]["dashboard_infos"] = $model::MODEL_INFOS["dashboard_infos"];
+      $this->ParamsConfig[$k]["form_infos"] = $model::modelInfos()["form_infos"];
+      $this->ParamsConfig[$k]["dashboard_infos"] = $model::modelInfos()["dashboard_infos"];
     }
   }
 
@@ -100,12 +100,14 @@ class Params
       }
     }
 
-    require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/params.php";
+    require ROOT . "/pages/params.php";
   }
 
   public function getEmptyForm(string $tab)
   {
-    $this->form = new \core\model\Form($this->ParamsConfig[$tab]["field_name"], "params", $this->ParamsConfig[$tab]["form_infos"]);
+    $fieldName = $this->ParamsConfig[$tab]["field_name"];
+    $formInfos = $this->ParamsConfig[$tab]["form_infos"];
+    $this->form = new \core\model\Form($fieldName, "params", $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($tab);
     return $this->form->getEmptyForm($fieldsOfTable);
   }
@@ -114,10 +116,11 @@ class Params
   {
     $model = "\Src\Entity\\" . ucfirst($tab);
     $this->paramInstance = new $model($id);
+
     $profileData = $this->paramInstance->all();
     $formInfos = $this->paramInstance::MODEL_INFOS["form_infos"];
 
-    $this->form = new \core\model\Form($tab, $tab, $formInfos);
+    $this->form = new \core\model\Form($tab, "params", $formInfos);
     return $this->form->getForm($profileData);
   }
 

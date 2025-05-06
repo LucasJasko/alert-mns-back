@@ -14,7 +14,7 @@ abstract class Model
 
   public function initdb(string $tableName, string $searchField)
   {
-    $this->db = new \core\Model\Database();
+    $this->db = \Src\App::db();
 
     $this->searchField = $searchField;
     $this->tableName = $tableName;
@@ -62,7 +62,6 @@ abstract class Model
       }
     }
   }
-
 
   public function setId(int $id)
   {

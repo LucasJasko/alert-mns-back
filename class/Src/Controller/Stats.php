@@ -6,6 +6,6 @@ class Stats
 {
   public function getView()
   {
-    require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/stats.php";
+    require ROOT . "/pages/stats.php";
   }
 }

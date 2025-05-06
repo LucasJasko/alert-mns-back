@@ -2,7 +2,7 @@
 
 namespace core\controller;
 
-use core\model\Database;
+use Core\Database\Database;
 
 class Auth
 {
@@ -12,12 +12,7 @@ class Auth
 
   public function __construct()
   {
-    $this->db = new Database();
-  }
-
-  private function checkAuth(string $email, string $pwd)
-  {
-    return $this->db->getAllWhereAnd("profile", "profile_mail", $email, "profile_password", $pwd);
+    $this->db = \Src\App::db();
   }
 
   public function tryLogin(string $email, string $pwd)
@@ -40,6 +35,11 @@ class Auth
     }
 
     return $this->response;
+  }
+
+  private function checkAuth(string $email, string $pwd)
+  {
+    return $this->db->getAllWhereAnd("profile", "profile_mail", $email, "profile_password", $pwd);
   }
 
   public function clientLogin()

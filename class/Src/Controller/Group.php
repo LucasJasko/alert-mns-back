@@ -2,7 +2,6 @@
 
 namespace Src\Controller;
 
-use Core\Model\Database;
 use Src\Entity\Group as GroupModel;
 
 class Group
@@ -19,10 +18,10 @@ class Group
 
   public function __construct()
   {
-    $this->formInfos = GroupModel::MODEL_INFOS["form_infos"];
-    $this->dashboardInfos = GroupModel::MODEL_INFOS["dashboard_infos"];
-    $this->formInfos = GroupModel::MODEL_INFOS["form_infos"];
-    $this->db = new Database();
+    $this->formInfos = GroupModel::modelInfos()["form_infos"];
+    $this->dashboardInfos = GroupModel::modelInfos()["dashboard_infos"];
+    $this->formInfos = GroupModel::modelInfos()["form_infos"];
+    $this->db = \Src\App::db();
   }
 
   public function getGroupDashboard()
@@ -42,8 +41,8 @@ class Group
     }
 
 
-    $this->dashboard = new \core\model\Dashboard("group", $groups, $this->dashboardInfos, $this->fieldsToNotRender);
-    require_once str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/group.php";
+    $this->dashboard = new \Core\Model\Dashboard("group", $groups, $this->dashboardInfos, $this->fieldsToNotRender);
+    require_once ROOT . "/pages/group.php";
   }
 
   public function getEmptyForm()

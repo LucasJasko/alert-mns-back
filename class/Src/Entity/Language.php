@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Language extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du langage ",
       "fields_labels" => [
@@ -39,5 +39,14 @@ class Language extends Model
       "language_id" => $this->id(),
       "language_name" =>  $this->name(),
     ];
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

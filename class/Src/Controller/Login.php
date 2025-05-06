@@ -9,7 +9,7 @@ class Login
 
   public function __construct()
   {
-    $this->auth = new \core\controller\Auth();
+    $this->auth = new \Core\Controller\Auth();
   }
 
   public function checkAuth(string $email, string $pwd)
@@ -30,6 +30,6 @@ class Login
 
   public function getLoginPage()
   {
-    require str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/login.php";
+    require ROOT . "/pages/login.php";
   }
 }

@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Post extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du poste ",
       "fields_labels" => [
@@ -42,5 +42,14 @@ class Post extends Model
       "post_id" => $this->id(),
       "post_name" =>  $this->name(),
     ];
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

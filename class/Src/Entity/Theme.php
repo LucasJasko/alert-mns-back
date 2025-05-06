@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Theme extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du thème ",
       "fields_labels" => [
@@ -39,5 +39,14 @@ class Theme extends Model
       "theme_id" => $this->id(),
       "theme_name" =>  $this->name(),
     ];
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

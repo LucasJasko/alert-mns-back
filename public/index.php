@@ -1,13 +1,11 @@
 <?php
 
-require_once "../config/config.php";
 require_once "../class/Src/App.php";
 
-use \core\controller\Auth;
 use \Src\App;
+use \core\controller\Auth;
 
-
-
+App::init();
 
 $page = isset($_GET["page"]) ? $_GET["page"] : "login";
 

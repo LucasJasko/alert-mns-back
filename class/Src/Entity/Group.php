@@ -9,7 +9,7 @@ class Group extends Model
   private $state;
   private $type;
 
-  const MODEL_INFOS = [
+  protected static array $modelInfos = [
     "form_infos" => [
       "form_title" => "Modification du groupe ",
       "fields_labels" => [
@@ -76,6 +76,10 @@ class Group extends Model
     $instance = new Type($typeID);
     $this->type = $instance->name();
   }
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
 
   public function state()
   {
@@ -84,5 +88,10 @@ class Group extends Model
   public function type()
   {
     return $this->type;
+  }
+
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

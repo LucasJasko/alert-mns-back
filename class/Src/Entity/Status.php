@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Status extends Model
 {
 
-  const MODEL_INFOS = [
+  protected static array $modelInfos = [
     "form_infos" => [
       "form_title" => "Modification du statut ",
       "fields_labels" => [
@@ -39,5 +39,14 @@ class Status extends Model
       "status_id" => $this->id(),
       "status_name" =>  $this->name(),
     ];
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

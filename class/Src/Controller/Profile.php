@@ -2,7 +2,6 @@
 
 namespace Src\Controller;
 
-use Core\Model\Database;
 use Src\Entity\Profile as ProfileModel;
 
 class Profile
@@ -19,11 +18,11 @@ class Profile
 
   public function __construct()
   {
-    $this->db = new Database();
+    $this->db = \Src\App::db();
 
-    $this->formInfos = ProfileModel::MODEL_INFOS["form_infos"];
-    $this->dashboardInfos = ProfileModel::MODEL_INFOS["dashboard_infos"];
-    $this->formInfos = ProfileModel::MODEL_INFOS["form_infos"];
+    $this->formInfos = ProfileModel::modelInfos()["form_infos"];
+    $this->dashboardInfos = ProfileModel::modelInfos()["dashboard_infos"];
+    $this->formInfos = ProfileModel::modelInfos()["form_infos"];
   }
 
   public function getProfileDashboard()
@@ -44,7 +43,7 @@ class Profile
 
 
     $this->dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
-    require_once str_replace("/public", "", $_SERVER["DOCUMENT_ROOT"]) . "/src/pages/profile.php";
+    require_once ROOT . "/pages/profile.php";
   }
 
   public function getEmptyForm()

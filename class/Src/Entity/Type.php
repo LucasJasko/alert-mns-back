@@ -8,7 +8,7 @@ use Src\Model\Model;
 class Type extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du type ",
       "fields_labels" => [
@@ -32,5 +32,14 @@ class Type extends Model
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

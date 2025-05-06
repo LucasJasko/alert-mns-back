@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Situation extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification de la situation ",
       "fields_labels" => [
@@ -34,5 +34,14 @@ class Situation extends Model
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

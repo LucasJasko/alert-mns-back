@@ -17,7 +17,7 @@ class Profile extends Model
   private string $role;
   private array $situation = [];
 
-  const MODEL_INFOS = [
+  protected static array $modelInfos = [
     "form_infos" => [
       "form_title" => "Modification de l'utilisateur ",
       "fields_labels" => [
@@ -132,6 +132,10 @@ class Profile extends Model
     }
     // var_dump($this->situation());
   }
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
 
   public function all()
   {
@@ -185,5 +189,9 @@ class Profile extends Model
   public function situation()
   {
     return $this->situation;
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

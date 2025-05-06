@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Role extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du rôle ",
       "fields_labels" => [
@@ -40,5 +40,14 @@ class Role extends Model
       "role_id" => $this->id(),
       "role_name" =>  $this->name(),
     ];
+  }
+
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

@@ -7,7 +7,7 @@ use Src\Model\Model;
 class Access extends Model
 {
 
-  const MODEL_INFOS =  [
+  protected static array $modelInfos =  [
     "form_infos" => [
       "form_title" => "Modification du département ",
       "fields_labels" => [
@@ -29,9 +29,12 @@ class Access extends Model
     }
   }
 
-
-  public function applyModelName()
+  public function setFormTitle()
   {
-    self::MODEL_INFOS["form_infos"]["form_title"] .= $this->name();
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
+  public static function modelInfos()
+  {
+    return self::$modelInfos;
   }
 }

@@ -89,6 +89,7 @@ class Database
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
+    var_dump($stmt);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
@@ -141,7 +142,7 @@ class Database
 
   public function deleteOne(string $table, string $field, int $param)
   {
-    $stmt = $this->db->prepare("DELETE FROM " . $table . " WHERE " . $field . " = :" . $field);
+    $stmt = $this->db->prepare("DELETE FROM `" . $table . "` WHERE " . $field . " = :" . $field);
     $stmt->execute([":" . $field => $param]);
   }
 }
