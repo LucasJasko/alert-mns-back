@@ -66,10 +66,11 @@ class Group
   public function submitData(array $data)
   {
     $this->groupInstance = new GroupModel($data["group_id"]);
-    if (!empty($data["group_id"])) {
-      $this->groupInstance->updateModel($data["group_id"], $data);
-    } else {
+
+    if (empty($data["group_id"])) {
       $this->groupInstance->createNewModel("group", $data);
+    } else {
+      $this->groupInstance->updateModel($data["group_id"], $data);
     }
   }
 }

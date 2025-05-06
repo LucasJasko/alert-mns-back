@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Post extends Model
+class Post extends \Src\Model\Model
 {
 
   protected static array $modelInfos =  [

@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Message extends Model
+class Message extends \Src\Model\Model
 {
 
   private int $exp;

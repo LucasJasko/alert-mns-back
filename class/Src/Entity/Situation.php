@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Situation extends Model
+class Situation extends \Src\Model\Model
 {
 
   protected static array $modelInfos =  [

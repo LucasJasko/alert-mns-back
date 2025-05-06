@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Group extends Model
+class Group extends \Src\Model\Model
 {
   private $state;
   private $type;

@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Profile extends Model
+class Profile extends \Src\Model\Model
 {
 
   private string $surname;

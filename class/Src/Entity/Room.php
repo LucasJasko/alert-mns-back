@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Room extends Model
+class Room extends \Src\Model\Model
 {
   function __construct($id)
   {

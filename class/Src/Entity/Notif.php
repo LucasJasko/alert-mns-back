@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Notif extends Model
+class Notif extends \Src\Model\Model
 {
   function __construct($id)
   {

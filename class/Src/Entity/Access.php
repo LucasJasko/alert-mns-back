@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Access extends Model
+class Access extends \Src\Model\Model
 {
 
   protected static array $modelInfos =  [

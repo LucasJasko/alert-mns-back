@@ -2,10 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-
-class Type extends Model
+class Type extends \Src\Model\Model
 {
 
   protected static array $modelInfos =  [

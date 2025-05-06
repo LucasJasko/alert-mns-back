@@ -65,7 +65,6 @@ class Database
       $stmt->bindValue(":" . $key, $value);
     }
     $stmt->bindValue(":" . $param, $id);
-    var_dump($stmt);
     $stmt->execute();
   }
 
@@ -89,7 +88,6 @@ class Database
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
-    var_dump($stmt);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }

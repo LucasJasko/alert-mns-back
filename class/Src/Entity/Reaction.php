@@ -2,9 +2,7 @@
 
 namespace Src\Entity;
 
-use Src\Model\Model;
-
-class Reaction extends Model
+class Reaction extends \Src\Model\Model
 {
   function __construct($id)
   {

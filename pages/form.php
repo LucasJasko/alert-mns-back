@@ -17,6 +17,7 @@
     <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
 
       <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
+      <?php var_dump($this->displayedData); ?>
 
       <?php foreach ($this->displayedData as $key => $value) {
         $dblSelect = $key == "situation_id" ? true : false;
@@ -25,12 +26,14 @@
         <label for="<?= $key ?>"> <?= $this->formInfos["fields_labels"][$key] ?> :</label>
 
         <?php if (str_contains($key, $this->tableName)) { ?>
+          <!-- Input texte -->
 
           <input type='text' placeholder='Un champ ici' name="<?= $key ?>" id="<?= $key ?>" value="<?= $this->displayedData[$key] ?>">
 
           <?php
         } else {
 
+          // Input select
           if ($key == "situation_id") { ?>
 
             <div class="dbl-select__container">
@@ -40,7 +43,8 @@
 
                 <?php
                 $options = $this->getDataOfTable("post");
-                for ($i = 0; $i < count($options); $i++) { ?>
+                for ($i = 0; $i < count($options); $i++) {
+                ?>
                   <option value="<?= $options[$i]["post_id"] ?>"><?= $options[$i]["post_name"] ?></option>
                 <?php } ?>
 
@@ -68,8 +72,9 @@
 
               <?php
               $options = $this->getDataOfTable(str_replace("_id", "", $key));
-              for ($i = 0; $i < count($options); $i++) { ?>
-                <option value="<?= $options[$i][$key] ?>"><?= $options[$i][str_replace("_id", "_name", $key)] ?></option>
+              for ($i = 0; $i < count($options); $i++) {
+              ?>
+                <option value="<?= $options[$i][$key] ?>" <?= $options[$i][str_replace("_id", "_name", $key)] == $this->displayedData[$key] ? "selected" : "" ?>><?= $options[$i][str_replace("_id", "_name", $key)] ?></option>
               <?php } ?>
 
             </select>
