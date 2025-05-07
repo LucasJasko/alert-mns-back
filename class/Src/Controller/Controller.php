@@ -2,8 +2,14 @@
 
 namespace Src\Controller;
 
-class Controller extends \Core\Controller\Controller
+abstract class Controller extends \Core\Controller\Controller
 {
+
+  public function __construct()
+  {
+    parent::__construct();
+  }
+
   public function getAvailableId($table, $field)
   {
     $res = $this->db->getField($table, $field);

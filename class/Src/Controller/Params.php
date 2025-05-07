@@ -53,7 +53,7 @@ class Params extends \Src\Controller\Controller
 
   public function __construct()
   {
-
+    parent::__construct();
     foreach ($this->ParamsConfig as $k => $v) {
       $model = "\Src\Entity\\" . ucfirst($k);
       $this->ParamsConfig[$k]["form_infos"] = $model::modelInfos()["form_infos"];
@@ -74,7 +74,6 @@ class Params extends \Src\Controller\Controller
       for ($i = 0; $i < count($recordset); $i++) {
         $clearedRecordset[$i] = $recordset[$i][$k . "_id"];
       }
-      // var_dump($clearedRecordset);
 
       for ($i = 0; $i < count($clearedRecordset); $i++) {
         $id = $clearedRecordset[$i];

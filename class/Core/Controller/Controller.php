@@ -2,12 +2,12 @@
 
 namespace Core\Controller;
 
-class Controller
+abstract class Controller
 {
 
   protected $db;
 
-  function __construct()
+  public function __construct()
   {
     $this->db = \Src\App::db();
   }

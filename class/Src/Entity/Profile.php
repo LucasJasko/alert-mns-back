@@ -51,6 +51,7 @@ class Profile extends \Src\Model\Model
 
   public function __construct($id)
   {
+
     $this->tableName = "profile";
     $this->searchField = "profile_id";
 
