@@ -32,7 +32,7 @@ class Database
 
   public function createOne(string $table, array $data, array $fields)
   {
-    $sql = "INSERT INTO " . $table . " ( ";
+    $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
       $sql .= $value . ", ";
     }

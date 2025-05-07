@@ -92,7 +92,7 @@ class Params extends \Src\Controller\Controller
     $formInfos = $this->ParamsConfig[$tab]["form_infos"];
     $this->form = new \core\model\Form($fieldName, "params", $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($tab);
-    return $this->form->getEmptyForm($fieldsOfTable);
+    return $this->form->getEmptyForm($fieldsOfTable, [$fieldName . "_id"]);
   }
 
   public function getForm(string $tab, int $id)
@@ -113,19 +113,17 @@ class Params extends \Src\Controller\Controller
     $model = "\Src\Entity\\" . ucfirst($tab);
     unset($data["table_name"]);
 
-    if (!empty($data[$tab . "_id"])) {
+    if (empty($data[$tab . "_id"])) {
+      $availableId = $this->getAvailableId($tab, $tab . "_id");
+      $data[$tab . "_id"] = $availableId;
+
+      $this->paramInstance = new $model($data[$tab . "_id"], $data);
+      $this->paramInstance->createNewModel($tab, $data);
+    } else {
       $modelId = $data[$tab . "_id"];
 
       $this->paramInstance = new $model($modelId);
       $this->paramInstance->updateModel($modelId, $data);
-    } else {
-      $availableId = $this->getAvailableId($tab, $tab . "_id");
-      $data[$tab . "_id"] = $availableId;
-
-      $modelId = $data[$tab . "_id"];
-
-      $this->paramInstance = new $model($modelId, $data);
-      $this->paramInstance->createNewModel($tab, $data);
     }
   }
 }

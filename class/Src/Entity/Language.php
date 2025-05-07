@@ -19,7 +19,7 @@ class Language extends \Src\Model\Model
     ]
   ];
 
-  public function __construct(int $id)
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "language";
     $this->searchField = "language_id";
@@ -27,8 +27,12 @@ class Language extends \Src\Model\Model
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($id);
 
-    if (count($row) != 0) {
-      $this->hydrate($row, $this->tableName);
+    if ($row) {
+      if (count($row) != 0) {
+        $this->hydrate($row, $this->tableName);
+      }
+    } else {
+      $this->hydrate($newData, $this->tableName);
     }
   }
 

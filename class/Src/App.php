@@ -15,7 +15,6 @@ class App
     self::autoload();
   }
 
-
   public static function autoload()
   {
     spl_autoload_register([__CLASS__, "loadClass"]);

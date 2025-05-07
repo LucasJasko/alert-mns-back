@@ -21,17 +21,72 @@ class Profile extends \Src\Model\Model
     "form_infos" => [
       "form_title" => "Modification de l'utilisateur ",
       "fields_labels" => [
-        'profile_id' => "Identifiant de l'utilisateur",
-        'profile_name' => "Nom de l'utilisateur",
-        'profile_surname' => "Prénom de l'utilisateur",
-        'profile_mail' => "email de l'utilisateur",
-        'profile_password' => "Mot de passe de l'utilisateur",
-        'profile_picture' => "Photo de l'utilisateur",
-        'language_id' => "Langue de préférence de l'utilisateur",
-        'theme_id' => "Thème de préférence de l'utilisateur",
-        'status_id' => "Statut de préférence de l'utilisateur",
-        'situation_id' => "Situations de l'utilisateur",
-        'role_id' => "Rôle de l'utilisateur"
+        'profile_id' => [
+          "label" => "Identifiant de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "text",
+          "attributes" => "required readonly"
+        ],
+        'profile_name' => [
+          "label" => "Nom de l'utilisateur",
+          "placeholder" => "ex: Jean",
+          "input_type" => "text",
+          "attributes" => "required"
+        ],
+        'profile_surname' => [
+          "label" => "Prénom de l'utilisateur",
+          "placeholder" => "ex: Dupont",
+          "input_type" => "text",
+          "attributes" => "required"
+        ],
+        'profile_mail' => [
+          "label" => "email de l'utilisateur",
+          "placeholder" => "ex: jean.dupont@gmail.com",
+          "input_type" => "email",
+          "attributes" => "required"
+        ],
+        'profile_password' => [
+          "label" => "Mot de passe de l'utilisateur",
+          "placeholder" => "ex: M0nSup&rP@ass98",
+          "input_type" => "password",
+          "attributes" => "required"
+        ],
+        'profile_picture' => [
+          "label" => "Photo de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "file",
+          "attributes" => "required"
+        ],
+        'language_id' => [
+          "label" => "Langue de préférence de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "",
+          "attributes" => "required"
+        ],
+        'theme_id' => [
+          "label" => "Thème de préférence de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "",
+          "attributes" => "required"
+        ],
+        'status_id' => [
+          "label" => "Statut de préférence de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "",
+          "attributes" => "required"
+        ],
+        'situation_id' => [
+          "label" => "Situations de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "",
+          "attributes" => "required"
+        ],
+        'role_id' => [
+          "label" => "Rôle de l'utilisateur",
+          "placeholder" => "",
+          "input_type" => "",
+          "attributes" => "required"
+        ]
       ]
     ],
     "dashboard_infos" => [
@@ -49,7 +104,7 @@ class Profile extends \Src\Model\Model
     ]
   ];
 
-  public function __construct($id)
+  public function __construct($id, $newData = [])
   {
 
     $this->tableName = "profile";
@@ -58,9 +113,14 @@ class Profile extends \Src\Model\Model
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($id);
 
-    if (count($row) != 0) {
-      $this->hydrate($row, $this->tableName);
+    if ($row) {
+      if (count($row) != 0) {
+        $this->hydrate($row, $this->tableName);
+      }
+    } else {
+      $this->hydrate($newData, $this->tableName);
     }
+    $this->setFormTitle();
   }
 
   public function hydrate($row, $table)
@@ -95,7 +155,7 @@ class Profile extends \Src\Model\Model
   public function setPicture(string | null $picture)
   {
     if ($picture == null) {
-      $this->picture = "le chemin vers une image par défaut";
+      $this->picture = "'le chemin vers une image par défaut'";
     } else {
       $this->picture = $picture;
     }
@@ -126,10 +186,10 @@ class Profile extends \Src\Model\Model
     $this->situation = $instance->setSituations();
   }
 
-  // public function setFormTitle()
-  // {
-  //   self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  // }
+  public function setFormTitle()
+  {
+    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  }
 
   public function all()
   {

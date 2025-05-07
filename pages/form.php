@@ -17,18 +17,26 @@
         <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
 
             <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
-            <?php var_dump($this->displayedData); ?>
 
             <?php foreach ($this->displayedData as $dataField => $dataValue) {
-                $dblSelect = $dataField == "situation_id" ? true : false;
+                $label = $this->formInfos["fields_labels"][$dataField]["label"];
+                $inputType = $this->formInfos["fields_labels"][$dataField]["input_type"];
+                $placeholder = $this->formInfos["fields_labels"][$dataField]["placeholder"];
+                $attributes = $this->formInfos["fields_labels"][$dataField]["attributes"];
             ?>
 
-                <label for="<?= $dataField ?>"> <?= $this->formInfos["fields_labels"][$dataField] ?> :</label>
+                <label for="<?= $dataField ?>"> <?= $label ?> :</label>
 
                 <?php if (str_contains($dataField, $this->tableName)) { ?>
                     <!-- Input texte -->
 
-                    <input type='text' placeholder='Un champ ici' name="<?= $dataField ?>" id="<?= $dataField ?>" value="<?= $this->displayedData[$dataField] ?>">
+                    <input
+                        type='<?= $inputType ?>'
+                        placeholder='<?= $placeholder ?>'
+                        name="<?= $dataField ?>"
+                        id="<?= $dataField ?>"
+                        <?= !empty($dataValue) ? "value=" . $dataValue : "" ?>
+                        <?= $attributes ?>>
 
                     <?php
                 } else {

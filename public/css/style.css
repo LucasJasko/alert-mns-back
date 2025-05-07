@@ -195,12 +195,19 @@ h2 {
 }
 
 .form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="file"],
 select {
   margin-bottom: 30px;
   border: 1px solid var(--limitgrey);
   border-radius: 5px;
   padding: 10px;
   width: 100%;
+}
+
+.form input[readonly] {
+  background-color: rgb(212, 212, 212);
 }
 
 .dbl-select__container {

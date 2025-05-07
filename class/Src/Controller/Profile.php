@@ -40,7 +40,6 @@ class Profile extends \Src\Controller\Controller
       $profiles[$i] = $profile->all();
     }
 
-
     $this->dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once ROOT . "/pages/profile.php";
   }
@@ -49,7 +48,7 @@ class Profile extends \Src\Controller\Controller
   {
     $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable("profile");
-    return $this->form->getEmptyForm($fieldsOfTable);
+    return $this->form->getEmptyForm($fieldsOfTable, ["profile_id"]);
   }
 
   public function getForm(int $id)
@@ -57,33 +56,40 @@ class Profile extends \Src\Controller\Controller
     $this->profileInstance = new ProfileModel($id);
     $profileData = $this->profileInstance->all();
 
-
     $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
     return $this->form->getForm($profileData);
   }
 
-
   public function submitData(array $data)
   {
-    $this->profileInstance = new ProfileModel($data["profile_id"]);
     if (empty($data["profile_id"])) {
+      $availableId = $this->getAvailableId("profile", "profile_id");
+      $data["profile_id"] = $availableId;
+
+      $this->profileInstance = new ProfileModel($data["profile_id"], $data);
       $this->profileInstance->createNewModel("profile", $data);
     } else {
-      $profileSituation = $data["situation_id"];
+      $profileSituation = $this->isolateSituations($data);
+
       $profileSituationInstance = new ProfileSituation($data["profile_id"]);
-
-      unset($data["situation_id"]);
-
-      for ($i = 0; $i <= count($profileSituation); $i++) {
-        if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
-          unset($profileSituation[$i]);
-        }
-      }
-
-      $profileSituation = array_unique($profileSituation, SORT_REGULAR);
-
       $profileSituationInstance->updateSituations($profileSituation);
+
+      $this->profileInstance = new ProfileModel($data["profile_id"]);
       $this->profileInstance->updateModel($data["profile_id"], $data);
     }
+  }
+
+  private function isolateSituations($data)
+  {
+    $profileSituation = $data["situation_id"];
+    unset($data["situation_id"]);
+
+    for ($i = 0; $i <= count($profileSituation); $i++) {
+      if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
+        unset($profileSituation[$i]);
+      }
+    }
+
+    return array_unique($profileSituation, SORT_REGULAR);
   }
 }

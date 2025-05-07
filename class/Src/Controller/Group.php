@@ -47,7 +47,8 @@ class Group extends \Src\Controller\Controller
   {
     $this->form = new \core\model\Form("group", "group", $this->formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable("group");
-    return $this->form->getEmptyForm($fieldsOfTable);
+
+    return $this->form->getEmptyForm($fieldsOfTable, ["group_id"]);
   }
 
   public function getForm(int $id)
@@ -55,19 +56,21 @@ class Group extends \Src\Controller\Controller
     $this->groupInstance = new GroupModel($id);
     $groupData = $this->groupInstance->all();
 
-
     $this->form = new \Core\Model\Form("group", "group", $this->formInfos);
     return $this->form->getForm($groupData);
   }
 
-
   public function submitData(array $data)
   {
-    $this->groupInstance = new GroupModel($data["group_id"]);
-
     if (empty($data["group_id"])) {
+      $availableId = $this->getAvailableId("group", "group_id");
+      $data["group_id"] = $availableId;
+
+      $this->groupInstance = new GroupModel($data["group_id"], $data);
       $this->groupInstance->createNewModel("group", $data);
     } else {
+
+      $this->groupInstance = new GroupModel($data["group_id"]);
       $this->groupInstance->updateModel($data["group_id"], $data);
     }
   }

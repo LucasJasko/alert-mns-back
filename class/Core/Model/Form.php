@@ -37,14 +37,15 @@ class Form
       $this->displayedData[$value] = "";
     }
     $this->compareData($except);
+
     require ROOT . "/pages/form.php";
   }
 
   private function compareData(array $except)
   {
     foreach ($this->displayedData as $key => $value) {
-      if (!array_key_exists($key, $except)) {
-        $this->displayedData[$key] = $value;
+      if (in_array($key, $except)) {
+        unset($this->displayedData[$key]);
       }
     }
   }

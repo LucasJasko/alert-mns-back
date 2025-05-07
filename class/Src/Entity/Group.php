@@ -25,7 +25,7 @@ class Group extends \Src\Model\Model
     ]
   ];
 
-  public function __construct($id)
+  public function __construct($id, $newData = [])
   {
     $this->tableName = "group";
     $this->searchField = "group_id";
@@ -33,8 +33,12 @@ class Group extends \Src\Model\Model
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($id);
 
-    if (count($row) != 0) {
-      $this->hydrate($row, $this->tableName);
+    if ($row) {
+      if (count($row) != 0) {
+        $this->hydrate($row, $this->tableName);
+      }
+    } else {
+      $this->hydrate($newData, $this->tableName);
     }
   }
 
