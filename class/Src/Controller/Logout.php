@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-class Logout
+class Logout extends \Src\Controller\Controller
 {
 
   public function logout()

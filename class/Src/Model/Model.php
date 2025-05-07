@@ -29,13 +29,14 @@ abstract class Model
   {
     return $this->db->getAllWhere($this->tableName, $this->searchField, $id);
   }
+
   public function createNewModel(string $table, array $data)
   {
     $fields =  $this->getFieldsOfModel($table);
     for ($i = 0; $i < count($fields); $i++) {
       if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
     }
-    $this->db->createOne($this->tableName, $fields, $data);
+    $this->db->createOne($this->tableName, $data, $fields);
     // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
   }
 

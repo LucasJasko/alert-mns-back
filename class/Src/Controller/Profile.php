@@ -5,13 +5,12 @@ namespace Src\Controller;
 use Src\Entity\Profile as ProfileModel;
 use Src\Relation\ProfileSituation;
 
-class Profile
+class Profile extends \Src\Controller\Controller
 {
   private $dashboard;
   private $dashboardInfos;
   private $form;
   private $formInfos;
-  private $db;
 
   private array $fieldsToNotRender = ["profile_password", "language_id", "theme_id", "status_id", "profile_picture"];
 
@@ -19,8 +18,6 @@ class Profile
 
   public function __construct()
   {
-    $this->db = \Src\App::db();
-
     $this->formInfos = ProfileModel::modelInfos()["form_infos"];
     $this->dashboardInfos = ProfileModel::modelInfos()["dashboard_infos"];
     $this->formInfos = ProfileModel::modelInfos()["form_infos"];

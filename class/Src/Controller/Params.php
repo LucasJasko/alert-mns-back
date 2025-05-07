@@ -2,29 +2,14 @@
 
 namespace Src\Controller;
 
-use Core\Model\Database;
-
-class Params
+class Params extends \Src\Controller\Controller
 {
-
-  private string $userSituationInstance;
-  private string $userSituationInfos;
-  private string $userDepartmentInstance;
-  private string $userDepartmentInfos;
-  private string $userThemeInstance;
-  private string $userThemeInfos;
-  private string $userStatusInstance;
-  private string $userStatusInfos;
-  private string $userRoleInstance;
-  private string $userRoleInfos;
-  private string $userLanguageInstance;
-  private string $userLanguageInfos;
 
   private array $ParamsConfig = [
     "post" => [
       "field_name" => "post",
       "class_name" => "Post",
-      "field_desc" => "Posts des utilisateurs",
+      "field_desc" => "Postes des utilisateurs",
       "field_p" => "un post",
     ],
     "department" => [
@@ -63,12 +48,11 @@ class Params
   private $dashboardInfos;
   private $form;
   private $formInfos;
-  private $db;
+
   private $paramInstance;
 
   public function __construct()
   {
-    $this->db = \Src\App::db();
 
     foreach ($this->ParamsConfig as $k => $v) {
       $model = "\Src\Entity\\" . ucfirst($k);
@@ -118,7 +102,7 @@ class Params
     $this->paramInstance = new $model($id);
 
     $profileData = $this->paramInstance->all();
-    $formInfos = $this->paramInstance::MODEL_INFOS["form_infos"];
+    $formInfos = $this->paramInstance::modelInfos()["form_infos"];
 
     $this->form = new \core\model\Form($tab, "params", $formInfos);
     return $this->form->getForm($profileData);
@@ -127,11 +111,22 @@ class Params
 
   public function submitData(array $data, string $tab)
   {
+    $model = "\Src\Entity\\" . ucfirst($tab);
     unset($data["table_name"]);
+
     if (!empty($data[$tab . "_id"])) {
-      $this->ParamsConfig[$tab]["instance"]->updateModel($data[$tab . "_id"], $data);
+      $modelId = $data[$tab . "_id"];
+
+      $this->paramInstance = new $model($modelId);
+      $this->paramInstance->updateModel($modelId, $data);
     } else {
-      $this->ParamsConfig[$tab]["instance"]->createNewModel($data);
+      $availableId = $this->getAvailableId($tab, $tab . "_id");
+      $data[$tab . "_id"] = $availableId;
+
+      $modelId = $data[$tab . "_id"];
+
+      $this->paramInstance = new $model($modelId, $data);
+      $this->paramInstance->createNewModel($tab, $data);
     }
   }
 }

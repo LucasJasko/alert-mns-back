@@ -21,7 +21,12 @@ class Access extends \Src\Model\Model
 
   function __construct($id)
   {
+    $this->tableName = "access";
+    $this->searchField = "access_id";
+
+    $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($id);
+
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }

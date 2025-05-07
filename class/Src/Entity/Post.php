@@ -19,18 +19,21 @@ class Post extends \Src\Model\Model
     ]
   ];
 
-  public function __construct($id)
+  public function __construct($id, $newData = [])
   {
-
-    $this->id = $id;
     $this->tableName = "post";
     $this->searchField = "post_id";
 
     $this->initdb($this->tableName, $this->searchField);
-
     $row = $this->getDBModel($id);
-    if (count($row) != 0) {
-      $this->hydrate($row, $this->tableName);
+
+
+    if ($row) {
+      if (count($row) != 0) {
+        $this->hydrate($row, $this->tableName);
+      }
+    } else {
+      $this->hydrate($newData, $this->tableName);
     }
   }
 

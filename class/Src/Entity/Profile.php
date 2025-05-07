@@ -51,14 +51,12 @@ class Profile extends \Src\Model\Model
 
   public function __construct($id)
   {
-
-    $this->id = $id;
     $this->tableName = "profile";
     $this->searchField = "profile_id";
 
     $this->initdb($this->tableName, $this->searchField);
+    $row = $this->getDBModel($id);
 
-    $row = $this->getDBModel($this->id);
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }

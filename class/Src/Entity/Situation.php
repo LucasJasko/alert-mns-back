@@ -2,27 +2,27 @@
 
 namespace Src\Entity;
 
-class Language extends \Src\Model\Model
+class Situation extends \Src\Model\Model
 {
 
   protected static array $modelInfos =  [
     "form_infos" => [
-      "form_title" => "Modification du langage ",
+      "form_title" => "Modification de la situation ",
       "fields_labels" => [
-        "language_id" => "ID",
-        "language_name" => "Nom",
+        "situation_id" => "Identifiant de la situation",
+        "situation_name" => "Nom de la situation"
       ]
     ],
     "dashboard_infos" => [
-      "language_id" => "Identifiant de la langue",
-      "language_name" => "Nom de la langue"
+      "situation_id" => "ID",
+      "situation_name" => "Nom",
     ]
   ];
 
-  public function __construct(int $id)
+  public function __construct($id)
   {
-    $this->tableName = "language";
-    $this->searchField = "language_id";
+    $this->tableName = "situation";
+    $this->searchField = "situation_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->getDBModel($id);
@@ -30,14 +30,6 @@ class Language extends \Src\Model\Model
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
-  }
-
-  public function all()
-  {
-    return [
-      "language_id" => $this->id(),
-      "language_name" =>  $this->name(),
-    ];
   }
 
   public function setFormTitle()

@@ -4,14 +4,12 @@ namespace Src\Controller;
 
 use Src\Entity\Group as GroupModel;
 
-class Group
+class Group extends \Src\Controller\Controller
 {
   private $dashboard;
   private $dashboardInfos;
   private $form;
   private $formInfos;
-  private $db;
-
   private array $fieldsToNotRender = [];
 
   private $groupInstance;

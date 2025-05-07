@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-class Stats
+class Stats extends \Src\Controller\Controller
 {
   public function getView()
   {

@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-class Login
+class Login extends \Src\Controller\Controller
 {
 
   private $auth;

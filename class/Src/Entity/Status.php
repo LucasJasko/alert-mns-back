@@ -21,11 +21,12 @@ class Status extends \Src\Model\Model
 
   public function __construct($id)
   {
-    $this->id = $id;
     $this->tableName = "status";
     $this->searchField = "status_id";
+
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($this->id);
+    $row = $this->getDBModel($id);
+
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
