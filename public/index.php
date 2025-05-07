@@ -96,6 +96,14 @@ switch ($page) {
       $controller->getLoginPage();
     }
     break;
+
+  case "logout":
+
+    Auth::protect();
+    $controller = new Src\Controller\Logout();
+    $controller->logout();
+
+    break;
 }
 
 if (isset($_GET["api"])) {

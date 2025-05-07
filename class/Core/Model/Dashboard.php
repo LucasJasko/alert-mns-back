@@ -76,9 +76,11 @@ class Dashboard
       $row .= "<td class='" . $key . "'>";
       if (isset($dataArray[$key])) {
         if (is_array($dataArray[$key])) {
-          foreach ($dataArray[$key] as $key => $value) {
-            $row .=  $key . " de " . $value;
-            $row .= "</br>";
+          for ($i = 0; $i < count($dataArray[$key]); $i++) {
+            foreach ($dataArray[$key][$i] as $post => $department) {
+              $row .=  $post . " de " . $department;
+              $row .= "</br>";
+            }
           }
         } else {
           $row .= $dataArray[$key];

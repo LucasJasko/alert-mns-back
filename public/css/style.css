@@ -167,6 +167,7 @@ h2 {
   align-items: center;
   font-size: 1.3rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .form__container {
@@ -207,13 +208,13 @@ select {
   align-items: start;
 }
 
-.dbl-select__container select {
+.dbl-select__container :first-child {
   margin-right: 5px;
 }
 
 .dbl-select {
   display: inline-block;
-  width: calc(50% - 20px);
+  width: 50%;
 }
 
 .valid-button {

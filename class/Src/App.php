@@ -2,7 +2,7 @@
 
 namespace Src;
 
-use Core\Database\Database;
+use Src\Database\Database;
 
 class App
 {

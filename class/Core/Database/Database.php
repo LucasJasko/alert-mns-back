@@ -89,7 +89,7 @@ class Database
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getField(string $table, string $field)

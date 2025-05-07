@@ -2,6 +2,8 @@
 
 namespace Src\Entity;
 
+use Src\Relation\ProfileSituation;
+
 class Profile extends \Src\Model\Model
 {
 
@@ -28,7 +30,7 @@ class Profile extends \Src\Model\Model
         'language_id' => "Langue de préférence de l'utilisateur",
         'theme_id' => "Thème de préférence de l'utilisateur",
         'status_id' => "Statut de préférence de l'utilisateur",
-        'situation_id' => "Situation de l'utilisateur",
+        'situation_id' => "Situations de l'utilisateur",
         'role_id' => "Rôle de l'utilisateur"
       ]
     ],
@@ -57,7 +59,6 @@ class Profile extends \Src\Model\Model
     $this->initdb($this->tableName, $this->searchField);
 
     $row = $this->getDBModel($this->id);
-
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);
     }
@@ -76,8 +77,8 @@ class Profile extends \Src\Model\Model
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
-      $this->setSituation($this->id);
     }
+    $this->setSituation($this->id);
   }
 
   public function setSurname(string $surname)
@@ -122,18 +123,14 @@ class Profile extends \Src\Model\Model
   }
   public function setSituation(int $profileId)
   {
-    $relation =  $this->db->getFieldsWhere("profile__situation", ["post_id", "department_id"], "profile_id", $profileId);
-    for ($i = 0; $i < count($relation); $i++) {
-      $post = new Post($relation[$i]["post_id"]);
-      $department = new Department($relation[$i]["department_id"]);
-      $this->situation += [$post->name() => $department->name()];
-    }
-    // var_dump($this->situation());
+    $instance = new ProfileSituation($profileId);
+    $this->situation = $instance->setSituations();
   }
-  public function setFormTitle()
-  {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
+
+  // public function setFormTitle()
+  // {
+  //   self::$modelInfos["form_infos"]["form_title"] .= $this->name();
+  // }
 
   public function all()
   {

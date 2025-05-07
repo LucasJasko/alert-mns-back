@@ -32,9 +32,9 @@
         </ul>
       </div>
       <div class="navbar__container__right">
-        <div class="log-out__btn">
+        <a href="index.php?page=logout" class="log-out__btn">
           <i class="fa-solid fa-power-off"></i>
-        </div>
+        </a>
       </div>
     </div>
   </nav>

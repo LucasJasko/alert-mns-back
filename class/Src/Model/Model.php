@@ -27,8 +27,7 @@ abstract class Model
 
   public function getDBModel(int $id)
   {
-    $row = $this->db->getAllWhere($this->tableName, $this->searchField, $id);
-    return $row;
+    return $this->db->getAllWhere($this->tableName, $this->searchField, $id);
   }
   public function createNewModel(string $table, array $data)
   {

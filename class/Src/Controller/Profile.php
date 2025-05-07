@@ -3,6 +3,7 @@
 namespace Src\Controller;
 
 use Src\Entity\Profile as ProfileModel;
+use Src\Relation\ProfileSituation;
 
 class Profile
 {
@@ -70,12 +71,21 @@ class Profile
     if (empty($data["profile_id"])) {
       $this->profileInstance->createNewModel("profile", $data);
     } else {
-      //  ICI ===============
-      $profileSituation = [$data["profile_id"], $data["post_id"], $data["department_id"]];
+      $profileSituation = $data["situation_id"];
+      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
 
-      var_dump($data);
+      unset($data["situation_id"]);
 
-      // $this->profileInstance->updateModel($data["profile_id"], $data);
+      for ($i = 0; $i <= count($profileSituation); $i++) {
+        if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
+          unset($profileSituation[$i]);
+        }
+      }
+
+      $profileSituation = array_unique($profileSituation, SORT_REGULAR);
+
+      $profileSituationInstance->updateSituations($profileSituation);
+      $this->profileInstance->updateModel($data["profile_id"], $data);
     }
   }
 }

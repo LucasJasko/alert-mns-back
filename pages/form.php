@@ -2,103 +2,138 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <title>Tableau de bord - Formulaire de modification</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <title>Tableau de bord - Formulaire de modification</title>
 </head>
 
 <body>
-  <main class="form__container">
+    <main class="form__container">
 
-    <h1><?= $this->formInfos["form_title"] ?></h1>
+        <h1><?= $this->formInfos["form_title"] ?></h1>
 
-    <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
+        <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
 
-      <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
-      <?php var_dump($this->displayedData); ?>
+            <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
+            <?php var_dump($this->displayedData); ?>
 
-      <?php foreach ($this->displayedData as $key => $value) {
-        $dblSelect = $key == "situation_id" ? true : false;
-      ?>
+            <?php foreach ($this->displayedData as $dataField => $dataValue) {
+                $dblSelect = $dataField == "situation_id" ? true : false;
+            ?>
 
-        <label for="<?= $key ?>"> <?= $this->formInfos["fields_labels"][$key] ?> :</label>
+                <label for="<?= $dataField ?>"> <?= $this->formInfos["fields_labels"][$dataField] ?> :</label>
 
-        <?php if (str_contains($key, $this->tableName)) { ?>
-          <!-- Input texte -->
+                <?php if (str_contains($dataField, $this->tableName)) { ?>
+                    <!-- Input texte -->
 
-          <input type='text' placeholder='Un champ ici' name="<?= $key ?>" id="<?= $key ?>" value="<?= $this->displayedData[$key] ?>">
+                    <input type='text' placeholder='Un champ ici' name="<?= $dataField ?>" id="<?= $dataField ?>" value="<?= $this->displayedData[$dataField] ?>">
 
-          <?php
-        } else {
+                    <?php
+                } else {
 
-          // Input select
-          if ($key == "situation_id") { ?>
+                    // Input select
+                    if (is_array($dataValue)) {
+                        $dataValueIndex = 0;
+                        for ($index = 0; $index < count($dataValue); $index++) {
 
-            <div class="dbl-select__container">
+                            foreach ($dataValue[$index] as $post => $department) { ?>
 
-              <select class="dbl-select" name="post_id">
-                <option value="">-- Poste --</option>
+                                <div class="dbl-select__container">
+
+                                    <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][post_id]">
+                                        <option value="">-- Poste --</option>
+
+                                        <?php
+                                        $options = $this->getDataOfTable("post");
+                                        for ($i = 0; $i < count($options); $i++) {
+                                        ?>
+                                            <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>><?= $options[$i]["post_name"] ?></option>
+                                        <?php } ?>
+
+                                    </select>
+
+                                    <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][department_id]">
+                                        <option value="">-- Département --</option>
+
+                                        <?php
+                                        $options = $this->getDataOfTable("department");
+                                        for ($i = 0; $i < count($options); $i++) { ?>
+                                            <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
+                                        <?php } ?>
+
+                                    </select>
+
+                                </div>
+
+                        <?php
+                                $dataValueIndex++;
+                            }
+                        }
+                        ?>
+
+                        <div class="dbl-select__container">
+
+                            <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][post_id]">
+                                <option value="">-- Poste --</option>
+
+                                <?php
+                                $options = $this->getDataOfTable("post");
+                                for ($i = 0; $i < count($options); $i++) {
+                                ?>
+                                    <option value="<?= $options[$i]["post_id"] ?>"><?= $options[$i]["post_name"] ?></option>
+                                <?php } ?>
+
+                            </select>
+
+                            <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][department_id]">
+                                <option value="">-- Département --</option>
+
+                                <?php
+                                $options = $this->getDataOfTable("department");
+                                for ($i = 0; $i < count($options); $i++) { ?>
+                                    <option value="<?= $options[$i]["department_id"] ?>"><?= $options[$i]["department_name"] ?></option>
+                                <?php } ?>
+
+                            </select>
+
+                        </div>
+
+
+                    <?php } else {
+                    ?>
+                        <select name="<?= $dataField ?>">
+
+                            <?php
+                            $options = $this->getDataOfTable(str_replace("_id", "", $dataField));
+                            for ($i = 0; $i < count($options); $i++) {
+                            ?>
+                                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][str_replace("_id", "_name", $dataField)] == $this->displayedData[$dataField] ? "selected" : "" ?>><?= $options[$i][str_replace("_id", "_name", $dataField)] ?></option>
+                            <?php } ?>
+
+                        </select>
 
                 <?php
-                $options = $this->getDataOfTable("post");
-                for ($i = 0; $i < count($options); $i++) {
-                ?>
-                  <option value="<?= $options[$i]["post_id"] ?>"><?= $options[$i]["post_name"] ?></option>
-                <?php } ?>
-
-              </select>
-
-              <select class="dbl-select" name="department_id">
-                <option value="">-- Département --</option>
-
-                <?php
-                $options = $this->getDataOfTable("department");
-                for ($i = 0; $i < count($options); $i++) { ?>
-                  <option value="<?= $options[$i]["department_id"] ?>"><?= $options[$i]["department_name"] ?></option>
-                <?php } ?>
-
-              </select>
-
-              <div class="valid-button plus-btn">+</div>
-
-            </div>
+                    }
+                } ?>
 
 
-          <?php } else {
-          ?>
-            <select name="<?= $key ?>">
+            <?php
+            }
 
-              <?php
-              $options = $this->getDataOfTable(str_replace("_id", "", $key));
-              for ($i = 0; $i < count($options); $i++) {
-              ?>
-                <option value="<?= $options[$i][$key] ?>" <?= $options[$i][str_replace("_id", "_name", $key)] == $this->displayedData[$key] ? "selected" : "" ?>><?= $options[$i][str_replace("_id", "_name", $key)] ?></option>
-              <?php } ?>
+            if ($this->redirectPage == "params") { ?>
 
-            </select>
+                <input class=" table" type="text" name="table_name" value="<?= $this->tableName ?>" hidden>
 
-        <?php
-          }
-        } ?>
+            <?php } ?>
 
+            <input class=" table" type="text" value="<?= $this->redirectPage ?> " hidden>
+            <input class="valid-button" type="submit" value="Enregistrer">
 
-      <?php
-      }
+        </form>
 
-      if ($this->redirectPage == "params") { ?>
-
-        <input class=" table" type="text" name="table_name" value="<?= $this->tableName ?>" hidden>
-
-      <?php } ?>
-
-      <input class=" table" type="text" value="<?= $this->redirectPage ?> " hidden>
-      <input class="valid-button" type="submit" value="Enregistrer">
-
-    </form>
-
-  </main>
+    </main>
 </body>
 
 </html>

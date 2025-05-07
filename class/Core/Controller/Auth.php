@@ -18,6 +18,7 @@ class Auth
   public function tryLogin(string $email, string $pwd)
   {
     $res = $this->checkAuth($email, $pwd);
+    $res = $res[0];
 
     if ($res && $pwd == $res["profile_password"]) {
 
