@@ -8,6 +8,7 @@ for (let i = 0; i < tableLines.length; i++) {
     const contextWindow = document.querySelector(".delete-container");
     contextWindow.classList.add("delete-active");
     const wrapper = document.createElement("div");
+
     wrapper.innerHTML = `
         <p class="delete-window__answer-text">Etes vous sûr de vouloir supprimer l'utilisateur ${profileName} ${profileSurname} <br> ( ID: ${profileId} ) ?</p>
         <p class="delete-window__warning-text">Attention: Cette action est irréversible !</p>

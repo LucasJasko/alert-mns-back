@@ -96,7 +96,7 @@ class Dashboard
   private function getManageButtons($id)
   {
     $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../index.php?page=" . $this->page . ($this->page == "params" ? "&tab=" . $this->tab : "") . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
-    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete btn__delete__" . $id . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
+    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete' href='../index.php?page=" . $this->page . "&id=" . $id . "&process=delete'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }
 }

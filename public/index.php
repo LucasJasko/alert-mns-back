@@ -31,6 +31,7 @@ switch ($page) {
       $controller->getGroupDashboard();
     }
 
+
     break;
 
 
@@ -41,6 +42,14 @@ switch ($page) {
 
     if ($_POST) {
       $controller->submitData($_POST);
+    }
+
+    if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+      if (isset($_GET["id"])) {
+        $controller->delete("profile", "profile_id", $_GET["id"]);
+      } else {
+        App::redirect("profile");
+      }
     }
 
     if (isset($_GET["id"])) {
@@ -103,6 +112,15 @@ switch ($page) {
     $controller = new Src\Controller\Logout();
     $controller->logout();
 
+    break;
+
+  case "page404":
+    require ROOT . "/pages/page404.php";
+    break;
+
+  default:
+    http_response_code(404);
+    App::redirect("page404");
     break;
 }
 

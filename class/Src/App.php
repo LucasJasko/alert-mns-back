@@ -33,4 +33,10 @@ class App
     }
     return self::$db;
   }
+
+  public static function redirect($page)
+  {
+    header("Location:./index.php?page=" . $page);
+    exit;
+  }
 }

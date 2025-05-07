@@ -55,7 +55,7 @@ class Profile extends \Src\Model\Model
           "label" => "Photo de l'utilisateur",
           "placeholder" => "",
           "input_type" => "file",
-          "attributes" => "required"
+          "attributes" => ""
         ],
         'language_id' => [
           "label" => "Langue de préférence de l'utilisateur",
