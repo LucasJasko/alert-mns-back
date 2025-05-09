@@ -20,11 +20,9 @@ class ProfileSituation extends \Src\Model\Model
 
   public function updateSituations($data)
   {
-    var_dump($data);
     $this->clearSituations();
     foreach ($data as $index => $array) {
       $data[$index]["profile_id"] = $this->id;
-      var_dump($data);
       $this->db->createOne("profile__situation", $data[$index], ["profile_id", "post_id", "department_id"]);
     }
   }
