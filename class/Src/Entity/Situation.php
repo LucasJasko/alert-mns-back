@@ -5,18 +5,27 @@ namespace Src\Entity;
 class Situation extends \Src\Model\Model
 {
 
-  protected static array $modelInfos =  [
-    "form_infos" => [
-      "form_title" => "Modification de la situation ",
-      "fields_labels" => [
-        "situation_id" => "Identifiant de la situation",
-        "situation_name" => "Nom de la situation"
-      ]
-    ],
-    "dashboard_infos" => [
-      "situation_id" => "ID",
-      "situation_name" => "Nom",
+  protected static array $formInfos = [
+    "form_title" => "Modification de la situation",
+    "form_fields" => [
+      "situation_id" => [
+        "label" => "Identifiant de la situation",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "situation_name" => [
+        "label" => "Nom de la situation",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "situation_id" => "ID",
+    "situation_name" => "Nom",
   ];
 
   public function __construct($id, $newData = [])
@@ -36,12 +45,16 @@ class Situation extends \Src\Model\Model
     }
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

@@ -5,18 +5,27 @@ namespace Src\Entity;
 class Theme extends \Src\Model\Model
 {
 
-  protected static array $modelInfos =  [
-    "form_infos" => [
-      "form_title" => "Modification du thème ",
-      "fields_labels" => [
-        "theme_id" => "Identifiant du thème",
-        "theme_name" => "Nom du thème",
-      ]
-    ],
-    "dashboard_infos" => [
-      "theme_id" => "ID",
-      "theme_name" => "Nom",
+  protected static array $formInfos = [
+    "form_title" => "Modification du thème",
+    "form_fields" => [
+      "theme_id" => [
+        "label" => "Identifiant du thème",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "theme_name" => [
+        "label" => "Nom du thème",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "theme_id" => "ID",
+    "theme_name" => "Nom",
   ];
 
   public function __construct($id, $newData = [])
@@ -44,12 +53,16 @@ class Theme extends \Src\Model\Model
     ];
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

@@ -17,92 +17,92 @@ class Profile extends \Src\Model\Model
   private string $role;
   private array $situation = [];
 
-  protected static array $modelInfos = [
-    "form_infos" => [
-      "form_title" => "Modification de l'utilisateur ",
-      "fields_labels" => [
-        'profile_id' => [
-          "label" => "Identifiant de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "text",
-          "attributes" => "required readonly"
-        ],
-        'profile_name' => [
-          "label" => "Nom de l'utilisateur",
-          "placeholder" => "ex: Jean",
-          "input_type" => "text",
-          "attributes" => "required"
-        ],
-        'profile_surname' => [
-          "label" => "Prénom de l'utilisateur",
-          "placeholder" => "ex: Dupont",
-          "input_type" => "text",
-          "attributes" => "required"
-        ],
-        'profile_mail' => [
-          "label" => "email de l'utilisateur",
-          "placeholder" => "ex: jean.dupont@gmail.com",
-          "input_type" => "email",
-          "attributes" => "required"
-        ],
-        'profile_password' => [
-          "label" => "Mot de passe de l'utilisateur",
-          "placeholder" => "ex: M0nSup&rP@ass98",
-          "input_type" => "password",
-          "attributes" => "required"
-        ],
-        'profile_picture' => [
-          "label" => "Photo de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "file",
-          "attributes" => ""
-        ],
-        'language_id' => [
-          "label" => "Langue de préférence de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "",
-          "attributes" => "required"
-        ],
-        'theme_id' => [
-          "label" => "Thème de préférence de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "",
-          "attributes" => "required"
-        ],
-        'status_id' => [
-          "label" => "Statut de préférence de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "",
-          "attributes" => "required"
-        ],
-        'situation_id' => [
-          "label" => "Situations de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "",
-          "attributes" => "required"
-        ],
-        'role_id' => [
-          "label" => "Rôle de l'utilisateur",
-          "placeholder" => "",
-          "input_type" => "",
-          "attributes" => "required"
-        ]
+  protected static array $formInfos = [
+    "form_title" => "Modification de l'utilisateur ",
+    "form_fields" => [
+      'profile_id' => [
+        "label" => "Identifiant de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      'profile_name' => [
+        "label" => "Nom de l'utilisateur",
+        "placeholder" => "ex: Jean",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
+      'profile_surname' => [
+        "label" => "Prénom de l'utilisateur",
+        "placeholder" => "ex: Dupont",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
+      'profile_mail' => [
+        "label" => "email de l'utilisateur",
+        "placeholder" => "ex: jean.dupont@gmail.com",
+        "input_type" => "email",
+        "attributes" => "required"
+      ],
+      'profile_password' => [
+        "label" => "Mot de passe de l'utilisateur",
+        "placeholder" => "ex: M0nSup&rP@ass98",
+        "input_type" => "password",
+        "attributes" => "required"
+      ],
+      'profile_picture' => [
+        "label" => "Photo de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "file",
+        "attributes" => ""
+      ],
+      'language_id' => [
+        "label" => "Langue de préférence de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "",
+        "attributes" => "required"
+      ],
+      'theme_id' => [
+        "label" => "Thème de préférence de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "",
+        "attributes" => "required"
+      ],
+      'status_id' => [
+        "label" => "Statut de préférence de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "",
+        "attributes" => "required"
+      ],
+      'situation_id' => [
+        "label" => "Situations de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "",
+        "attributes" => "required"
+      ],
+      'role_id' => [
+        "label" => "Rôle de l'utilisateur",
+        "placeholder" => "",
+        "input_type" => "",
+        "attributes" => "required"
       ]
-    ],
-    "dashboard_infos" => [
-      "profile_id" => "ID",
-      "profile_name" => "Prénom",
-      "profile_surname" => "Nom",
-      "profile_mail" => "Mail",
-      "profile_password" => "Mot de passe",
-      "profile_picture" => "Photo de profil",
-      "language_id" => "Langue",
-      "theme_id" => "Thème",
-      "status_id" => "Etat",
-      "situation_id" => "Situation",
-      "role_id" => "Rôle"
     ]
   ];
+
+  protected static array $dashboardInfos = [
+    "profile_id" => "ID",
+    "profile_name" => "Prénom",
+    "profile_surname" => "Nom",
+    "profile_mail" => "Mail",
+    "profile_password" => "Mot de passe",
+    "profile_picture" => "Photo de profil",
+    "language_id" => "Langue",
+    "theme_id" => "Thème",
+    "status_id" => "Etat",
+    "situation_id" => "Situation",
+    "role_id" => "Rôle"
+  ];
+
 
   public function __construct($id, $newData = [])
   {
@@ -186,11 +186,6 @@ class Profile extends \Src\Model\Model
     $this->situation = $instance->setSituations();
   }
 
-  public function setFormTitle()
-  {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-
   public function all()
   {
     return [
@@ -244,8 +239,17 @@ class Profile extends \Src\Model\Model
   {
     return $this->situation;
   }
-  public static function modelInfos()
+
+  public static function formInfos()
   {
-    return self::$modelInfos;
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
+  public function setFormTitle()
+  {
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

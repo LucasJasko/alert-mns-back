@@ -5,18 +5,27 @@ namespace Src\Entity;
 class Type extends \Src\Model\Model
 {
 
-  protected static array $modelInfos =  [
-    "form_infos" => [
-      "form_title" => "Modification du type ",
-      "fields_labels" => [
-        "type_id" => "ID",
-        "type_name" => "Nom",
-      ]
-    ],
-    "dashboard_infos" => [
-      "type_id" => "Identifiant du type",
-      "type_name" => "Nom du type"
+  protected static array $formInfos = [
+    "form_title" => "Modification du type",
+    "form_fields" => [
+      "type_id" => [
+        "label" => "Identifiant du type",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "type_name" => [
+        "label" => "Nom du type",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "type_id" => "ID",
+    "type_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
@@ -36,12 +45,16 @@ class Type extends \Src\Model\Model
     }
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

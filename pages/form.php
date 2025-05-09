@@ -19,10 +19,10 @@
             <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
             <?php foreach ($this->displayedData as $dataField => $dataValue) {
-                $label = $this->formInfos["fields_labels"][$dataField]["label"];
-                $inputType = $this->formInfos["fields_labels"][$dataField]["input_type"];
-                $placeholder = $this->formInfos["fields_labels"][$dataField]["placeholder"];
-                $attributes = $this->formInfos["fields_labels"][$dataField]["attributes"];
+                $label = $this->formInfos["form_fields"][$dataField]["label"];
+                $inputType = $this->formInfos["form_fields"][$dataField]["input_type"];
+                $placeholder = $this->formInfos["form_fields"][$dataField]["placeholder"];
+                $attributes = $this->formInfos["form_fields"][$dataField]["attributes"];
             ?>
 
                 <label for="<?= $dataField ?>"> <?= $label ?> :</label>
@@ -143,5 +143,7 @@
 
     </main>
 </body>
+
+<script src="js/form.js"></script>
 
 </html>

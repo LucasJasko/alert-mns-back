@@ -18,7 +18,6 @@ class Auth
   public function tryLogin(string $email, string $pwd)
   {
     $res = $this->checkAuth($email, $pwd);
-    $res = $res[0];
 
     if ($res && $pwd == $res["profile_password"]) {
 
@@ -29,7 +28,7 @@ class Auth
         $this->response = ['success' => true, 'message' => 'Utilisateur connecté'];
         \core\model\Log::writeLog("L'administrateur [" . $res["profile_id"] .  "]" . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       } else {
-        $this->response = ['success' => false, 'message' => "Vous n'etes pas autorisé à vous connecté."];
+        $this->response = ['success' => false, 'message' => "Vous n'etes pas autorisé à vous connecter."];
       }
     } else {
       $this->response = ['success' => false, 'message' => 'Échec de la connexion : email ou mot de passe incorrect.'];
@@ -40,7 +39,7 @@ class Auth
 
   private function checkAuth(string $email, string $pwd)
   {
-    return $this->db->getAllWhereAnd("profile", "profile_mail", $email, "profile_password", $pwd);
+    return $this->db->getFieldsWhereAnd("profile", ["profile_id", "profile_password", "role_id", "profile_name", "profile_surname"], "profile_mail", $email, "profile_password", $pwd);
   }
 
   public function clientLogin()

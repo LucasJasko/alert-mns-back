@@ -7,23 +7,44 @@ class Group extends \Src\Model\Model
   private $state;
   private $type;
 
-  protected static array $modelInfos = [
-    "form_infos" => [
-      "form_title" => "Modification du groupe ",
-      "fields_labels" => [
-        "group_id" => "Identifiant du groupe",
-        "group_name" => "Nom du groupe",
-        "state_id" => "Etat du groupe",
-        "type_id" => "Type de groupe"
+  protected static array $formInfos = [
+    "form_title" => "Modification du groupe ",
+    "form_fields" => [
+      "group_id" => [
+        "label" => "Identifiant du groupe",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "group_name" => [
+        "label" => "Nom du groupe",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
+      "state_id" => [
+        "label" => "Etat du groupe",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
+      "type_id" => [
+        "label" => "Type de groupe",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
       ]
-    ],
-    "dashboard_infos" => [
-      "group_id" => "ID",
-      "group_name" => "Nom",
-      "state_id" => "Etat",
-      "type_id" => "Type"
     ]
   ];
+
+  protected static array $dashboardInfos = [
+    "group_id" => "ID",
+    "group_name" => "Nom",
+    "state_id" => "Etat",
+    "type_id" => "Type"
+  ];
+
+
 
   public function __construct($id, $newData = [])
   {
@@ -77,10 +98,6 @@ class Group extends \Src\Model\Model
     $instance = new Type($typeID);
     $this->type = $instance->name();
   }
-  public function setFormTitle()
-  {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
 
   public function state()
   {
@@ -91,8 +108,16 @@ class Group extends \Src\Model\Model
     return $this->type;
   }
 
-  public static function modelInfos()
+  public static function formInfos()
   {
-    return self::$modelInfos;
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
+  public function setFormTitle()
+  {
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

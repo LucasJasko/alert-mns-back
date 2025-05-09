@@ -13,4 +13,4 @@ si patch, git tag avant
 TO DO:
 
 - [x] Revoir BDD par rapport à la nouvelle version du shéma looping
-- [ ] Créer les écriture et lecture sur les tables relationnels pour récupérer les éléments rattachés à l'entité interrogé
+- [x] Créer les écriture et lecture sur les tables relationnels pour récupérer les éléments rattachés à l'entité interrogé

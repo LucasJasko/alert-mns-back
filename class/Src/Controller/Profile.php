@@ -19,9 +19,8 @@ class Profile extends \Src\Controller\Controller
   public function __construct()
   {
     parent::__construct();
-    $this->formInfos = ProfileModel::modelInfos()["form_infos"];
-    $this->dashboardInfos = ProfileModel::modelInfos()["dashboard_infos"];
-    $this->formInfos = ProfileModel::modelInfos()["form_infos"];
+    $this->formInfos = ProfileModel::formInfos();
+    $this->dashboardInfos = ProfileModel::dashboardInfos();
   }
 
   public function getProfileDashboard()

@@ -5,18 +5,27 @@ namespace Src\Entity;
 class Role extends \Src\Model\Model
 {
 
-  protected static array $modelInfos =  [
-    "form_infos" => [
-      "form_title" => "Modification du rôle ",
-      "fields_labels" => [
-        "role_id" => "Identifiant du rôle",
-        "role_name" => "Description du rôle"
-      ]
-    ],
-    "dashboard_infos" => [
-      "role_id" => "ID",
-      "role_name" => "Nom",
+  protected static array $formInfos = [
+    "form_title" => "Modification du rôle",
+    "form_fields" => [
+      "role_id" => [
+        "label" => "Identifiant du rôle",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "role_name" => [
+        "label" => "Nom du rôle",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "role_id" => "ID",
+    "role_name" => "Nom",
   ];
 
   public function __construct($id, $newData = [])
@@ -44,12 +53,16 @@ class Role extends \Src\Model\Model
     ];
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

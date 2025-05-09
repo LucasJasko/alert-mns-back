@@ -56,8 +56,8 @@ class Params extends \Src\Controller\Controller
     parent::__construct();
     foreach ($this->ParamsConfig as $k => $v) {
       $model = "\Src\Entity\\" . ucfirst($k);
-      $this->ParamsConfig[$k]["form_infos"] = $model::modelInfos()["form_infos"];
-      $this->ParamsConfig[$k]["dashboard_infos"] = $model::modelInfos()["dashboard_infos"];
+      $this->ParamsConfig[$k]["form_infos"] = $model::formInfos();
+      $this->ParamsConfig[$k]["dashboard_infos"] = $model::dashboardInfos();
     }
   }
 
@@ -101,7 +101,7 @@ class Params extends \Src\Controller\Controller
     $this->paramInstance = new $model($id);
 
     $profileData = $this->paramInstance->all();
-    $formInfos = $this->paramInstance::modelInfos()["form_infos"];
+    $formInfos = $this->paramInstance::formInfos();
 
     $this->form = new \core\model\Form($tab, "params", $formInfos);
     return $this->form->getForm($profileData);

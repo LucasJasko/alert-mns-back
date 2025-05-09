@@ -4,19 +4,28 @@ namespace Src\Entity;
 
 class Department extends \Src\Model\Model
 {
+  protected static array $formInfos = [
 
-  protected static array $modelInfos = [
-    "form_infos" => [
-      "form_title" => "Modification du département ",
-      "fields_labels" => [
-        "department_id" => "Identifiant du département",
-        "department_name" => "Nom du département"
-      ]
-    ],
-    "dashboard_infos" => [
-      "department_id" => "ID",
-      "department_name" => "Nom",
+    "form_title" => "Modification du département ",
+    "form_fields" => [
+      "department_id" => [
+        "label" => "Identifiant du département",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
+      "department_name" => [
+        "label" => "Nom du département",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required"
+      ],
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "department_id" => "ID",
+    "department_name" => "Nom",
   ];
 
   public function __construct($id, $newData = [])
@@ -45,12 +54,16 @@ class Department extends \Src\Model\Model
     ];
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

@@ -4,19 +4,17 @@ namespace Src\Entity;
 
 class Access extends \Src\Model\Model
 {
-
-  protected static array $modelInfos =  [
-    "form_infos" => [
-      "form_title" => "Modification du département ",
-      "fields_labels" => [
-        "access_id" => "Identifiant du département",
-        "access_name" => "Nom du département"
-      ]
-    ],
-    "dashboard_infos" => [
-      "access_id" => "ID",
-      "access_name" => "Nom",
+  protected static array $formInfos = [
+    "form_title" => "Modification du groupe ",
+    "form_fields" => [
+      "access_id" => "Identifiant du département",
+      "access_name" => "Nom du département"
     ]
+  ];
+
+  protected static array $dashboardInfos = [
+    "access_id" => "ID",
+    "access_name" => "Nom",
   ];
 
   function __construct($id)
@@ -32,12 +30,16 @@ class Access extends \Src\Model\Model
     }
   }
 
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
+  }
   public function setFormTitle()
   {
-    self::$modelInfos["form_infos"]["form_title"] .= $this->name();
-  }
-  public static function modelInfos()
-  {
-    return self::$modelInfos;
+    self::$formInfos["form_title"] .= $this->name();
   }
 }

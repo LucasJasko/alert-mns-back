@@ -17,9 +17,8 @@ class Group extends \Src\Controller\Controller
   public function __construct()
   {
     parent::__construct();
-    $this->formInfos = GroupModel::modelInfos()["form_infos"];
-    $this->dashboardInfos = GroupModel::modelInfos()["dashboard_infos"];
-    $this->formInfos = GroupModel::modelInfos()["form_infos"];
+    $this->formInfos = GroupModel::formInfos();
+    $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
   public function getGroupDashboard()
