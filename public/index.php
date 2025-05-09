@@ -73,6 +73,7 @@ switch ($page) {
       $controller->submitData($_POST, $_POST["table_name"]);
     }
 
+
     if (isset($_GET["id"]) && isset($_GET["tab"])) {
 
       if ($_GET["id"] != 0) {
@@ -82,6 +83,14 @@ switch ($page) {
       }
     } else {
       $controller->getParamsDashboard();
+    }
+
+    if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+      if (isset($_GET["id"]) && isset($_GET["tab"])) {
+        $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+      } else {
+        App::redirect("params");
+      }
     }
 
     break;

@@ -100,6 +100,9 @@ class Params extends \Src\Controller\Controller
     $model = "\Src\Entity\\" . ucfirst($tab);
     $this->paramInstance = new $model($id);
 
+    var_dump($id);
+    var_dump($this->paramInstance);
+
     $profileData = $this->paramInstance->all();
     $formInfos = $this->paramInstance::formInfos();
 

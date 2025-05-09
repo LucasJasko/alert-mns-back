@@ -35,7 +35,7 @@
                         placeholder='<?= $placeholder ?>'
                         name="<?= $dataField ?>"
                         id="<?= $dataField ?>"
-                        <?= !empty($dataValue) ? "value=" . $dataValue : "" ?>
+                        <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>
                         <?= $attributes ?>>
 
                     <?php
