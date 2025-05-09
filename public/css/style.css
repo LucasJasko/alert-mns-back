@@ -208,6 +208,7 @@ select {
 
 .form input[readonly] {
   background-color: rgb(212, 212, 212);
+  outline: none;
 }
 
 .dbl-select__container {
