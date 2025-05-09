@@ -61,12 +61,12 @@ class Profile extends \Src\Controller\Controller
 
   public function submitData(array $data)
   {
-    var_dump($data);
     if (empty($data["profile_id"])) {
       $availableId = $this->getAvailableId("profile", "profile_id");
       $data["profile_id"] = $availableId;
 
       $profileSituation = $this->isolateSituations($data);
+      unset($data["situation_id"]);
       $profileSituationInstance = new ProfileSituation($data["profile_id"]);
       $profileSituationInstance->updateSituations($profileSituation);
 
@@ -75,6 +75,7 @@ class Profile extends \Src\Controller\Controller
     } else {
 
       $profileSituation = $this->isolateSituations($data);
+      unset($data["situation_id"]);
       $profileSituationInstance = new ProfileSituation($data["profile_id"]);
       $profileSituationInstance->updateSituations($profileSituation);
 
@@ -86,8 +87,6 @@ class Profile extends \Src\Controller\Controller
   private function isolateSituations($data)
   {
     $profileSituation = $data["situation_id"];
-    unset($data["situation_id"]);
-
     for ($i = 0; $i <= count($profileSituation); $i++) {
       if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
         unset($profileSituation[$i]);
