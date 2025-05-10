@@ -23,7 +23,13 @@ switch ($page) {
 
     if (isset($_GET["id"])) {
       if ($_GET["id"] != 0) {
-        $controller->getForm($_GET["id"]);
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $controller->delete("group", "group_id", $_GET["id"]);
+          App::redirect("group");
+        } else {
+          $controller->getForm($_GET["id"]);
+        }
       } else {
         $controller->getEmptyForm();
       }
@@ -44,17 +50,17 @@ switch ($page) {
       $controller->submitData($_POST);
     }
 
-    if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-      if (isset($_GET["id"])) {
-        $controller->delete("profile", "profile_id", $_GET["id"]);
-      } else {
-        App::redirect("profile");
-      }
-    }
-
     if (isset($_GET["id"])) {
+
       if ($_GET["id"] != 0) {
-        $controller->getForm($_GET["id"]);
+
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $controller->delete("profile", "profile_id", $_GET["id"]);
+          App::redirect("profile");
+        } else {
+          $controller->getForm($_GET["id"]);
+        }
       } else {
         $controller->getEmptyForm();
       }
@@ -77,7 +83,14 @@ switch ($page) {
     if (isset($_GET["id"]) && isset($_GET["tab"])) {
 
       if ($_GET["id"] != 0) {
-        $controller->getForm($_GET["tab"], $_GET["id"]);
+
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+          App::redirect("params");
+        } else {
+          $controller->getForm($_GET["tab"], $_GET["id"]);
+        }
       } else {
         $controller->getEmptyForm($_GET["tab"]);
       }
@@ -85,13 +98,6 @@ switch ($page) {
       $controller->getParamsDashboard();
     }
 
-    if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-      if (isset($_GET["id"]) && isset($_GET["tab"])) {
-        $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
-      } else {
-        App::redirect("params");
-      }
-    }
 
     break;
 

@@ -23,11 +23,6 @@ class Login extends \Src\Controller\Controller
     }
   }
 
-  public function redirect($page)
-  {
-    header("Location:/index.php?page=" . $page);
-  }
-
   public function getLoginPage()
   {
     require ROOT . "/pages/login.php";

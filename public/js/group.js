@@ -3,10 +3,13 @@ for (let i = 0; i < tableLines.length; i++) {
   const groupId = tableLines[i].querySelector(".group_id").innerHTML;
   const deleteIcon = tableLines[i].querySelector(".btn__delete");
 
-  deleteIcon.addEventListener("click", () => {
+  deleteIcon.addEventListener("click", (e) => {
+    e.preventDefault();
     const contextWindow = document.querySelector(".delete-container");
+
     contextWindow.classList.add("delete-active");
     const wrapper = document.createElement("div");
+
     wrapper.innerHTML = `
         <p class="delete-window__answer-text">Etes vous sûr de vouloir supprimer le groupe ${groupName} <br> ( ID: ${groupId} ) ?</p>
         <p class="delete-window__warning-text">Attention: Cette action est irréversible ! Tous les messages associés à ce groupe seront perdus !</p>
@@ -17,5 +20,11 @@ for (let i = 0; i < tableLines.length; i++) {
   `;
     wrapper.classList.add("delete-window");
     contextWindow.appendChild(wrapper);
+
+    const cancelBtn = document.querySelector(".delete-window__btn-cancel");
+    cancelBtn.addEventListener("click", () => {
+      contextWindow.innerHTML = "";
+      contextWindow.classList.remove("delete-active");
+    });
   });
 }

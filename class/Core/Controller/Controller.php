@@ -11,4 +11,9 @@ abstract class Controller
   {
     $this->db = \Src\App::db();
   }
+
+  public function redirect($page)
+  {
+    header("Location:./index.php?page=" . $page);
+  }
 }

@@ -26,7 +26,7 @@ class Auth
         session_start();
         $_SESSION["logged"] = "OK";
         $this->response = ['success' => true, 'message' => 'Utilisateur connecté'];
-        \core\model\Log::writeLog("L'administrateur [" . $res["profile_id"] .  "]" . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+        \core\model\Log::writeLog("L'administrateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       } else {
         $this->response = ['success' => false, 'message' => "Vous n'etes pas autorisé à vous connecter."];
       }
@@ -49,6 +49,7 @@ class Auth
     $data = json_decode($rawData, true);
 
     if ($data) {
+      // TODO manque vérification du contenu de data
       $res = $this->tryLogin($data["profile_mail"], $data["profile_password"]);
       echo json_encode($res);
     }
@@ -72,6 +73,4 @@ class Auth
       exit();
     }
   }
-
-  public static function destroy() {}
 }

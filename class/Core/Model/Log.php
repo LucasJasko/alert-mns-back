@@ -11,7 +11,7 @@ class Log
     $date = date("Y-m-d");
     $time = date("H:i:s");
 
-    $pathfile   = str_replace("/public", "",  $_SERVER["DOCUMENT_ROOT"]) . "/logs/" . $date . "-logs.txt";
+    $pathfile   = ROOT . "/logs/" . $date . "-logs.txt";
     $openedfile = fopen($pathfile, "a");
 
     $logmessage = "[ " . $date . " ] [ " . $time . " ] " . $message . "\n";
