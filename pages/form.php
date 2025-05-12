@@ -19,6 +19,7 @@
             <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
             <?php foreach ($this->displayedData as $dataField => $dataValue) {
+
                 $label = $this->formInfos["form_fields"][$dataField]["label"];
                 $inputType = $this->formInfos["form_fields"][$dataField]["input_type"];
                 $placeholder = $this->formInfos["form_fields"][$dataField]["placeholder"];

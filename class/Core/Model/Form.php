@@ -35,6 +35,9 @@ class Form
   {
     foreach ($fieldsOfTable as $key => $value) {
       $this->displayedData[$value] = "";
+      if ($value == "situation_id") {
+        $this->displayedData[$value] = [];
+      }
     }
     $this->compareData($except);
 

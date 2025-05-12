@@ -31,6 +31,7 @@ function updateRequiredAttributes() {
   });
 }
 
+// Vérifie si le dernier sleect a été rempli
 function handleSelectChange(e) {
   const container = e.currentTarget.closest(".dbl-select__container");
   const selects = container.querySelectorAll(".dbl-select");

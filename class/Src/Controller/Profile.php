@@ -47,6 +47,7 @@ class Profile extends \Src\Controller\Controller
   {
     $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable("profile");
+    $fieldsOfTable[] = "situation_id";
     return $this->form->getEmptyForm($fieldsOfTable, ["profile_id"]);
   }
 
