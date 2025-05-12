@@ -13,31 +13,7 @@
 
   <h1>Alert MNS - Tableau de bord: Statistiques de l'application</h1>
 
-  <nav class="navbar">
-    <div class="navbar__container">
-      <div class="navbar__container__left">
-        <ul>
-          <li>
-            <a href="index.php?page=group">Groupes</a>
-          </li>
-          <li>
-            <a href="index.php?page=profile">Utilisateurs</a>
-          </li>
-          <li>
-            <a href="index.php?page=params">Paramétrages</a>
-          </li>
-          <li>
-            <a href="index.php?page=stats">Statistiques</a>
-          </li>
-        </ul>
-      </div>
-      <div class="navbar__container__right">
-        <a href="index.php?page=logout" class="log-out__btn">
-          <i class="fa-solid fa-power-off"></i>
-        </a>
-      </div>
-    </div>
-  </nav>
+  <?php require_once ROOT . "/pages/template/navbar.php"  ?>
 
   <input type="text" class="target" value="Statistiques" hidden>
   <script src="js/index.js"></script>

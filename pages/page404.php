@@ -8,8 +8,8 @@
 </head>
 
 <body>
-  <h1>RINE AFOUTRE LA CONNARD</h1>
-  <a href="../public/index.php?page='profile'">Vers les profiles</a>
+  <h1>OUPS... la page recherchée n'existe pas</h1>
+  <a href="index.php?page=profile">Vers les profiles</a>
 </body>
 
 </html>

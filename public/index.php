@@ -22,7 +22,9 @@ switch ($page) {
     }
 
     if (isset($_GET["id"])) {
+
       if ($_GET["id"] != 0) {
+
         if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
           $controller->delete("group", "group_id", $_GET["id"]);
@@ -127,10 +129,6 @@ switch ($page) {
     $controller = new Src\Controller\Logout();
     $controller->logout();
 
-    break;
-
-  case "page404":
-    require ROOT . "/pages/page404.php";
     break;
 
   default:
