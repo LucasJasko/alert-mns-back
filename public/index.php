@@ -89,7 +89,10 @@ switch ($page) {
 
         if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
-          $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+          $res = $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+          if ($res = "23000") {
+            App::redirect("error");
+          }
           App::redirect("params");
         } else {
           $controller->getForm($_GET["tab"], $_GET["id"]);
@@ -130,6 +133,10 @@ switch ($page) {
     $controller = new Src\Controller\Logout();
     $controller->logout();
 
+    break;
+
+  case "error":
+    require_once "../pages/error.php";
     break;
 
   default:

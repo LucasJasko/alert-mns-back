@@ -39,8 +39,6 @@ addButton.addEventListener("click", (e) => {
 
 allDblSelectors.forEach((selector) => {
   selector.addEventListener("click", () => {
-    console.log(selector.children[1]);
-
     if (selector.children[0].value == "") {
       selector.children[0].required == true;
     }

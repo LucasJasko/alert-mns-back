@@ -29,6 +29,7 @@ abstract class Controller extends \Core\Controller\Controller
 
   public function delete(string $table, string $field, int $id)
   {
-    $this->db->deleteOne($table, $field, $id);
+    $res = $this->db->deleteOne($table, $field, $id);
+    return $res;
   }
 }

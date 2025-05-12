@@ -3,6 +3,7 @@
 namespace Core\Database;
 
 use \PDO;
+use PDOException;
 
 class Database
 {
@@ -169,6 +170,10 @@ class Database
   public function deleteOne(string $table, string $field, int $param)
   {
     $stmt = $this->db->prepare("DELETE FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    $stmt->execute([":" . $field => $param]);
+    try {
+      $stmt->execute([":" . $field => $param]);
+    } catch (PDOException $e) {
+      return $e->getCode();
+    }
   }
 }
