@@ -239,15 +239,17 @@ select {
 }
 
 .plus-btn {
-  display: inline-block;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
-  text-align: center;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
-.add-button {
-  margin-top: 20px;
+.not-filled {
+  background-color: red;
+  border-color: red;
+}
+
+.not-filled:hover {
+  color: red !important;
 }
 
 .valid-button:hover {

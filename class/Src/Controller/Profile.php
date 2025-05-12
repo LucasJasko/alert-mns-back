@@ -68,11 +68,11 @@ class Profile extends \Src\Controller\Controller
 
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
-      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
-      $profileSituationInstance->updateSituations($profileSituation);
-
       $this->profileInstance = new ProfileModel($data["profile_id"], $data);
       $this->profileInstance->createNewModel("profile", $data);
+
+      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
+      $profileSituationInstance->updateSituations($profileSituation);
     } else {
 
       $profileSituation = $this->isolateSituations($data);

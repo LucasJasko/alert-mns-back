@@ -27,15 +27,15 @@ class ProfileSituation extends \Src\Model\Model
     }
   }
 
-  public function getSituations()
+  public function situations()
   {
-    return  $this->db->getFieldsWhere("profile__situation", ["post_id", "department_id"], "profile_id", $this->id);
+    return $this->db->getFieldsWhere("profile__situation", ["post_id", "department_id"], "profile_id", $this->id);
   }
 
   public function setSituations()
   {
     $situationList = [];
-    $relation = $this->getSituations();
+    $relation = $this->situations();
     for ($i = 0; $i < count($relation); $i++) {
       $post = new \Src\Entity\Post($relation[$i]["post_id"]);
       $department = new \Src\Entity\Department($relation[$i]["department_id"]);

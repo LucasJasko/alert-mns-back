@@ -49,6 +49,7 @@ switch ($page) {
     $controller = new Src\Controller\Profile();
 
     if ($_POST) {
+      var_dump($_POST);
       $controller->submitData($_POST);
     }
 

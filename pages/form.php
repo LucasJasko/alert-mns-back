@@ -18,6 +18,8 @@
 
             <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
+            <?php var_dump($this->displayedData) ?>
+
             <?php foreach ($this->displayedData as $dataField => $dataValue) {
 
                 $label = $this->formInfos["form_fields"][$dataField]["label"];
@@ -44,74 +46,52 @@
 
                     // Input select
                     if (is_array($dataValue)) {
-                        $dataValueIndex = 0;
-                        for ($index = 0; $index < count($dataValue); $index++) {
 
-                            foreach ($dataValue[$index] as $post => $department) { ?>
+                        switch ($dataField) {
+                            case "situation_id":
+                                if (empty($dataValue)) $dataValue[] = [["" => ""]];
 
-                                <div class="dbl-select__container">
+                                for ($index = 0; $index < count($dataValue); $index++) {
 
-                                    <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][post_id]">
-                                        <option value="">-- Poste --</option>
+                                    foreach ($dataValue[$index] as $post => $department) { ?>
 
-                                        <?php
-                                        $options = $this->getDataOfTable("post");
-                                        for ($i = 0; $i < count($options); $i++) {
-                                        ?>
-                                            <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>><?= $options[$i]["post_name"] ?></option>
-                                        <?php } ?>
+                                        <div class="dbl-select__container">
 
-                                    </select>
+                                            <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][post_id]">
+                                                <option value="">-- Poste --</option>
 
-                                    <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][department_id]">
-                                        <option value="">-- Département --</option>
+                                                <?php
+                                                $options = $this->getDataOfTable("post");
+                                                for ($i = 0; $i < count($options); $i++) {
+                                                ?>
+                                                    <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>><?= $options[$i]["post_name"] ?></option>
+                                                <?php } ?>
 
-                                        <?php
-                                        $options = $this->getDataOfTable("department");
-                                        for ($i = 0; $i < count($options); $i++) { ?>
-                                            <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
-                                        <?php } ?>
+                                            </select>
 
-                                    </select>
+                                            <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][department_id]">
+                                                <option value="">-- Département --</option>
 
-                                </div>
+                                                <?php
+                                                $options = $this->getDataOfTable("department");
+                                                for ($i = 0; $i < count($options); $i++) { ?>
+                                                    <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
+                                                <?php } ?>
 
-                        <?php
-                                $dataValueIndex++;
-                            }
+                                            </select>
+
+                                        </div>
+
+                                <?php
+                                    }
+                                } ?>
+
+                                <button class="valid-button plus-btn ">Ajouter une situation</button>
+
+                        <?php break;
                         }
+                    } else {
                         ?>
-
-                        <div class="dbl-select__container">
-
-                            <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][post_id]">
-                                <option value="">-- Poste --</option>
-
-                                <?php
-                                $options = $this->getDataOfTable("post");
-                                for ($i = 0; $i < count($options); $i++) {
-                                ?>
-                                    <option value="<?= $options[$i]["post_id"] ?>"><?= $options[$i]["post_name"] ?></option>
-                                <?php } ?>
-
-                            </select>
-
-                            <select class="dbl-select" name="<?= $dataField ?>[<?= $dataValueIndex ?>][department_id]">
-                                <option value="">-- Département --</option>
-
-                                <?php
-                                $options = $this->getDataOfTable("department");
-                                for ($i = 0; $i < count($options); $i++) { ?>
-                                    <option value="<?= $options[$i]["department_id"] ?>"><?= $options[$i]["department_name"] ?></option>
-                                <?php } ?>
-
-                            </select>
-
-                        </div>
-
-
-                    <?php } else {
-                    ?>
                         <select name="<?= $dataField ?>">
 
                             <?php

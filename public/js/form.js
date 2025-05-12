@@ -1,68 +1,51 @@
 const form = document.querySelector(".form");
-const oneSituation = document.querySelector(".dbl-select__container");
+const addButton = document.querySelector(".plus-btn");
+let allDblSelectors = document.querySelectorAll(".dbl-select__container");
 
-function updateRequiredAttributes() {
-  const situations = document.querySelectorAll(".dbl-select__container");
+addButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  allDblSelectors = document.querySelectorAll(".dbl-select__container");
+  let index = allDblSelectors.length - 1;
+  let isFilled = true;
 
-  situations.forEach((situation, index) => {
-    const selects = situation.querySelectorAll(".dbl-select");
-    const allEmpty = Array.from(selects).every((select) => select.value === "");
-    const allFilled = Array.from(selects).every((select) => select.value !== "");
-    const partiallyFilled = Array.from(selects).some((select) => select.value !== "") && !allFilled;
-
-    // Dernier bloc
-    const isLast = index === situations.length - 1;
-
-    selects.forEach((select) => {
-      if (!isLast) {
-        // Tous les blocs sauf le dernier : toujours required
-        select.required = true;
-      } else {
-        // Dernier bloc
-        if (partiallyFilled) {
-          // Si partiellement rempli → required
-          select.required = true;
-        } else {
-          // Vide → pas required
-          select.required = false;
-        }
+  allDblSelectors.forEach((dblSelector) => {
+    Array.from(dblSelector.children).forEach((selector) => {
+      if (selector.value == "") {
+        isFilled = false;
+        addButton.textContent = "Veuillez remplir tous les champs";
+        addButton.classList.add("not-filled");
+        setTimeout(() => {
+          addButton.textContent = "Ajouter une situation";
+          addButton.classList.remove("not-filled");
+        }, 2000);
       }
     });
   });
-}
 
-// Vérifie si le dernier sleect a été rempli
-function handleSelectChange(e) {
-  const container = e.currentTarget.closest(".dbl-select__container");
-  const selects = container.querySelectorAll(".dbl-select");
+  if (isFilled) {
+    const newDblSelect = document.querySelector(".dbl-select__container").cloneNode(true);
+    index++;
 
-  const allFilled = Array.from(selects).every((select) => select.value !== "");
-  const situations = document.querySelectorAll(".dbl-select__container");
-  const isLast = container === situations[situations.length - 1];
-
-  if (allFilled && isLast) {
-    const newSituation = oneSituation.cloneNode(true); // Clone le bloc
-    const newSelects = newSituation.querySelectorAll(".dbl-select");
-
-    // Réinitialise les valeurs des selects
-    newSelects.forEach((select) => {
-      select.value = "";
+    Array.from(newDblSelect.children).forEach((children) => {
+      children.value = "";
     });
 
-    // Ajoute le nouveau bloc à la fin du formulaire
-    container.parentNode.insertBefore(newSituation, container.nextSibling);
+    newDblSelect.children[0].name = "situation_id[" + index + "][post_id]";
+    newDblSelect.children[1].name = "situation_id[" + index + "][department_id]";
 
-    // Ajoute les listeners aux selects du nouveau bloc
-    newSelects.forEach((select) => {
-      select.addEventListener("change", handleSelectChange);
-    });
+    form.insertBefore(newDblSelect, addButton);
   }
-
-  updateRequiredAttributes();
-}
-
-document.querySelectorAll(".dbl-select").forEach((select) => {
-  select.addEventListener("change", handleSelectChange);
 });
 
-updateRequiredAttributes();
+allDblSelectors.forEach((selector) => {
+  selector.addEventListener("click", () => {
+    console.log(selector.children[1]);
+
+    if (selector.children[0].value == "") {
+      selector.children[0].required == true;
+    }
+    if (selector.children[0].value == "") {
+      selector.children[0].reqired == true;
+    }
+  });
+});
