@@ -23,6 +23,14 @@ class Login extends \Src\Controller\Controller
     }
   }
 
+  public function checkClientAuth(string $email, string $pwd)
+  {
+    http_response_code(200);
+    return $this->auth->tryClientLogin($email, $pwd);
+  }
+
+
+
   public function getLoginPage()
   {
     require ROOT . "/pages/login.php";

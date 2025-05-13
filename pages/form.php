@@ -18,8 +18,6 @@
 
             <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
-            <?php var_dump($this->displayedData) ?>
-
             <?php foreach ($this->displayedData as $dataField => $dataValue) {
 
                 $label = $this->formInfos["form_fields"][$dataField]["label"];
@@ -30,9 +28,9 @@
 
                 <label for="<?= $dataField ?>"> <?= $label ?> :</label>
 
-                <?php if (str_contains($dataField, $this->tableName)) { ?>
-                    <!-- Input texte -->
-
+                <?php
+                if (str_contains($dataField, $this->tableName)) {
+                ?>
                     <input
                         type='<?= $inputType ?>'
                         placeholder='<?= $placeholder ?>'
@@ -44,12 +42,13 @@
                     <?php
                 } else {
 
-                    // Input select
                     if (is_array($dataValue)) {
 
+                        if (empty($dataValue)) $dataValue[] = [["" => ""]];
+
                         switch ($dataField) {
+
                             case "situation_id":
-                                if (empty($dataValue)) $dataValue[] = [["" => ""]];
 
                                 for ($index = 0; $index < count($dataValue); $index++) {
 
@@ -88,6 +87,21 @@
 
                                 <button class="valid-button plus-btn ">Ajouter une situation</button>
 
+                            <?php break;
+
+                            case "room_id": ?>
+                                <select>
+
+                                    <option value="">-- Sélectionnez un salon à éditer --</option>
+
+                                    <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
+                                        <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
+                                    <?php } ?>
+
+                                </select>
+
+                                <button class="valid-button plus-btn">Créer un nouveau salon</button>
+
                         <?php break;
                         }
                     } else {
@@ -97,18 +111,16 @@
                             <?php
                             $options = $this->getDataOfTable(str_replace("_id", "", $dataField));
                             for ($i = 0; $i < count($options); $i++) {
+                                $fieldName = str_replace("_id", "_name", $dataField);
                             ?>
-                                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][str_replace("_id", "_name", $dataField)] == $this->displayedData[$dataField] ? "selected" : "" ?>><?= $options[$i][str_replace("_id", "_name", $dataField)] ?></option>
+                                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $this->displayedData[$dataField] ? "selected" : "" ?>><?= $options[$i][$fieldName] ?></option>
                             <?php } ?>
 
                         </select>
 
                 <?php
                     }
-                } ?>
-
-
-            <?php
+                }
             }
 
             if ($this->redirectPage == "params") { ?>
@@ -117,7 +129,7 @@
 
             <?php } ?>
 
-            <input class=" table" type="text" value="<?= $this->redirectPage ?> " hidden>
+            <input class=" table" type="text" value="<?= $this->redirectPage ?>" hidden>
             <input class="valid-button" type="submit" value="Enregistrer">
 
         </form>

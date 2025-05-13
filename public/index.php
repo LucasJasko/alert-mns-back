@@ -7,145 +7,168 @@ use \core\controller\Auth;
 
 App::init();
 
-$page = isset($_GET["page"]) ? $_GET["page"] : "login";
+if (!isset($_GET["api"])) {
 
-switch ($page) {
+  $page = isset($_GET["page"]) ? $_GET["page"] : "login";
 
+  switch ($page) {
 
-  case "group":
+    case "group":
 
-    Auth::protect();
-    $controller = new Src\Controller\Group();
+      Auth::protect();
+      $controller = new Src\Controller\Group();
 
-    if ($_POST) {
-      $controller->submitData($_POST);
-    }
-
-    if (isset($_GET["id"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $controller->delete("group", "group_id", $_GET["id"]);
-          App::redirect("group");
-        } else {
-          $controller->getForm($_GET["id"]);
-        }
-      } else {
-        $controller->getEmptyForm();
+      if ($_POST) {
+        $controller->submitData($_POST);
       }
-    } else {
-      $controller->getGroupDashboard();
-    }
 
+      if (isset($_GET["id"])) {
 
-    break;
+        if ($_GET["id"] != 0) {
 
+          if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
-  case "profile":
-
-    Auth::protect();
-    $controller = new Src\Controller\Profile();
-
-    if ($_POST) {
-      var_dump($_POST);
-      $controller->submitData($_POST);
-    }
-
-    if (isset($_GET["id"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $controller->delete("profile", "profile_id", $_GET["id"]);
-          App::redirect("profile");
-        } else {
-          $controller->getForm($_GET["id"]);
-        }
-      } else {
-        $controller->getEmptyForm();
-      }
-    } else {
-      $controller->getProfileDashboard();
-    }
-    break;
-
-
-  case "params":
-
-    Auth::protect();
-    $controller = new Src\Controller\Params();
-
-    if ($_POST) {
-      $controller->submitData($_POST, $_POST["table_name"]);
-    }
-
-
-    if (isset($_GET["id"]) && isset($_GET["tab"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $res = $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
-          if ($res = "23000") {
-            App::redirect("error");
+            $controller->delete("group", "group_id", $_GET["id"]);
+            App::redirect("group");
+          } else {
+            $controller->getForm($_GET["id"]);
           }
-          App::redirect("params");
         } else {
-          $controller->getForm($_GET["tab"], $_GET["id"]);
+          $controller->getEmptyForm();
         }
       } else {
-        $controller->getEmptyForm($_GET["tab"]);
+        $controller->getGroupDashboard();
       }
-    } else {
-      $controller->getParamsDashboard();
+
+      break;
+
+    case "profile":
+
+      Auth::protect();
+      $controller = new Src\Controller\Profile();
+
+      if ($_POST) {
+        var_dump($_POST);
+        $controller->submitData($_POST);
+      }
+
+      if (isset($_GET["id"])) {
+
+        if ($_GET["id"] != 0) {
+
+          if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+            $controller->delete("profile", "profile_id", $_GET["id"]);
+            App::redirect("profile");
+          } else {
+            $controller->getForm($_GET["id"]);
+          }
+        } else {
+          $controller->getEmptyForm();
+        }
+      } else {
+        $controller->getProfileDashboard();
+      }
+
+      break;
+
+    case "params":
+
+      Auth::protect();
+      $controller = new Src\Controller\Params();
+
+      if ($_POST) {
+        $controller->submitData($_POST, $_POST["table_name"]);
+      }
+
+      if (isset($_GET["id"]) && isset($_GET["tab"])) {
+
+        if ($_GET["id"] != 0) {
+
+          if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+            $res = $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+            if ($res = "23000") {
+              App::redirect("error");
+            }
+            App::redirect("params");
+          } else {
+            $controller->getForm($_GET["tab"], $_GET["id"]);
+          }
+        } else {
+          $controller->getEmptyForm($_GET["tab"]);
+        }
+      } else {
+        $controller->getParamsDashboard();
+      }
+
+      break;
+
+    case "stats":
+
+      Auth::protect();
+      $controller = new Src\Controller\Stats();
+      $controller->getView();
+
+      break;
+
+    case "login":
+
+      $controller = new Src\Controller\Login();
+
+      if (isset($_POST["email"]) && isset($_POST["password"])) {
+        $controller->checkAuth($_POST["email"], $_POST["password"]);
+      } else {
+        $controller->getLoginPage();
+      }
+
+      break;
+
+    case "logout":
+
+      Auth::protect();
+      $controller = new Src\Controller\Logout();
+      $controller->logout();
+
+      break;
+
+    case "error":
+
+      require_once "../pages/error.php";
+
+      break;
+
+    default:
+
+      http_response_code(404);
+      App::redirect("page404");
+
+      break;
+  }
+} else {
+
+  if ($_SERVER["REQUEST_METHOD"] == "GET" || $_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+    switch ($_GET["api"]) {
+
+
+      case "login":
+
+        $controller = new Src\Controller\Login();
+
+        // ICI DATA EST UN OBJET DONC ON ACCEDE AUX DONNEES COMME UN OBJET
+        $data = json_decode(file_get_contents("php://input"));
+
+        if (!empty($data->email && !empty($data->password))) {
+          $response = $controller->checkClientAuth($data->email, $data->password);
+          echo json_encode($response);
+        }
+
+        break;
     }
-
-
-    break;
-
-
-  case "stats":
-
-    Auth::protect();
-    $controller = new Src\Controller\Stats();
-    $controller->getView();
-    break;
-
-
-  case "login":
-
-    $controller = new Src\Controller\Login();
-
-    if (isset($_POST["email"]) && isset($_POST["password"])) {
-      $controller->checkAuth($_POST["email"], $_POST["password"]);
-    } else {
-      $controller->getLoginPage();
-    }
-    break;
-
-  case "logout":
-
-    Auth::protect();
-    $controller = new Src\Controller\Logout();
-    $controller->logout();
-
-    break;
-
-  case "error":
-    require_once "../pages/error.php";
-    break;
-
-  default:
-    http_response_code(404);
-    App::redirect("page404");
-    break;
-}
-
-if (isset($_GET["api"])) {
-  switch ($_GET["api"]) {
+  } else {
+    http_response_code(405);
+    echo json_encode(["message" => "La methode n'est pas autorisee"]);
   }
 }

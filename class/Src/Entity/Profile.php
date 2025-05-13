@@ -142,22 +142,22 @@ class Profile extends \Src\Model\Model
 
   public function setSurname(string $surname)
   {
-    $this->surname = $surname;
+    $this->surname = htmlspecialchars($surname);
   }
   public function setMail(string $mail)
   {
-    $this->mail = $mail;
+    $this->mail = htmlspecialchars($mail);
   }
   public function setPassword(string $password)
   {
-    $this->password = $password;
+    $this->password = htmlspecialchars($password);
   }
   public function setPicture(string | null $picture)
   {
     if ($picture == null) {
       $this->picture = "'le chemin vers une image par défaut'";
     } else {
-      $this->picture = $picture;
+      $this->picture = htmlspecialchars($picture);
     }
   }
   public function setLanguage(int $languageID)

@@ -36,7 +36,7 @@ class Group extends \Src\Model\Model
         "attributes" => "required"
       ],
       "room_id" => [
-        "label" => "Liste des salons du groupe",
+        "label" => "Salons du groupe",
         "placeholder" => "",
         "input_type" => "select",
         "attributes" => "required"

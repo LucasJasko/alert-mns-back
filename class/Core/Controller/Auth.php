@@ -2,7 +2,7 @@
 
 namespace core\controller;
 
-use Core\Database\Database;
+use \Core\Model\Log;
 
 class Auth
 {
@@ -25,13 +25,22 @@ class Auth
 
         session_start();
         $_SESSION["logged"] = "OK";
-        $this->response = ['success' => true, 'message' => 'Utilisateur connecté'];
-        \core\model\Log::writeLog("L'administrateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+        $this->response = [
+          'success' => true,
+          'message' => 'Utilisateur connecté'
+        ];
+        Log::writeLog("L'administrateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       } else {
-        $this->response = ['success' => false, 'message' => "Vous n'etes pas autorisé à vous connecter."];
+        $this->response = [
+          'success' => false,
+          'message' => "Vous n'etes pas autorisé à vous connecter."
+        ];
       }
     } else {
-      $this->response = ['success' => false, 'message' => 'Échec de la connexion : email ou mot de passe incorrect.'];
+      $this->response = [
+        'success' => false,
+        'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
+      ];
     }
 
     return $this->response;
@@ -50,19 +59,30 @@ class Auth
 
     if ($data) {
       // TODO manque vérification du contenu de data
-      $res = $this->tryLogin($data["profile_mail"], $data["profile_password"]);
+      $res = $this->tryLogin(htmlspecialchars($data["profile_mail"]), htmlspecialchars($data["profile_password"]));
       echo json_encode($res);
     }
   }
 
-  public function getClientAccess()
+  public function tryClientLogin(string $email, string $pwd)
   {
-    // Plutôt que l'étoile il faudra donner l'adresse du client ici
-    return [
-      header("Access-Control-Allow-Origin: *"),
-      header("Access-Control-Allow-Headers: *"),
-      header("Content-Type: application/json"),
-    ];
+    $res = $this->checkAuth($email, $pwd);
+
+    if ($res && $pwd == $res["profile_password"]) {
+
+      session_start();
+      $_SESSION["logged"] = "OK";
+      Log::writeLog("L'administrateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+      return [
+        'success' => true,
+        'message' => 'Utilisateur connecté'
+      ];
+    } else {
+      return [
+        'success' => false,
+        'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
+      ];
+    }
   }
 
   public static function protect()

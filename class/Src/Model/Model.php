@@ -65,20 +65,20 @@ abstract class Model
 
   public function setId(int $id)
   {
-    $this->id = $id;
+    $this->id = htmlspecialchars($id);
   }
   public function setName(string $name)
   {
-    $this->name = $name;
+    $this->name = htmlspecialchars($name);
   }
 
   public function setTableName($tableName)
   {
-    $this->tableName = $tableName;
+    $this->tableName = htmlspecialchars($tableName);
   }
   public function setSearchField($searchField)
   {
-    $this->searchField = $searchField;
+    $this->searchField = htmlspecialchars($searchField);
   }
 
   public function id()
