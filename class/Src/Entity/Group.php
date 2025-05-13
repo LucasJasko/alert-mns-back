@@ -6,6 +6,7 @@ class Group extends \Src\Model\Model
 {
   private $state;
   private $type;
+  private $room;
 
   protected static array $formInfos = [
     "form_title" => "Modification du groupe ",
@@ -33,6 +34,12 @@ class Group extends \Src\Model\Model
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
+      ],
+      "room_id" => [
+        "label" => "Liste des salons du groupe",
+        "placeholder" => "",
+        "input_type" => "select",
+        "attributes" => "required"
       ]
     ]
   ];
@@ -44,15 +51,13 @@ class Group extends \Src\Model\Model
     "type_id" => "Type"
   ];
 
-
-
   public function __construct($id, $newData = [])
   {
     $this->tableName = "group";
     $this->searchField = "group_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->getDBModel($id)[0];
 
     if ($row) {
       if (count($row) != 0) {
@@ -71,11 +76,12 @@ class Group extends \Src\Model\Model
       } else {
         $key = str_replace("_id", "", $key);
       }
-      $method = "set" . $key;
+      $method = "set" . ucfirst($key);
       if (method_exists($this, $method)) {
         $this->{$method}($value);
       }
     }
+    $this->setRoom($this->id);
   }
 
   public function all()
@@ -85,6 +91,7 @@ class Group extends \Src\Model\Model
       "group_name" =>  $this->name(),
       "state_id" => $this->state(),
       "type_id" =>  $this->type(),
+      "room_id" => $this->room()
     ];
   }
 
@@ -98,6 +105,11 @@ class Group extends \Src\Model\Model
     $instance = new Type($typeID);
     $this->type = $instance->name();
   }
+  public function setRoom(int $groupID)
+  {
+    $res = $this->db->getAllWhere("room", "group_id", $groupID);
+    $this->room = $res;
+  }
 
   public function state()
   {
@@ -106,6 +118,10 @@ class Group extends \Src\Model\Model
   public function type()
   {
     return $this->type;
+  }
+  public function room()
+  {
+    return $this->room;
   }
 
   public static function formInfos()

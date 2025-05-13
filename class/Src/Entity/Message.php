@@ -13,6 +13,6 @@ class Message extends \Src\Model\Model
 
   public function __construct($id)
   {
-    $row = $this->getDBModel($id);
+    $row = $this->getDBModel($id)[0];
   }
 }

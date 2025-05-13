@@ -13,7 +13,9 @@
   <h1>Alert MNS</h1>
   <?php require_once ROOT . "/pages/template/navbar.php"  ?>
 
-  <p>Ce paramètre ne peut pas être supprimé car d'autres en sont dépendant.</p>
+  <div class="param-window">
+    <p>Ce paramètre ne peut pas être supprimé car d'autres en sont dépendant.</p>
+  </div>
 </body>
 
 </html>

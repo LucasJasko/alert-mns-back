@@ -6,6 +6,6 @@ class Reaction extends \Src\Model\Model
 {
   function __construct($id)
   {
-    $row = $this->getDBModel($id);
+    $row = $this->getDBModel($id)[0];
   }
 }

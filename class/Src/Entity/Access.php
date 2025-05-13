@@ -23,7 +23,7 @@ class Access extends \Src\Model\Model
     $this->searchField = "access_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->getDBModel($id)[0];
 
     if (count($row) != 0) {
       $this->hydrate($row, $this->tableName);

@@ -34,7 +34,7 @@ class Status extends \Src\Model\Model
     $this->searchField = "status_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->getDBModel($id)[0];
 
     if ($row) {
       if (count($row) != 0) {
