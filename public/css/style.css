@@ -42,6 +42,14 @@ body {
   background-color: var(--paperwhite);
   box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.151);
 }
+
+.login-window {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .param-window-small {
   width: calc(33% - 30px);
 }
