@@ -32,7 +32,7 @@ if (!isset($_GET["api"])) {
             $controller->delete("group", "group_id", $_GET["id"]);
             App::redirect("group");
           } else {
-            $controller->getForm($_GET["id"]);
+            $controller->getForm("group", $_GET["id"], $controller->formInfos);
           }
         } else {
           $controller->getEmptyForm();
@@ -61,7 +61,7 @@ if (!isset($_GET["api"])) {
             $controller->delete("profile", "profile_id", $_GET["id"]);
             App::redirect("profile");
           } else {
-            $controller->getForm($_GET["id"]);
+            $controller->getForm("profile", $_GET["id"], $controller->formInfos);
           }
         } else {
           $controller->getEmptyForm();
@@ -93,7 +93,7 @@ if (!isset($_GET["api"])) {
             }
             App::redirect("params");
           } else {
-            $controller->getForm($_GET["tab"], $_GET["id"]);
+            $controller->getForm("params", $_GET["id"], $controller->paramsConfig[$_GET["tab"]]["form_infos"], $_GET["tab"]);
           }
         } else {
           $controller->getEmptyForm($_GET["tab"]);

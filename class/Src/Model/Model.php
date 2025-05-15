@@ -32,9 +32,10 @@ abstract class Model
 
   public function createNewModel(string $table, array $data)
   {
-    $fields =  $this->getFieldsOfModel($table);
+    $fields = $this->getFieldsOfModel($table);
     for ($i = 0; $i < count($fields); $i++) {
-      if (!isset($data[$fields[$i]])) $data[$fields[$i]] = "";
+      if (!isset($data[$fields[$i]]))
+        $data[$fields[$i]] = "";
     }
     $this->db->createOne($this->tableName, $data, $fields);
     // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
@@ -65,37 +66,35 @@ abstract class Model
 
   public function setId(int $id)
   {
-    $this->id = htmlspecialchars($id);
+    $this->id = $id;
   }
   public function setName(string $name)
   {
-    $this->name = htmlspecialchars($name);
+    $this->name = $name;
   }
-
   public function setTableName($tableName)
   {
-    $this->tableName = htmlspecialchars($tableName);
+    $this->tableName = $tableName;
   }
   public function setSearchField($searchField)
   {
-    $this->searchField = htmlspecialchars($searchField);
+    $this->searchField = $searchField;
   }
 
   public function id()
   {
-    return $this->id;
+    return htmlspecialchars($this->id);
   }
   public function name()
   {
-    return $this->name;
+    return htmlspecialchars($this->name);
   }
-
   public function tableName()
   {
-    return $this->tableName;
+    return htmlspecialchars($this->tableName);
   }
   public function searchField()
   {
-    return $this->searchField;
+    return htmlspecialchars($this->searchField);
   }
 }

@@ -5,7 +5,7 @@ namespace Src\Controller;
 class Params extends \Src\Controller\Controller
 {
 
-  private array $paramsConfig = [
+  public array $paramsConfig = [
     "post" => [
       "field_name" => "post",
       "class_name" => "Post",
@@ -44,69 +44,49 @@ class Params extends \Src\Controller\Controller
     ],
   ];
 
+  private $dashboardsInfos;
   private $dashboard;
-  private $dashboardInfos;
   private $form;
-  private $formInfos;
+  private $formsInfos;
 
   private $paramInstance;
 
   public function __construct()
   {
     parent::__construct();
-    foreach ($this->paramsConfig as $k => $v) {
-      $model = "\Src\Entity\\" . ucfirst($k);
-      $this->paramsConfig[$k]["form_infos"] = $model::formInfos();
-      $this->paramsConfig[$k]["dashboard_infos"] = $model::dashboardInfos();
+    foreach ($this->paramsConfig as $table => $v) {
+      $model = "\Src\Entity\\" . ucfirst($table);
+      $this->formsInfos[] = $model::formInfos();
+      $this->dashboardsInfos[$table] = $model::dashboardInfos();
     }
   }
 
   public function getParamsDashboard()
   {
-    foreach ($this->paramsConfig as $k => $v) {
-      $this->paramsConfig[$k]["recordset"] = [];
-      $model = "\Src\Entity\\" . ucfirst($k);
-      $fielId = $k . "_id";
-
-      $recordset = $this->db->getField($k, $fielId);
-
-      $clearedRecordset = [];
-      for ($i = 0; $i < count($recordset); $i++) {
-        $clearedRecordset[$i] = $recordset[$i][$k . "_id"];
-      }
+    foreach ($this->paramsConfig as $table => $v) {
+      $recordset = $this->db->getField($table, $table . "_id");
+      $clearedRecordset = $this->clearRecordset($recordset, $table);
 
       for ($i = 0; $i < count($clearedRecordset); $i++) {
-        $id = $clearedRecordset[$i];
-        $model = new $model($id);
-        $this->paramsConfig[$k]["recordset"][] = $model->all();
-        $this->paramsConfig[$k]["fields"][] = $this->db->getFieldsOfTable($k);
+        $recordsets[$table] = $this->getModelsFromRecordset($clearedRecordset, $table);
+        $ParamsFields[$table][] = $this->db->getFieldsOfTable($table);
       }
     }
 
+    $dashboardsInfos = $this->dashboardsInfos;
     $paramsConfig = $this->paramsConfig;
-    require ROOT . "/pages/params.php";
+
+    require_once ROOT . "/pages/params.php";
   }
 
   public function getEmptyForm(string $tab)
   {
     $fieldName = $this->paramsConfig[$tab]["field_name"];
-    $formInfos = $this->paramsConfig[$tab]["form_infos"];
-    $this->form = new \core\model\Form($fieldName, "params", $formInfos);
+    $formInfos = $this->formsInfos[$tab];
+    $this->form = new \Src\Model\Form($fieldName, "params", $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($tab);
     return $this->form->getEmptyForm($fieldsOfTable, [$fieldName . "_id"]);
   }
-
-  public function getForm(string $tab, int $id)
-  {
-    $model = "\Src\Entity\\" . ucfirst($tab);
-    $this->paramInstance = new $model($id);
-    $profileData = $this->paramInstance->all();
-    $formInfos = $this->paramInstance::formInfos();
-
-    $this->form = new \core\model\Form($tab, "params", $formInfos);
-    return $this->form->getForm($profileData);
-  }
-
 
   public function submitData(array $data, string $tab)
   {

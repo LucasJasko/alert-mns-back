@@ -7,14 +7,12 @@ use Src\Relation\ProfileSituation;
 
 class Profile extends \Src\Controller\Controller
 {
-  private $dashboard;
+  private $profileInstance;
   private $dashboardInfos;
   private $form;
-  private $formInfos;
-
+  public $formInfos;
   private array $fieldsToNotRender = ["profile_password", "language_id", "theme_id", "status_id", "profile_picture"];
 
-  private $profileInstance;
 
   public function __construct()
   {
@@ -26,38 +24,24 @@ class Profile extends \Src\Controller\Controller
   public function getProfileDashboard()
   {
     $recordset = $this->db->getField("profile", "profile_id");
+    $clearedRecordset = $this->clearRecordset($recordset, "profile");
+    $profiles = $this->getModelsFromRecordset($clearedRecordset, "Profile");
 
-    $clearedRecordset = [];
-    for ($i = 0; $i < count($recordset); $i++) {
-      $clearedRecordset[$i] = $recordset[$i]["profile_id"];
-    }
+    $fields = $this->unsetFieldsToRender($this->dashboardInfos, $this->fieldsToNotRender);
+    $data = $profiles;
+    $tab = "profile";
+    $page = isset($_GET["page"]) ? $_GET["page"] : "";
 
-    $profiles = [];
-    for ($i = 0; $i < count($clearedRecordset); $i++) {
-      $id = $clearedRecordset[$i];
-      $profile = new ProfileModel($id);
-      $profiles[$i] = $profile->all();
-    }
-
-    $dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once ROOT . "/pages/profile.php";
   }
 
   public function getEmptyForm()
   {
-    $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
+    $this->form = new \Src\Model\Form("profile", "profile", $this->formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable("profile");
     $fieldsOfTable[] = "situation_id";
+
     return $this->form->getEmptyForm($fieldsOfTable, ["profile_id"]);
-  }
-
-  public function getForm(int $id)
-  {
-    $this->profileInstance = new ProfileModel($id);
-    $profileData = $this->profileInstance->all();
-
-    $this->form = new \core\model\Form("profile", "profile", $this->formInfos);
-    return $this->form->getForm($profileData);
   }
 
   public function submitData(array $data)

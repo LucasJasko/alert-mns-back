@@ -15,14 +15,12 @@
 
   <?php require_once ROOT . "/pages/template/navbar.php" ?>
 
-
   <main class="main-container">
     <div class="param-window">
       <div class="btn-container">
         <a class="valid-button add-button" href="group/0">Ajouter un groupe</a>
       </div>
-
-      <?= $dashboard->getCompleteDashboard() ?>
+      <?php require_once ROOT . "/pages/template/dashboard.php" ?>
     </div>
 
     <div class="delete-container"></div>

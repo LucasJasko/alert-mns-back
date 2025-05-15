@@ -6,12 +6,11 @@ use Src\Entity\Group as GroupModel;
 
 class Group extends \Src\Controller\Controller
 {
+  private $groupInstance;
   private $dashboardInfos;
   private $form;
-  private $formInfos;
+  public $formInfos;
   private array $fieldsToNotRender = [];
-
-  private $groupInstance;
 
   public function __construct()
   {
@@ -23,39 +22,23 @@ class Group extends \Src\Controller\Controller
   public function getGroupDashboard()
   {
     $recordset = $this->db->getField("group", "group_id");
+    $clearedRecordset = $this->clearRecordset($recordset, "group");
+    $groups = $this->getModelsFromRecordset($clearedRecordset, "Group");
+    $fields = $this->unsetFieldsToRender($this->dashboardInfos, $this->fieldsToNotRender);
 
-    $clearedRecordset = [];
-    for ($i = 0; $i < count($recordset); $i++) {
-      $clearedRecordset[$i] = $recordset[$i]["group_id"];
-    }
+    $data = $groups;
+    $tab = "group";
+    $page = isset($_GET["page"]) ? $_GET["page"] : "";
 
-    $groups = [];
-    for ($i = 0; $i < count($clearedRecordset); $i++) {
-      $id = $clearedRecordset[$i];
-      $group = new GroupModel($id);
-      $groups[$i] = $group->all();
-    }
-
-
-    $dashboard = new \Core\Model\Dashboard("group", $groups, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once ROOT . "/pages/group.php";
   }
 
   public function getEmptyForm()
   {
-    $this->form = new \core\model\Form("group", "group", $this->formInfos);
+    $this->form = new \Src\Model\Form("group", "group", $this->formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable("group");
 
     return $this->form->getEmptyForm($fieldsOfTable, ["group_id"]);
-  }
-
-  public function getForm(int $id)
-  {
-    $this->groupInstance = new GroupModel($id);
-    $groupData = $this->groupInstance->all();
-
-    $this->form = new \Core\Model\Form("group", "group", $this->formInfos);
-    return $this->form->getForm($groupData);
   }
 
   public function submitData(array $data)

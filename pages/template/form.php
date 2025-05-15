@@ -57,7 +57,7 @@
                         <option value="">-- Poste --</option>
 
                         <?php
-                        $options = \Core\Model\Form::getDataOfTable("post");
+                        $options = \Src\Model\Form::getDataOfTable("post");
                         for ($i = 0; $i < count($options); $i++) {
                           ?>
                           <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>>
@@ -71,7 +71,7 @@
                         <option value="">-- Département --</option>
 
                         <?php
-                        $options = \Core\Model\Form::getDataOfTable("department");
+                        $options = \Src\Model\Form::getDataOfTable("department");
                         for ($i = 0; $i < count($options); $i++) { ?>
                           <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
                         <?php } ?>
@@ -108,7 +108,7 @@
             <select name="<?= $dataField ?>">
 
               <?php
-              $options = \Core\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
+              $options = \Src\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
               for ($i = 0; $i < count($options); $i++) {
                 $fieldName = str_replace("_id", "_name", $dataField);
                 ?>

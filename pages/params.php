@@ -20,16 +20,20 @@
     <div class="params-container">
 
       <?php
-      foreach ($paramsConfig as $table) {
-        $dashboard = new \core\model\Dashboard($table["field_name"], $table["recordset"], $table["dashboard_infos"]);
+      foreach ($paramsConfig as $table => $infos) {
+        $fields = $dashboardsInfos[$table];
+        $data = $recordsets[$table];
+        $tab = $table;
+        $page = isset($_GET["page"]) ? $_GET["page"] : "";
         ?>
-        <div class="param-window param-window-small <?= $table["field_name"] ?>">
-          <h2 class="param-title"><?= $table["field_desc"] ?></h2>
+
+        <div class="param-window param-window-small <?= $infos["field_name"] ?>">
+          <h2 class="param-title"><?= $infos["field_desc"] ?></h2>
           <div class="btn-container">
-            <a class="valid-button add-button" href="params/<?= $table["field_name"] ?>/0">Ajouter
-              <?= $table["field_p"] ?></a>
+            <a class="valid-button add-button" href="params/<?= $infos["field_name"] ?>/0">Ajouter
+              <?= $infos["field_p"] ?></a>
           </div>
-          <?= $dashboard->getCompleteDashboard() ?>
+          <?php require ROOT . "/pages/template/dashboard.php" ?>
         </div>
       <?php } ?>
 

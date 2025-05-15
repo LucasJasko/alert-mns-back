@@ -1,6 +1,6 @@
 <?php
 
-namespace core\model;
+namespace Src\Model;
 
 class Form
 {

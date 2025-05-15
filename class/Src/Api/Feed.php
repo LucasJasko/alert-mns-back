@@ -1,6 +1,6 @@
 <?php
 
-namespace core\model;
+namespace core\Api;
 
 class Feed
 {
@@ -9,7 +9,7 @@ class Feed
   {
     $auth = new \core\controller\Auth();
     $rawData = file_get_contents("php://input");
-    $data    = json_decode($rawData, true);
+    $data = json_decode($rawData, true);
 
     $typeID = $data["typeID"];
     $convID = $data["convID"];
@@ -19,7 +19,7 @@ class Feed
     if (json_encode($jsonPath)) {
       echo json_encode($jsonPath);
     }
-    if (! json_encode($jsonPath)) {
+    if (!json_encode($jsonPath)) {
       echo "La recherche n'a rien donné";
     }
   }

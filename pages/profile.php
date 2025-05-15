@@ -20,7 +20,7 @@
       <div class="btn-container">
         <a class="valid-button add-button" href="profile/0">Ajouter un utilisateur</a>
       </div>
-      <?= $dashboard->getCompleteDashboard() ?>
+      <?php require_once ROOT . "/pages/template/dashboard.php" ?>
     </div>
 
     <div class="delete-container"></div>
