@@ -6,6 +6,7 @@ use \Src\App;
 use \core\controller\Auth;
 
 App::init();
+// Init le routeur aussi à terme
 
 if (!isset($_GET["api"])) {
 
@@ -48,7 +49,6 @@ if (!isset($_GET["api"])) {
       $controller = new Src\Controller\Profile();
 
       if ($_POST) {
-        var_dump($_POST);
         $controller->submitData($_POST);
       }
 
@@ -117,6 +117,7 @@ if (!isset($_GET["api"])) {
       $controller = new Src\Controller\Login();
 
       if (isset($_POST["email"]) && isset($_POST["password"])) {
+        // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
         $controller->checkAuth($_POST["email"], $_POST["password"]);
       } else {
         $controller->getLoginPage();
@@ -149,9 +150,7 @@ if (!isset($_GET["api"])) {
 
   if ($_SERVER["REQUEST_METHOD"] == "GET" || $_SERVER["REQUEST_METHOD"] == "POST") {
 
-
     switch ($_GET["api"]) {
-
 
       case "login":
 

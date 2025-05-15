@@ -2,139 +2,140 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <title>Tableau de bord - Formulaire de modification</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <title>Tableau de bord - Formulaire de modification</title>
 </head>
 
 <body>
-    <main class="form__container">
 
-        <h1><?= $this->formInfos["form_title"] ?></h1>
+  <main class="form__container">
 
-        <form class="form" action="index.php?page=<?= $this->redirectPage ?>" method="post">
+    <h1><?= $formInfos["form_title"] ?></h1>
 
-            <a class="return-link" href="./index.php?page=<?= $this->redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
+    <form class="form" action="/<?= $redirectPage ?>" method="post">
 
-            <?php foreach ($this->displayedData as $dataField => $dataValue) {
+      <a class="return-link" href="/<?= $redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
-                $label = $this->formInfos["form_fields"][$dataField]["label"];
-                $inputType = $this->formInfos["form_fields"][$dataField]["input_type"];
-                $placeholder = $this->formInfos["form_fields"][$dataField]["placeholder"];
-                $attributes = $this->formInfos["form_fields"][$dataField]["attributes"];
-            ?>
+      <?php foreach ($displayedData as $dataField => $dataValue) {
 
-                <label for="<?= $dataField ?>"> <?= $label ?> :</label>
+        $label = $formInfos["form_fields"][$dataField]["label"];
+        $inputType = $formInfos["form_fields"][$dataField]["input_type"];
+        $placeholder = $formInfos["form_fields"][$dataField]["placeholder"];
+        $attributes = $formInfos["form_fields"][$dataField]["attributes"];
+        ?>
 
-                <?php
-                if (str_contains($dataField, $this->tableName)) {
-                ?>
-                    <input
-                        type='<?= $inputType ?>'
-                        placeholder='<?= $placeholder ?>'
-                        name="<?= $dataField ?>"
-                        id="<?= $dataField ?>"
-                        <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>
-                        <?= $attributes ?>>
+        <label for="<?= $dataField ?>"> <?= $label ?> :</label>
+
+        <?php
+        if (str_contains($dataField, $tableName)) {
+          ?>
+          <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
+            <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>>
+
+          <?php
+        } else {
+
+          if (is_array($dataValue)) {
+
+            if (empty($dataValue))
+              $dataValue[] = [["" => ""]];
+
+            switch ($dataField) {
+
+              case "situation_id":
+
+                for ($index = 0; $index < count($dataValue); $index++) {
+
+                  foreach ($dataValue[$index] as $post => $department) { ?>
+
+                    <div class="dbl-select__container">
+
+                      <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][post_id]">
+                        <option value="">-- Poste --</option>
+
+                        <?php
+                        $options = \Core\Model\Form::getDataOfTable("post");
+                        for ($i = 0; $i < count($options); $i++) {
+                          ?>
+                          <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>>
+                            <?= $options[$i]["post_name"] ?>
+                          </option>
+                        <?php } ?>
+
+                      </select>
+
+                      <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][department_id]">
+                        <option value="">-- Département --</option>
+
+                        <?php
+                        $options = \Core\Model\Form::getDataOfTable("department");
+                        for ($i = 0; $i < count($options); $i++) { ?>
+                          <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
+                        <?php } ?>
+
+                      </select>
+
+                    </div>
 
                     <?php
-                } else {
+                  }
+                } ?>
 
-                    if (is_array($dataValue)) {
+                <button class="valid-button plus-btn ">Ajouter une situation</button>
 
-                        if (empty($dataValue)) $dataValue[] = [["" => ""]];
+                <?php break;
 
-                        switch ($dataField) {
+              case "room_id": ?>
+                <select>
 
-                            case "situation_id":
+                  <option value="">-- Sélectionnez un salon à éditer --</option>
 
-                                for ($index = 0; $index < count($dataValue); $index++) {
+                  <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
+                    <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
+                  <?php } ?>
 
-                                    foreach ($dataValue[$index] as $post => $department) { ?>
+                </select>
 
-                                        <div class="dbl-select__container">
+                <button class="valid-button plus-btn">Créer un nouveau salon</button>
 
-                                            <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][post_id]">
-                                                <option value="">-- Poste --</option>
-
-                                                <?php
-                                                $options = $this->getDataOfTable("post");
-                                                for ($i = 0; $i < count($options); $i++) {
-                                                ?>
-                                                    <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>><?= $options[$i]["post_name"] ?></option>
-                                                <?php } ?>
-
-                                            </select>
-
-                                            <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][department_id]">
-                                                <option value="">-- Département --</option>
-
-                                                <?php
-                                                $options = $this->getDataOfTable("department");
-                                                for ($i = 0; $i < count($options); $i++) { ?>
-                                                    <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
-                                                <?php } ?>
-
-                                            </select>
-
-                                        </div>
-
-                                <?php
-                                    }
-                                } ?>
-
-                                <button class="valid-button plus-btn ">Ajouter une situation</button>
-
-                            <?php break;
-
-                            case "room_id": ?>
-                                <select>
-
-                                    <option value="">-- Sélectionnez un salon à éditer --</option>
-
-                                    <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
-                                        <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
-                                    <?php } ?>
-
-                                </select>
-
-                                <button class="valid-button plus-btn">Créer un nouveau salon</button>
-
-                        <?php break;
-                        }
-                    } else {
-                        ?>
-                        <select name="<?= $dataField ?>">
-
-                            <?php
-                            $options = $this->getDataOfTable(str_replace("_id", "", $dataField));
-                            for ($i = 0; $i < count($options); $i++) {
-                                $fieldName = str_replace("_id", "_name", $dataField);
-                            ?>
-                                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $this->displayedData[$dataField] ? "selected" : "" ?>><?= $options[$i][$fieldName] ?></option>
-                            <?php } ?>
-
-                        </select>
-
-                <?php
-                    }
-                }
+                <?php break;
             }
+          } else {
+            ?>
+            <select name="<?= $dataField ?>">
 
-            if ($this->redirectPage == "params") { ?>
+              <?php
+              $options = \Core\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
+              for ($i = 0; $i < count($options); $i++) {
+                $fieldName = str_replace("_id", "_name", $dataField);
+                ?>
+                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $displayedData[$dataField] ? "selected" : "" ?>>
+                  <?= $options[$i][$fieldName] ?>
+                </option>
+              <?php } ?>
 
-                <input class=" table" type="text" name="table_name" value="<?= $this->tableName ?>" hidden>
+            </select>
 
-            <?php } ?>
+            <?php
+          }
+        }
+      }
 
-            <input class=" table" type="text" value="<?= $this->redirectPage ?>" hidden>
-            <input class="valid-button" type="submit" value="Enregistrer">
+      if ($redirectPage == "params") { ?>
 
-        </form>
+        <input class=" table" type="text" name="table_name" value="<?= $tableName ?>" hidden>
 
-    </main>
+      <?php } ?>
+
+      <input class=" table" type="text" value="<?= $redirectPage ?>" hidden>
+      <input class="valid-button" type="submit" value="Enregistrer">
+
+    </form>
+
+  </main>
 </body>
 
 <script src="js/form.js"></script>

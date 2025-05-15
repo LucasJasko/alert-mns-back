@@ -13,6 +13,6 @@ class Logout extends \Src\Controller\Controller
 
   public function redirect($page)
   {
-    header("Location:/index.php?page=" . $page);
+    header("Location:/" . $page);
   }
 }

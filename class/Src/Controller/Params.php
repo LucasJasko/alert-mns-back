@@ -5,7 +5,7 @@ namespace Src\Controller;
 class Params extends \Src\Controller\Controller
 {
 
-  private array $ParamsConfig = [
+  private array $paramsConfig = [
     "post" => [
       "field_name" => "post",
       "class_name" => "Post",
@@ -54,17 +54,17 @@ class Params extends \Src\Controller\Controller
   public function __construct()
   {
     parent::__construct();
-    foreach ($this->ParamsConfig as $k => $v) {
+    foreach ($this->paramsConfig as $k => $v) {
       $model = "\Src\Entity\\" . ucfirst($k);
-      $this->ParamsConfig[$k]["form_infos"] = $model::formInfos();
-      $this->ParamsConfig[$k]["dashboard_infos"] = $model::dashboardInfos();
+      $this->paramsConfig[$k]["form_infos"] = $model::formInfos();
+      $this->paramsConfig[$k]["dashboard_infos"] = $model::dashboardInfos();
     }
   }
 
   public function getParamsDashboard()
   {
-    foreach ($this->ParamsConfig as $k => $v) {
-      $this->ParamsConfig[$k]["recordset"] = [];
+    foreach ($this->paramsConfig as $k => $v) {
+      $this->paramsConfig[$k]["recordset"] = [];
       $model = "\Src\Entity\\" . ucfirst($k);
       $fielId = $k . "_id";
 
@@ -78,18 +78,19 @@ class Params extends \Src\Controller\Controller
       for ($i = 0; $i < count($clearedRecordset); $i++) {
         $id = $clearedRecordset[$i];
         $model = new $model($id);
-        $this->ParamsConfig[$k]["recordset"][] = $model->all();
-        $this->ParamsConfig[$k]["fields"][] =  $this->db->getFieldsOfTable($k);
+        $this->paramsConfig[$k]["recordset"][] = $model->all();
+        $this->paramsConfig[$k]["fields"][] = $this->db->getFieldsOfTable($k);
       }
     }
 
+    $paramsConfig = $this->paramsConfig;
     require ROOT . "/pages/params.php";
   }
 
   public function getEmptyForm(string $tab)
   {
-    $fieldName = $this->ParamsConfig[$tab]["field_name"];
-    $formInfos = $this->ParamsConfig[$tab]["form_infos"];
+    $fieldName = $this->paramsConfig[$tab]["field_name"];
+    $formInfos = $this->paramsConfig[$tab]["form_infos"];
     $this->form = new \core\model\Form($fieldName, "params", $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($tab);
     return $this->form->getEmptyForm($fieldsOfTable, [$fieldName . "_id"]);
@@ -99,10 +100,6 @@ class Params extends \Src\Controller\Controller
   {
     $model = "\Src\Entity\\" . ucfirst($tab);
     $this->paramInstance = new $model($id);
-
-    var_dump($id);
-    var_dump($this->paramInstance);
-
     $profileData = $this->paramInstance->all();
     $formInfos = $this->paramInstance::formInfos();
 

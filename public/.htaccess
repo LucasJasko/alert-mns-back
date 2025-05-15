@@ -1,0 +1,26 @@
+RewriteEngine On
+RewriteRule ^login/?$ /index.php?page=login [L]
+RewriteRule ^group/?$ /index.php?page=group [L]
+RewriteRule ^group/([0-9+])/?$ /index.php?page=group&id=$1 [L]
+RewriteRule ^profile/?$ /index.php?page=profile [L]
+RewriteRule ^profile/([0-9+])/?$ /index.php?page=profile&id=$1 [L]
+RewriteRule ^stats/?$ /index.php?page=stats [L]
+RewriteRule ^logout/?$ /index.php?page=logout [L]
+RewriteRule ^error/?$ /index.php?page=error [L]
+
+RewriteRule ^params/?$ /index.php?page=params [L]
+RewriteRule ^params/([^_]*)/([0-9+])/?$ /index.php?page=params&tab=$1&id=$2 [L]
+
+
+<IfModule mod_headers.c>
+Header always set Access-Control-Allow-Origin: "*"
+Header always set Access-Control-Allow-Headers: "Origin, Content-Type"
+Header always set Access-Control-Allow-Methods: "*"
+Header always set Access-Control-Max-Age: "3600"
+</IfModule>
+
+<If "%{REQUEST_URI} =~ m#^/api/#">
+Header always set Content-Type: "application/json"
+</If>
+
+# TODO DEFINIR L ACCES AUX DOSSIERS upload uniquement via les liens du site

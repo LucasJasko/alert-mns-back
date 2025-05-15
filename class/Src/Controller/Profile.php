@@ -39,7 +39,7 @@ class Profile extends \Src\Controller\Controller
       $profiles[$i] = $profile->all();
     }
 
-    $this->dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
+    $dashboard = new \core\model\Dashboard("profile", $profiles, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once ROOT . "/pages/profile.php";
   }
 

@@ -2,9 +2,6 @@
 
 namespace Src;
 
-use PDOException;
-use Src\Database\Database;
-
 class App
 {
 
@@ -30,18 +27,14 @@ class App
   public static function db()
   {
     if (self::$db === null) {
-      try {
-        self::$db = new Database(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-      } catch (PDOException $e) {
-        echo "Erreur de connexion : " . $e->getMessage();
-      }
+      self::$db = new \Src\Database\Database(DB_HOST, DB_NAME, DB_USER, DB_PASS);
     }
     return self::$db;
   }
 
   public static function redirect($page)
   {
-    header("Location:./index.php?page=" . $page);
+    header("Location:/" . $page);
     exit;
   }
 

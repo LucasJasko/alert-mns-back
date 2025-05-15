@@ -13,16 +13,16 @@
 
   <h1>Alert MNS - Tableau de bord: Gestion des groupes</h1>
 
-  <?php require_once ROOT . "/pages/template/navbar.php"  ?>
+  <?php require_once ROOT . "/pages/template/navbar.php" ?>
 
 
   <main class="main-container">
     <div class="param-window">
       <div class="btn-container">
-        <a class="valid-button add-button" href="../index.php?page=group&id=0">Ajouter un groupe</a>
+        <a class="valid-button add-button" href="group/0">Ajouter un groupe</a>
       </div>
 
-      <?= $this->dashboard->getCompleteDashboard() ?>
+      <?= $dashboard->getCompleteDashboard() ?>
     </div>
 
     <div class="delete-container"></div>

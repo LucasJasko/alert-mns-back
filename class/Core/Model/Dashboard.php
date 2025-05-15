@@ -17,7 +17,7 @@ class Dashboard
     $this->tableName = $tableName;
     $this->modelName = ucfirst($this->tableName);
 
-    $this->page = isset($_GET["page"]) ?  $_GET["page"] : "";
+    $this->page = isset($_GET["page"]) ? $_GET["page"] : "";
     $this->tab = $tableName;
     $this->data = $data;
 
@@ -78,7 +78,7 @@ class Dashboard
         if (is_array($dataArray[$key])) {
           for ($i = 0; $i < count($dataArray[$key]); $i++) {
             foreach ($dataArray[$key][$i] as $post => $department) {
-              $row .=  $post . " de " . $department;
+              $row .= $post . " de " . $department;
               $row .= "</br>";
             }
           }
@@ -95,8 +95,8 @@ class Dashboard
 
   private function getManageButtons($id)
   {
-    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='../index.php?page=" . $this->page . ($this->page == "params" ? "&tab=" . $this->tab : "") . "&id=" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
-    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete' href='../index.php?page=" . $this->page . "&id=" . $id . "&process=delete' id='" .  $this->page . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
+    $updateBtn = "<td class='btn__container'> <a class='btn btn__update' href='" . $this->page . ($this->page == "params" ? "/" . $this->tab : "") . "/" . $id . "'> <i class='fa-solid fa-pen'></i></a> </td>";
+    $deleteBtn = "<td class='btn__container'> <a class='btn btn__delete' href='" . $this->page . "/" . $id . "&process=delete' id='" . $this->page . "'><i class='fa-solid fa-trash-can'></i></a> </td>";
     return $updateBtn . $deleteBtn;
   }
 }
