@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <title>Tableau de bord - Formulaire de modification</title>
 </head>
@@ -15,7 +15,8 @@
 
     <h1><?= $formInfos["form_title"] ?></h1>
 
-    <form class="form" action="/<?= $redirectPage ?>" method="post">
+    <form class="form" action="<?= $redirectPage ?>" method="post">
+
 
       <a class="return-link" href="/<?= $redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
@@ -138,6 +139,6 @@
   </main>
 </body>
 
-<script src="js/form.js"></script>
+<script src="/js/form.js"></script>
 
 </html>

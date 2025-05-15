@@ -32,10 +32,10 @@ if (!isset($_GET["api"])) {
             $controller->delete("group", "group_id", $_GET["id"]);
             App::redirect("group");
           } else {
-            $controller->getForm("group", $_GET["id"], $controller->formInfos);
+            $controller->getModelForm("group", $_GET["id"], $controller->formInfos);
           }
         } else {
-          $controller->getEmptyForm();
+          $controller->getEmptyModelForm("group", $controller->formInfos);
         }
       } else {
         $controller->getGroupDashboard();
@@ -61,10 +61,10 @@ if (!isset($_GET["api"])) {
             $controller->delete("profile", "profile_id", $_GET["id"]);
             App::redirect("profile");
           } else {
-            $controller->getForm("profile", $_GET["id"], $controller->formInfos);
+            $controller->getModelForm("profile", $_GET["id"], $controller->formInfos);
           }
         } else {
-          $controller->getEmptyForm();
+          $controller->getEmptyModelForm("profile", $controller->formInfos);
         }
       } else {
         $controller->getProfileDashboard();
@@ -93,10 +93,10 @@ if (!isset($_GET["api"])) {
             }
             App::redirect("params");
           } else {
-            $controller->getForm("params", $_GET["id"], $controller->paramsConfig[$_GET["tab"]]["form_infos"], $_GET["tab"]);
+            $controller->getModelForm($_GET["tab"], $_GET["id"], $controller->formsInfos[$_GET["tab"]]);
           }
         } else {
-          $controller->getEmptyForm($_GET["tab"]);
+          $controller->getEmptyModelForm($_GET["tab"], $controller->formsInfos[$_GET["tab"]], "params");
         }
       } else {
         $controller->getParamsDashboard();

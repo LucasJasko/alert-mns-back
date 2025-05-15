@@ -27,9 +27,9 @@ abstract class Controller extends \Core\Controller\Controller
     }
   }
 
-  public function modelData($id, $modelName)
+  public function modelData($id, $modelName, $tab = "")
   {
-    $modelPath = "Src\Entity\\" . $modelName;
+    $modelPath = "Src\Entity\\" . (!empty($tab) ? $tab : $modelName);
     $groupInstance = new $modelPath($id);
     return $groupInstance->all();
   }
@@ -63,14 +63,21 @@ abstract class Controller extends \Core\Controller\Controller
     return $fields;
   }
 
-  public function getForm(string $modelName, int $id, array $formInfos, $tab = "")
+  public function getModelForm(string $modelName, int $id, array $formInfos, $tab = "")
   {
-    $profileData = $this->modelData($id, ucfirst($modelName));
-    $form = new \Src\Model\Form($modelName, !is_null($tab) ? $tab : $modelName, $formInfos);
+    $profileData = $this->modelData($id, ucfirst(!empty($tab) ? $tab : $modelName), $tab);
+    $form = new \Src\Model\Form($modelName, !empty($tab) ? $tab : $modelName, $formInfos);
 
     return $form->getForm($profileData);
   }
 
+  public function getEmptyModelForm(string $modelName, array $formInfos, $tab = "")
+  {
+    $form = new \Src\Model\Form($modelName, !empty($tab) ? $tab : $modelName, $formInfos);
+    $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
+
+    return $form->getEmptyForm($fieldsOfTable, [$modelName . "_id"]);
+  }
 
   public function delete(string $table, string $field, int $id)
   {

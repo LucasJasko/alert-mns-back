@@ -13,7 +13,7 @@
 
   <h1>Alert MNS - Tableau de bord: Statistiques de l'application</h1>
 
-  <?php require_once ROOT . "/pages/template/navbar.php"  ?>
+  <?php require_once ROOT . "/pages/template/navbar.php" ?>
 
   <input type="text" class="target" value="Statistiques" hidden>
   <script src="js/index.js"></script>

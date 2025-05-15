@@ -24,8 +24,8 @@ class Language extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "language_id" => "Identifiant de la langue",
-    "language_name" => "Nom de la langue"
+    "language_id" => "ID",
+    "language_name" => "Nom"
   ];
 
   public function __construct(int $id, $newData = [])
@@ -49,7 +49,7 @@ class Language extends \Src\Model\Model
   {
     return [
       "language_id" => $this->id(),
-      "language_name" =>  $this->name(),
+      "language_name" => $this->name(),
     ];
   }
 

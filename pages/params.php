@@ -20,7 +20,7 @@
     <div class="params-container">
 
       <?php
-      foreach ($paramsConfig as $table => $infos) {
+      foreach ($paramsConfig as $table => $infos):
         $fields = $dashboardsInfos[$table];
         $data = $recordsets[$table];
         $tab = $table;
@@ -35,7 +35,7 @@
           </div>
           <?php require ROOT . "/pages/template/dashboard.php" ?>
         </div>
-      <?php } ?>
+      <?php endforeach ?>
 
     </div>
 

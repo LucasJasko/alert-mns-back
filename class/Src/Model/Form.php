@@ -14,8 +14,8 @@ class Form
   public function __construct(string $tableName, string $redirectPage, array $formInfos)
   {
     $this->tableName = $tableName;
-    $this->formInfos = $formInfos;
     $this->redirectPage = $redirectPage;
+    $this->formInfos = $formInfos;
     $this->db = \Src\App::db();
   }
 
@@ -30,7 +30,8 @@ class Form
     $redirectPage = $this->redirectPage;
     $displayedData = $this->displayedData;
     $tableName = $this->tableName;
-    require ROOT . "/pages/form.php";
+
+    require ROOT . "/pages/template/form.php";
   }
 
   public function getEmptyForm(array $fieldsOfTable, array $except = [])
@@ -43,7 +44,12 @@ class Form
     }
     $this->compareData($except);
 
-    require ROOT . "/pages/form.php";
+    $formInfos = $this->formInfos;
+    $redirectPage = $this->redirectPage;
+    $displayedData = $this->displayedData;
+    $tableName = $this->tableName;
+
+    require ROOT . "/pages/template/form.php";
   }
 
   private function compareData(array $except)

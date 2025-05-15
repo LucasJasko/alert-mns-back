@@ -10,7 +10,7 @@ class Params extends \Src\Controller\Controller
       "field_name" => "post",
       "class_name" => "Post",
       "field_desc" => "Postes des utilisateurs",
-      "field_p" => "un post",
+      "field_p" => "un poste",
     ],
     "department" => [
       "field_name" => "department",
@@ -47,7 +47,7 @@ class Params extends \Src\Controller\Controller
   private $dashboardsInfos;
   private $dashboard;
   private $form;
-  private $formsInfos;
+  public $formsInfos;
 
   private $paramInstance;
 
@@ -56,7 +56,7 @@ class Params extends \Src\Controller\Controller
     parent::__construct();
     foreach ($this->paramsConfig as $table => $v) {
       $model = "\Src\Entity\\" . ucfirst($table);
-      $this->formsInfos[] = $model::formInfos();
+      $this->formsInfos[$table] = $model::formInfos();
       $this->dashboardsInfos[$table] = $model::dashboardInfos();
     }
   }
@@ -77,15 +77,6 @@ class Params extends \Src\Controller\Controller
     $paramsConfig = $this->paramsConfig;
 
     require_once ROOT . "/pages/params.php";
-  }
-
-  public function getEmptyForm(string $tab)
-  {
-    $fieldName = $this->paramsConfig[$tab]["field_name"];
-    $formInfos = $this->formsInfos[$tab];
-    $this->form = new \Src\Model\Form($fieldName, "params", $formInfos);
-    $fieldsOfTable = $this->db->getFieldsOfTable($tab);
-    return $this->form->getEmptyForm($fieldsOfTable, [$fieldName . "_id"]);
   }
 
   public function submitData(array $data, string $tab)

@@ -35,15 +35,6 @@ class Profile extends \Src\Controller\Controller
     require_once ROOT . "/pages/profile.php";
   }
 
-  public function getEmptyForm()
-  {
-    $this->form = new \Src\Model\Form("profile", "profile", $this->formInfos);
-    $fieldsOfTable = $this->db->getFieldsOfTable("profile");
-    $fieldsOfTable[] = "situation_id";
-
-    return $this->form->getEmptyForm($fieldsOfTable, ["profile_id"]);
-  }
-
   public function submitData(array $data)
   {
     if (empty($data["profile_id"])) {

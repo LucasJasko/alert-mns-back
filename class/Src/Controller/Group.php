@@ -33,14 +33,6 @@ class Group extends \Src\Controller\Controller
     require_once ROOT . "/pages/group.php";
   }
 
-  public function getEmptyForm()
-  {
-    $this->form = new \Src\Model\Form("group", "group", $this->formInfos);
-    $fieldsOfTable = $this->db->getFieldsOfTable("group");
-
-    return $this->form->getEmptyForm($fieldsOfTable, ["group_id"]);
-  }
-
   public function submitData(array $data)
   {
     if (empty($data["group_id"])) {
