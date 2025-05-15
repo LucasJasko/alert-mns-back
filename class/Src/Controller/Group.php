@@ -6,7 +6,6 @@ use Src\Entity\Group as GroupModel;
 
 class Group extends \Src\Controller\Controller
 {
-  private $dashboard;
   private $dashboardInfos;
   private $form;
   private $formInfos;
@@ -38,7 +37,7 @@ class Group extends \Src\Controller\Controller
     }
 
 
-    $this->dashboard = new \Core\Model\Dashboard("group", $groups, $this->dashboardInfos, $this->fieldsToNotRender);
+    $dashboard = new \Core\Model\Dashboard("group", $groups, $this->dashboardInfos, $this->fieldsToNotRender);
     require_once ROOT . "/pages/group.php";
   }
 

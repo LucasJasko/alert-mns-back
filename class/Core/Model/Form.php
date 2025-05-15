@@ -23,11 +23,13 @@ class Form
   public function getForm(array $data, array $except = [])
   {
     $this->displayedData = $data;
-    foreach ($except as $k => $v) {
-      $except[$v] = $k;
-      unset($except[$k]);
-    }
+    $except = $this->remakeExcept($except);
     $this->compareData($except);
+
+    $formInfos = $this->formInfos;
+    $redirectPage = $this->redirectPage;
+    $displayedData = $this->displayedData;
+    $tableName = $this->tableName;
     require ROOT . "/pages/form.php";
   }
 
@@ -53,8 +55,17 @@ class Form
     }
   }
 
-  public function getDataOfTable($table)
+  private function remakeExcept($except)
   {
-    return $this->db->getAll($table);
+    foreach ($except as $k => $v) {
+      $except[$v] = $k;
+      unset($except[$k]);
+    }
+    return $except;
+  }
+
+  public static function getDataOfTable($table)
+  {
+    return \Src\App::db()->getAll($table);
   }
 }

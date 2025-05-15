@@ -20,15 +20,18 @@ class Database
     $this->dbUsername = $dbuser;
     $this->dbPassword = $dbpass;
 
+    $this->init();
+  }
+
+  public function init()
+  {
+    $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
     try {
-      if ($this->db === null) {
-        $dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName . ';charset=utf8';
-        $this->db = new \PDO($dsn, $this->dbUsername, $this->dbPassword);
-      }
-      return $this->db;
-    } catch (\PDOException $e) {
-      return $e->getMessage();
+      $this->db = new PDO($dsn, $this->dbUsername, $this->dbPassword);
+    } catch (PDOException $e) {
+      return "Erreur de connexion : " . $e->getMessage();
     }
+    return $this->db;
   }
 
   public function createOne(string $table, array $data, array $fields)
@@ -93,7 +96,7 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getFieldWhereAnd(string $table, string $target,  string $field1, string $field1Value, string $field2, string $field2Value)
+  public function getFieldWhereAnd(string $table, string $target, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
@@ -102,7 +105,7 @@ class Database
     return $stmt->fetch();
   }
 
-  public function getFieldsWhereAnd(string $table, array $target,  string $field1, string $field1Value, string $field2, string $field2Value)
+  public function getFieldsWhereAnd(string $table, array $target, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $sql = "SELECT ";
     for ($i = 0; $i < count($target); $i++) {

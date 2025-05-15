@@ -72,7 +72,7 @@ class Auth
 
       session_start();
       $_SESSION["logged"] = "OK";
-      Log::writeLog("L'administrateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+      Log::writeLog("L'utilisateur [" . $res["profile_id"] .  "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       return [
         'success' => true,
         'message' => 'Utilisateur connecté'

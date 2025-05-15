@@ -47,7 +47,7 @@ class Profile extends \Src\Model\Model
       'profile_password' => [
         "label" => "Mot de passe de l'utilisateur",
         "placeholder" => "ex: M0nSup&rP@ass98",
-        "input_type" => "password",
+        "input_type" => "text",
         "attributes" => "required"
       ],
       'profile_picture' => [
