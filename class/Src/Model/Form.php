@@ -19,7 +19,6 @@ class Form
     $this->db = \Src\App::db();
   }
 
-
   public function getForm(array $data, array $except = [])
   {
     $this->displayedData = $data;

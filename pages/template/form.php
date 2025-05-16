@@ -90,15 +90,20 @@
                 <?php break;
 
               case "room_id": ?>
-                <select>
+                <div class="edit-select__container">
 
-                  <option value="">-- Sélectionnez un salon à éditer --</option>
+                  <select class="edit-select">
 
-                  <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
-                    <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
-                  <?php } ?>
+                    <option value="">-- Sélectionnez un salon à éditer --</option>
 
-                </select>
+                    <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
+                      <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
+                    <?php } ?>
+
+                  </select>
+
+                  <a class="valid-button edit-button" href=""> <i class='fa-solid fa-pen'></i></a>
+                </div>
 
                 <button class="valid-button plus-btn">Créer un nouveau salon</button>
 

@@ -144,7 +144,6 @@ class Database
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
-
   public function getFieldsWhere(string $table, array $target, string $field, $value)
   {
     $sql = "SELECT ";

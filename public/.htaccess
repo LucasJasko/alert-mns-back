@@ -11,6 +11,9 @@ RewriteRule ^error/?$ /index.php?page=error [L]
 RewriteRule ^params/?$ /index.php?page=params [L]
 RewriteRule ^params/([^_]*)/([0-9+])/?$ /index.php?page=params&tab=$1&id=$2 [L]
 
+RewriteRule ^api/([^_]*)/?$ /index.php?api=$1 [L]
+RewriteRule ^api/([^_]*)/([0-9+])/?$ /index.php?api=$1&id=$2 [L]
+
 
 <IfModule mod_headers.c>
 Header always set Access-Control-Allow-Origin: "*"

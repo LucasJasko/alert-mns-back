@@ -30,6 +30,7 @@ body {
 
 .params-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -231,6 +232,31 @@ select {
 .dbl-select {
   display: inline-block;
   width: 50%;
+}
+
+.edit-select {
+  width: calc(100% - 50px);
+}
+
+.edit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.edit-select__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit-button > i {
+  color: white;
+}
+
+.edit-button > i:hover {
+  color: var(--validgreen);
 }
 
 .valid-button {

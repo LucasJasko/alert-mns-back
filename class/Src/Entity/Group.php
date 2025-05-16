@@ -51,7 +51,7 @@ class Group extends \Src\Model\Model
     "type_id" => "Type"
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "group";
     $this->searchField = "group_id";
