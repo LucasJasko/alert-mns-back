@@ -93,7 +93,7 @@ if (!isset($_GET["api"])) {
             }
             App::redirect("params");
           } else {
-            $controller->getModelForm($_GET["tab"], $_GET["id"], $controller->formsInfos[$_GET["tab"]]);
+            $controller->getModelForm($_GET["tab"], $_GET["id"], $controller->formsInfos[$_GET["tab"]], "params");
           }
         } else {
           $controller->getEmptyModelForm($_GET["tab"], $controller->formsInfos[$_GET["tab"]], "params");

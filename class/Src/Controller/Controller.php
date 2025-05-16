@@ -27,9 +27,9 @@ abstract class Controller extends \Core\Controller\Controller
     }
   }
 
-  public function modelData($id, $modelName, $tab = "")
+  public function modelData($id, $modelName)
   {
-    $modelPath = "Src\Entity\\" . (!empty($tab) ? $tab : $modelName);
+    $modelPath = "Src\Entity\\" . ucfirst($modelName);
     $groupInstance = new $modelPath($id);
     return $groupInstance->all();
   }
@@ -63,17 +63,17 @@ abstract class Controller extends \Core\Controller\Controller
     return $fields;
   }
 
-  public function getModelForm(string $modelName, int $id, array $formInfos, $tab = "")
+  public function getModelForm(string $modelName, int $id, array $formInfos, $redirectPage = "")
   {
-    $profileData = $this->modelData($id, ucfirst(!empty($tab) ? $tab : $modelName), $tab);
-    $form = new \Src\Model\Form($modelName, !empty($tab) ? $tab : $modelName, $formInfos);
+    $profileData = $this->modelData($id, $modelName);
+    $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos);
 
     return $form->getForm($profileData);
   }
 
-  public function getEmptyModelForm(string $modelName, array $formInfos, $tab = "")
+  public function getEmptyModelForm(string $modelName, array $formInfos, $redirectPage = "")
   {
-    $form = new \Src\Model\Form($modelName, !empty($tab) ? $tab : $modelName, $formInfos);
+    $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
 
     return $form->getEmptyForm($fieldsOfTable, [$modelName . "_id"]);
