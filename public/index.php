@@ -88,7 +88,7 @@ if (!isset($_GET["api"])) {
           if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
             $res = $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
-            if ($res = "23000") {
+            if ($res != null) {
               App::redirect("error");
             }
             App::redirect("params");

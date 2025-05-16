@@ -15,7 +15,7 @@
 
     <h1><?= $formInfos["form_title"] ?></h1>
 
-    <form class="form" action="<?= $redirectPage ?>" method="post">
+    <form class="form" action="/<?= $redirectPage ?>" method="post">
 
 
       <a class="return-link" href="/<?= $redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>

@@ -34,6 +34,7 @@ class Post extends \Src\Model\Model
     $this->searchField = "post_id";
 
     $this->initdb($this->tableName, $this->searchField);
+    // TODO vérifier pourquoi l'index 0 n'est pas reconnu lors de la création d'un objet
     $row = $this->getDBModel($id)[0];
 
     if ($row) {
@@ -49,7 +50,7 @@ class Post extends \Src\Model\Model
   {
     return [
       "post_id" => $this->id(),
-      "post_name" =>  $this->name(),
+      "post_name" => $this->name(),
     ];
   }
 

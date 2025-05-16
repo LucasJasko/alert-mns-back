@@ -87,6 +87,8 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+
+
   public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
