@@ -28,13 +28,13 @@ class Situation extends \Src\Model\Model
     "situation_name" => "Nom",
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "situation";
     $this->searchField = "situation_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {

@@ -87,7 +87,12 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-
+  public function getOneWhere(string $table, string $field, int $id)
+  {
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
+    $stmt->execute([":" . $field => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
 
   public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {

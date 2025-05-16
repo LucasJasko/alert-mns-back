@@ -28,13 +28,13 @@ class Role extends \Src\Model\Model
     "role_name" => "Nom",
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "role";
     $this->searchField = "role_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -49,7 +49,7 @@ class Role extends \Src\Model\Model
   {
     return [
       "role_id" => $this->id(),
-      "role_name" =>  $this->name(),
+      "role_name" => $this->name(),
     ];
   }
 

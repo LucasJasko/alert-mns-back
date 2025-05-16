@@ -11,29 +11,31 @@
 
   <tbody>
 
-    <?php for ($i = 0; $i < count($data); $i++): ?>
+
+    <?php for ($dataIndex = 0; $dataIndex < count($data); $dataIndex++): ?>
 
       <tr class="<?= $tab ?>">
 
-        <?php foreach ($fields as $key => $value): ?>
+        <?php foreach ($fields as $fieldName => $label): ?>
 
-          <td class="<?= $key ?>">
+          <td class="<?= $fieldName ?>">
 
-            <?php if (isset($data[$i][$key])) {
+            <?php if (isset($data[$dataIndex][$fieldName])) {
 
-              if (is_array($data[$i][$key])) {
+              if (is_array($data[$dataIndex][$fieldName])) {
 
-                for ($y = 0; $y < count($data[$y][$key]); $y++) {
+                for ($fieldValueIndex = 0; $fieldValueIndex < count($data[$dataIndex][$fieldName]); $fieldValueIndex++) {
 
-                  foreach ($data[$i][$key][$y] as $post => $department) {
+                  foreach ($data[$dataIndex][$fieldName][$fieldValueIndex] as $post => $department) {
                     echo $post . " de " . $department;
+                    echo "</br>";
                   }
 
                 }
 
               } else {
 
-                echo $data[$i][$key];
+                echo $data[$dataIndex][$fieldName];
 
               } ?>
 
@@ -46,7 +48,7 @@
         <td class="btn__container">
 
           <a class="btn btn__update"
-            href="<?= $page . ($page == "params" ? "/" . $tab : "") . "/" . $data[$i][$tab . "_id"] ?>">
+            href="<?= $page . ($page == "params" ? "/" . $tab : "") . "/" . $data[$dataIndex][$tab . "_id"] ?>">
             <i class='fa-solid fa-pen'></i>
           </a>
 
@@ -54,7 +56,8 @@
 
         <td class='btn__container'>
 
-          <a class='btn btn__delete' href="<?= $page . "/" . $data[$i][$tab . "_id"] ?>&process=delete" id="<?= $page ?>">
+          <a class='btn btn__delete' href="<?= $page . "/" . $data[$dataIndex][$tab . "_id"] ?>&process=delete"
+            id="<?= $page ?>">
             <i class='fa-solid fa-trash-can'></i>
           </a>
 

@@ -49,6 +49,7 @@ if (!isset($_GET["api"])) {
       $controller = new Src\Controller\Profile();
 
       if ($_POST) {
+        // TODO message d'erreur lors de l'ajout d'une situation de profile
         $controller->submitData($_POST);
       }
 

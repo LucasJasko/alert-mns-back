@@ -28,13 +28,13 @@ class Department extends \Src\Model\Model
     "department_name" => "Nom",
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "department";
     $this->searchField = "department_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -50,7 +50,7 @@ class Department extends \Src\Model\Model
   {
     return [
       "department_id" => $this->id(),
-      "department_name" =>  $this->name(),
+      "department_name" => $this->name(),
     ];
   }
 

@@ -28,14 +28,14 @@ class Post extends \Src\Model\Model
     "post_name" => "Nom",
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "post";
     $this->searchField = "post_id";
 
     $this->initdb($this->tableName, $this->searchField);
     // TODO vérifier pourquoi l'index 0 n'est pas reconnu lors de la création d'un objet
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {

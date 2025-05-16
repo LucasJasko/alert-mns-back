@@ -34,7 +34,7 @@ class State extends \Src\Model\Model
     $this->tableName = "state";
     $this->searchField = "state_id";
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {

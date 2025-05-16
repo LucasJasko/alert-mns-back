@@ -4,8 +4,8 @@ namespace Src\Entity;
 
 class Reaction extends \Src\Model\Model
 {
-  function __construct($id)
+  function __construct(int $id)
   {
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
   }
 }

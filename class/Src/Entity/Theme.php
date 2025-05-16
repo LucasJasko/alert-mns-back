@@ -28,13 +28,13 @@ class Theme extends \Src\Model\Model
     "theme_name" => "Nom",
   ];
 
-  public function __construct($id, $newData = [])
+  public function __construct(int $id, $newData = [])
   {
     $this->tableName = "theme";
     $this->searchField = "theme_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -49,7 +49,7 @@ class Theme extends \Src\Model\Model
   {
     return [
       "theme_id" => $this->id(),
-      "theme_name" =>  $this->name(),
+      "theme_name" => $this->name(),
     ];
   }
 

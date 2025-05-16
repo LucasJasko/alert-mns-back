@@ -111,7 +111,7 @@ class Profile extends \Src\Model\Model
     $this->searchField = "profile_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -152,7 +152,7 @@ class Profile extends \Src\Model\Model
   {
     $this->password = htmlspecialchars($password);
   }
-  public function setPicture(string | null $picture)
+  public function setPicture(string|null $picture)
   {
     if ($picture == null) {
       $this->picture = "'le chemin vers une image par défaut'";
@@ -190,16 +190,16 @@ class Profile extends \Src\Model\Model
   {
     return [
       "profile_id" => $this->id(),
-      "profile_name" =>  $this->name(),
+      "profile_name" => $this->name(),
       "profile_surname" => $this->surname(),
       "profile_mail" => $this->mail(),
       "profile_password" => $this->password(),
-      "profile_picture" =>  $this->picture(),
+      "profile_picture" => $this->picture(),
       "language_id" => $this->language(),
       "theme_id" => $this->theme(),
       "status_id" => $this->status(),
       "situation_id" => $this->situation(),
-      "role_id" =>  $this->role(),
+      "role_id" => $this->role(),
     ];
   }
 

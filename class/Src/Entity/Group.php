@@ -57,7 +57,7 @@ class Group extends \Src\Model\Model
     $this->searchField = "group_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id)[0];
+    $row = $this->getDBModel($id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -88,9 +88,9 @@ class Group extends \Src\Model\Model
   {
     return [
       "group_id" => $this->id(),
-      "group_name" =>  $this->name(),
+      "group_name" => $this->name(),
       "state_id" => $this->state(),
-      "type_id" =>  $this->type(),
+      "type_id" => $this->type(),
       "room_id" => $this->room()
     ];
   }
