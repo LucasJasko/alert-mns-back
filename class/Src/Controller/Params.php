@@ -61,7 +61,7 @@ class Params extends \Src\Controller\Controller
     }
   }
 
-  public function dispatch()
+  public function dispatch($id = null, $tab = null, $isApi = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -70,22 +70,22 @@ class Params extends \Src\Controller\Controller
       $this->submitData($_POST, $_POST["table_name"]);
     }
 
-    if (isset($_GET["id"]) && isset($_GET["tab"])) {
+    if (isset($id) && isset($tab)) {
 
-      if ($_GET["id"] != 0) {
+      if ($id != 0) {
 
         if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
-          $res = $this->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+          $res = $this->delete($tab, $tab . "_id", $id);
           if ($res != null) {
             \Src\App::redirect("error");
           }
           \Src\App::redirect("params");
         } else {
-          $this->getModelForm($_GET["tab"], $_GET["id"], $this->formsInfos[$_GET["tab"]], "params");
+          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
         }
       } else {
-        $this->getEmptyModelForm($_GET["tab"], $this->formsInfos[$_GET["tab"]], "params");
+        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
       }
     } else {
       $this->getParamsDashboard();

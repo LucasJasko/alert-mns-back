@@ -13,12 +13,23 @@ class Router
 
   public static function dispatch(string $path): void
   {
+
+    if (str_starts_with($path, "/api")) {
+      $isApi = true;
+      $path = substr($path, 4);
+    }
+
     foreach (self::$routes as $route => $handler) {
+
       $pattern = preg_replace("#\{\w+\}#", "([^\/]+)", $route);
 
       if (preg_match("#^$pattern$#", $path, $matches)) {
 
         array_shift($matches);
+
+        if (isset($isApi) && $isApi) {
+          $matches[] = $isApi;
+        }
 
         call_user_func_array($handler, $matches);
 
@@ -27,20 +38,11 @@ class Router
     }
 
     http_response_code(404);
-    \Src\App::redirect("page404");
+    if ($isApi) {
+      echo json_encode(["message" => "Service introuvable"]);
+    } else {
+      \Src\App::redirect("page404");
+    }
 
   }
 }
-
-// V1 dispatch qui ne gère pas les routes dynamiques
-// if (array_key_exists($path, self::$routes)) {
-
-//   $handler = self::$routes[$path];
-
-//   call_user_func($handler);
-
-// } else {
-
-//   echo "404 not found";
-
-// }

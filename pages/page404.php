@@ -9,7 +9,7 @@
 
 <body>
   <h1>OUPS... la page recherchée n'existe pas</h1>
-  <a href="index.php?page=profile">Vers les profiles</a>
+  <a href="profile">Vers les profiles</a>
 </body>
 
 </html>

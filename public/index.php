@@ -16,37 +16,53 @@ Router::add("/", function () {
   $controller->dispatch();
 });
 
-Router::add("/login", function () {
+Router::add("/login", function ($isApi = false) {
   $controller = new Src\Controller\Login();
-  $controller->dispatch();
+  $controller->dispatch($isApi);
 });
 
-Router::add("/logout", function () {
+Router::add("/logout", function ($isApi = false) {
   $controller = new Src\Controller\Logout();
   $controller->dispatch();
 });
 
-Router::add("/group", function () {
+Router::add("/group", function ($isApi = false) {
   $controller = new Src\Controller\Group();
   $controller->dispatch();
 });
 
-Router::add("/profile", function () {
+Router::add("/group/{id}", function ($id, $isApi = false) {
+  $controller = new Src\Controller\Group();
+  $controller->dispatch($id, $isApi);
+});
+
+Router::add("/profile", function ($isApi = false) {
   $controller = new Src\Controller\Profile();
   $controller->dispatch();
 });
 
-Router::add("/params", function () {
+Router::add("/profile/{id}", function ($id, $isApi = false) {
+  $controller = new Src\Controller\Profile();
+  $controller->dispatch($id, $isApi);
+});
+
+Router::add("/params", function ($isApi = false) {
   $controller = new Src\Controller\Params();
   $controller->dispatch();
 });
 
-Router::add("/stats", function () {
+// ATENTION: les routes sont bindé dans l'ordre de leur apparition dans l'URL
+Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
+  $controller = new Src\Controller\Params();
+  $controller->dispatch($id, $tab, $isApi);
+});
+
+Router::add("/stats", function ($isApi = false) {
   $controller = new Src\Controller\Stats();
   $controller->dispatch();
 });
 
-Router::add("/error", function () {
+Router::add("/error", function ($isApi = false) {
   require_once "../pages/error.php";
 });
 
@@ -54,47 +70,6 @@ Router::add("/page404", function () {
   require_once "../pages/page404.php";
 });
 
-
-// exemples de route dynamiques fonctionnelles à utiliser pour le projet
-Router::add("/products/{id}", function ($id) {
-  echo "Voici la page du produit numéro: $id";
-});
-
-Router::add("/products/{product_id}/order/{order_id}", function ($product_id, $order_id) {
-  echo "Voici la page du produit numéro: $product_id commande numéro: $order_id";
-});
-// /////////////////////////////////////////////////////////
-
 Router::dispatch($path);
 
 exit;
-
-
-
-
-
-
-
-
-
-
-
-switch ($path) {
-
-  case "api/login":
-
-    $controller = new Src\Controller\Login();
-
-    // ICI DATA EST UN OBJET DONC ON ACCEDE AUX DONNEES COMME UN OBJET
-    $data = json_decode(file_get_contents("php://input"));
-
-    if (!empty($data->email && !empty($data->password))) {
-      $response = $controller->checkClientAuth($data->email, $data->password);
-      echo json_encode($response);
-    }
-
-    break;
-}
-// http_response_code(405);
-// echo json_encode(["message" => "La methode n'est pas autorisee"]);
-

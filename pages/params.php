@@ -24,7 +24,7 @@
         $fields = $dashboardsInfos[$table];
         $data = $recordsets[$table];
         $tab = $table;
-        $page = isset($_GET["page"]) ? $_GET["page"] : "";
+        $page = "params";
         ?>
 
         <div class="param-window param-window-small <?= $infos["field_name"] ?>">

@@ -19,7 +19,7 @@ class Group extends \Src\Controller\Controller
     $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
-  public function dispatch()
+  public function dispatch($id = null, bool $isApi = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -28,16 +28,16 @@ class Group extends \Src\Controller\Controller
       $this->submitData($_POST);
     }
 
-    if (isset($_GET["id"])) {
+    if (isset($id)) {
 
-      if ($_GET["id"] != 0) {
+      if ($id != 0) {
 
         if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
-          $this->delete("group", "group_id", $_GET["id"]);
+          $this->delete("group", "group_id", $id);
           \Src\App::redirect("group");
         } else {
-          $this->getModelForm("group", $_GET["id"], $this->formInfos);
+          $this->getModelForm("group", $id, $this->formInfos);
         }
       } else {
         $this->getEmptyModelForm("group", $this->formInfos);
@@ -59,7 +59,7 @@ class Group extends \Src\Controller\Controller
 
     $data = $groups;
     $tab = "group";
-    $page = isset($_GET["page"]) ? $_GET["page"] : "";
+    $page = "group";
 
     require_once ROOT . "/pages/group.php";
   }

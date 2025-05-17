@@ -21,7 +21,7 @@ class Profile extends \Src\Controller\Controller
     $this->dashboardInfos = ProfileModel::dashboardInfos();
   }
 
-  public function dispatch()
+  public function dispatch($id = null, bool $isApi = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -31,17 +31,17 @@ class Profile extends \Src\Controller\Controller
       $this->submitData($_POST);
     }
 
-    if (isset($_GET["id"])) {
+    if (isset($id)) {
 
-      if ($_GET["id"] != 0) {
+      if ($id != 0) {
 
         if (isset($_GET["process"]) && $_GET["process"] == "delete") {
 
-          $this->delete("profile", "profile_id", $_GET["id"]);
+          $this->delete("profile", "profile_id", $id);
           \Src\App::redirect("profile");
 
         } else {
-          $this->getModelForm("profile", $_GET["id"], $this->formInfos);
+          $this->getModelForm("profile", $id, $this->formInfos);
         }
       } else {
         $this->getEmptyModelForm("profile", $this->formInfos);
@@ -60,7 +60,7 @@ class Profile extends \Src\Controller\Controller
     $fields = $this->unsetFieldsToRender($this->dashboardInfos, $this->fieldsToNotRender);
     $data = $profiles;
     $tab = "profile";
-    $page = isset($_GET["page"]) ? $_GET["page"] : "";
+    $page = "profile";
 
     require_once ROOT . "/pages/profile.php";
   }
