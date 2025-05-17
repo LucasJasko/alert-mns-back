@@ -1,18 +1,8 @@
 RewriteEngine On
-RewriteRule ^login/?$ /index.php?page=login [L]
-RewriteRule ^group/?$ /index.php?page=group [L]
-RewriteRule ^group/([0-9+])/?$ /index.php?page=group&id=$1 [L]
-RewriteRule ^profile/?$ /index.php?page=profile [L]
-RewriteRule ^profile/([0-9+])/?$ /index.php?page=profile&id=$1 [L]
-RewriteRule ^stats/?$ /index.php?page=stats [L]
-RewriteRule ^logout/?$ /index.php?page=logout [L]
-RewriteRule ^error/?$ /index.php?page=error [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^params/?$ /index.php?page=params [L]
-RewriteRule ^params/([^_]*)/([0-9+])/?$ /index.php?page=params&tab=$1&id=$2 [L]
-
-RewriteRule ^api/([^_]*)/?$ /index.php?api=$1 [L]
-RewriteRule ^api/([^_]*)/([0-9+])/?$ /index.php?api=$1&id=$2 [L]
+RewriteRule ^ index.php [L]
 
 
 <IfModule mod_headers.c>
