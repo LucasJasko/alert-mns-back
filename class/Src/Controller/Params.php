@@ -61,6 +61,37 @@ class Params extends \Src\Controller\Controller
     }
   }
 
+  public function dispatch()
+  {
+
+    \Core\Controller\Auth::protect();
+
+    if ($_POST) {
+      $this->submitData($_POST, $_POST["table_name"]);
+    }
+
+    if (isset($_GET["id"]) && isset($_GET["tab"])) {
+
+      if ($_GET["id"] != 0) {
+
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $res = $this->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
+          if ($res != null) {
+            \Src\App::redirect("error");
+          }
+          \Src\App::redirect("params");
+        } else {
+          $this->getModelForm($_GET["tab"], $_GET["id"], $this->formsInfos[$_GET["tab"]], "params");
+        }
+      } else {
+        $this->getEmptyModelForm($_GET["tab"], $this->formsInfos[$_GET["tab"]], "params");
+      }
+    } else {
+      $this->getParamsDashboard();
+    }
+  }
+
   public function getParamsDashboard()
   {
     foreach ($this->paramsConfig as $table => $v) {

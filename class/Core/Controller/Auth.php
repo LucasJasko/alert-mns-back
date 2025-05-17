@@ -89,7 +89,7 @@ class Auth
   {
     session_start();
     if (!isset($_SESSION["logged"]) || $_SESSION["logged"] != "OK") {
-      header("Location:/index.php?page=login");
+      \Src\App::redirect("login");
       exit();
     }
   }

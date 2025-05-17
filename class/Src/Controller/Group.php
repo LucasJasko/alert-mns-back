@@ -19,6 +19,37 @@ class Group extends \Src\Controller\Controller
     $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
+  public function dispatch()
+  {
+
+    \Core\Controller\Auth::protect();
+
+    if ($_POST) {
+      $this->submitData($_POST);
+    }
+
+    if (isset($_GET["id"])) {
+
+      if ($_GET["id"] != 0) {
+
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $this->delete("group", "group_id", $_GET["id"]);
+          \Src\App::redirect("group");
+        } else {
+          $this->getModelForm("group", $_GET["id"], $this->formInfos);
+        }
+      } else {
+        $this->getEmptyModelForm("group", $this->formInfos);
+      }
+    } else {
+      $this->getGroupDashboard();
+    }
+
+  }
+
+
+
   public function getGroupDashboard()
   {
     $recordset = $this->db->getField("group", "group_id");

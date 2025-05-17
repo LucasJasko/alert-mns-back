@@ -8,11 +8,12 @@ class Logout extends \Src\Controller\Controller
   public function logout()
   {
     session_destroy();
-    $this->redirect("login");
+    \Src\App::redirect("login");
   }
 
-  public function redirect($page)
+  public function dispatch()
   {
-    header("Location:/" . $page);
+    \Core\Controller\Auth::protect();
+    $this->logout();
   }
 }

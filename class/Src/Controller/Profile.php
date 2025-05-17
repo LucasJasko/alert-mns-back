@@ -21,6 +21,36 @@ class Profile extends \Src\Controller\Controller
     $this->dashboardInfos = ProfileModel::dashboardInfos();
   }
 
+  public function dispatch()
+  {
+
+    \Core\Controller\Auth::protect();
+
+    if ($_POST) {
+      // TODO message d'erreur lors de l'ajout d'une situation de profile
+      $this->submitData($_POST);
+    }
+
+    if (isset($_GET["id"])) {
+
+      if ($_GET["id"] != 0) {
+
+        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+
+          $this->delete("profile", "profile_id", $_GET["id"]);
+          \Src\App::redirect("profile");
+
+        } else {
+          $this->getModelForm("profile", $_GET["id"], $this->formInfos);
+        }
+      } else {
+        $this->getEmptyModelForm("profile", $this->formInfos);
+      }
+    } else {
+      $this->getProfileDashboard();
+    }
+  }
+
   public function getProfileDashboard()
   {
     $recordset = $this->db->getField("profile", "profile_id");

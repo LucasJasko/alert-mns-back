@@ -12,14 +12,31 @@ class Login extends \Src\Controller\Controller
     $this->auth = new \Core\Controller\Auth();
   }
 
+  public function dispatch()
+  {
+    if (isset($_POST["email"]) && isset($_POST["password"])) {
+
+      // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
+      $this->checkAuth($_POST["email"], $_POST["password"]);
+
+    } else {
+
+      require ROOT . "/pages/login.php";
+
+    }
+  }
+
   public function checkAuth(string $email, string $pwd)
   {
     $res = $this->auth->tryLogin($email, $pwd);
+
     if ($res["success"]) {
-      $this->redirect("profile");
+
+      \Src\App::redirect("profile");
+
     } else {
-      $err = "Email ou mot de passe incorrect";
-      return $err;
+
+      return $res;
     }
   }
 
@@ -27,12 +44,5 @@ class Login extends \Src\Controller\Controller
   {
     http_response_code(200);
     return $this->auth->tryClientLogin($email, $pwd);
-  }
-
-
-
-  public function getLoginPage()
-  {
-    require ROOT . "/pages/login.php";
   }
 }

@@ -1,167 +1,85 @@
 <?php
 
+
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
 require_once "../class/Src/App.php";
 
-use \Core\Controller\Auth;
 use \Core\Router;
 
 \Src\App::init();
 
+$router = new Router();
+
 Router::add("/", function () {
-  echo "Hello";
+  $controller = new Src\Controller\Profile();
+  $controller->dispatch();
 });
 
-Router::add("/about", function () {
-  echo "About !";
+Router::add("/login", function () {
+  $controller = new Src\Controller\Login();
+  $controller->dispatch();
 });
+
+Router::add("/logout", function () {
+  $controller = new Src\Controller\Logout();
+  $controller->dispatch();
+});
+
+Router::add("/group", function () {
+  $controller = new Src\Controller\Group();
+  $controller->dispatch();
+});
+
+Router::add("/profile", function () {
+  $controller = new Src\Controller\Profile();
+  $controller->dispatch();
+});
+
+Router::add("/params", function () {
+  $controller = new Src\Controller\Params();
+  $controller->dispatch();
+});
+
+Router::add("/stats", function () {
+  $controller = new Src\Controller\Stats();
+  $controller->dispatch();
+});
+
+Router::add("/error", function () {
+  require_once "../pages/error.php";
+});
+
+Router::add("/page404", function () {
+  require_once "../pages/page404.php";
+});
+
+
+// exemples de route dynamiques fonctionnelles à utiliser pour le projet
+Router::add("/products/{id}", function ($id) {
+  echo "Voici la page du produit numéro: $id";
+});
+
+Router::add("/products/{product_id}/order/{order_id}", function ($product_id, $order_id) {
+  echo "Voici la page du produit numéro: $product_id commande numéro: $order_id";
+});
+// /////////////////////////////////////////////////////////
 
 Router::dispatch($path);
-// Init le routeur aussi à terme
 
 exit;
 
+
+
+
+
+
+
+
+
+
+
 switch ($path) {
-
-  case "group":
-
-    Auth::protect();
-    $controller = new Src\Controller\Group();
-
-    if ($_POST) {
-      $controller->submitData($_POST);
-    }
-
-    if (isset($_GET["id"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $controller->delete("group", "group_id", $_GET["id"]);
-          App::redirect("group");
-        } else {
-          $controller->getModelForm("group", $_GET["id"], $controller->formInfos);
-        }
-      } else {
-        $controller->getEmptyModelForm("group", $controller->formInfos);
-      }
-    } else {
-      $controller->getGroupDashboard();
-    }
-
-    break;
-
-  case "profile":
-
-    Auth::protect();
-    $controller = new Src\Controller\Profile();
-
-    if ($_POST) {
-      // TODO message d'erreur lors de l'ajout d'une situation de profile
-      $controller->submitData($_POST);
-    }
-
-    if (isset($_GET["id"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $controller->delete("profile", "profile_id", $_GET["id"]);
-          App::redirect("profile");
-        } else {
-          $controller->getModelForm("profile", $_GET["id"], $controller->formInfos);
-        }
-      } else {
-        $controller->getEmptyModelForm("profile", $controller->formInfos);
-      }
-    } else {
-      $controller->getProfileDashboard();
-    }
-
-    break;
-
-  case "params":
-
-    Auth::protect();
-    $controller = new Src\Controller\Params();
-
-    if ($_POST) {
-      $controller->submitData($_POST, $_POST["table_name"]);
-    }
-
-    if (isset($_GET["id"]) && isset($_GET["tab"])) {
-
-      if ($_GET["id"] != 0) {
-
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
-
-          $res = $controller->delete($_GET["tab"], $_GET["tab"] . "_id", $_GET["id"]);
-          if ($res != null) {
-            App::redirect("error");
-          }
-          App::redirect("params");
-        } else {
-          $controller->getModelForm($_GET["tab"], $_GET["id"], $controller->formsInfos[$_GET["tab"]], "params");
-        }
-      } else {
-        $controller->getEmptyModelForm($_GET["tab"], $controller->formsInfos[$_GET["tab"]], "params");
-      }
-    } else {
-      $controller->getParamsDashboard();
-    }
-
-    break;
-
-  case "stats":
-
-    Auth::protect();
-    $controller = new Src\Controller\Stats();
-    $controller->getView();
-
-    break;
-
-  case "login":
-
-    $controller = new Src\Controller\Login();
-
-    if (isset($_POST["email"]) && isset($_POST["password"])) {
-      // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
-      $controller->checkAuth($_POST["email"], $_POST["password"]);
-    } else {
-      $controller->getLoginPage();
-    }
-
-    break;
-
-  case "/":
-
-    $controller = new Src\Controller\Login();
-
-    if (isset($_POST["email"]) && isset($_POST["password"])) {
-      // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
-      $controller->checkAuth($_POST["email"], $_POST["password"]);
-    } else {
-      $controller->getLoginPage();
-    }
-
-    break;
-
-  case "logout":
-
-    Auth::protect();
-    $controller = new Src\Controller\Logout();
-    $controller->logout();
-
-    break;
-
-  case "error":
-
-    require_once "../pages/error.php";
-
-    break;
 
   case "api/login":
 
@@ -174,13 +92,6 @@ switch ($path) {
       $response = $controller->checkClientAuth($data->email, $data->password);
       echo json_encode($response);
     }
-
-    break;
-
-  default:
-
-    http_response_code(404);
-    App::redirect("page404");
 
     break;
 }

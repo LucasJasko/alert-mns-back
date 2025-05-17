@@ -8,4 +8,11 @@ class Stats extends \Src\Controller\Controller
   {
     require ROOT . "/pages/stats.php";
   }
+
+  public function dispatch()
+  {
+    \Core\Controller\Auth::protect();
+    $this->getView();
+  }
+
 }

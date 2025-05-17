@@ -15,11 +15,12 @@
   <h1>Alert-MNS: Portail d'accès admin</h1>
 
   <div class="login-window">
-    <form class="login-form form" action="index.php" method="post">
+    <form class="login-form form" action="login" method="post">
       <input type="text" name="email" placeholder="email">
       <input type="password" name="password" placeholder="password">
       <input class="valid-button" type="submit" value="Connexion"> <br>
-      <?php if (!is_null($err)) echo $err; ?>
+      <?php if (!is_null($err))
+        echo $err; ?>
     </form>
   </div>
 
