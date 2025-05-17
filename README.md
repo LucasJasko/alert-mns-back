@@ -14,3 +14,4 @@ TO DO:
 
 - [x] Revoir BDD par rapport à la nouvelle version du shéma looping
 - [x] Créer les écriture et lecture sur les tables relationnels pour récupérer les éléments rattachés à l'entité interrogé
+- [ ] Gérer le process delete sur les boutons du dashboard, à voir si la consigne doit être donné dans l'url ou ailleurs.
