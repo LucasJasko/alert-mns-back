@@ -34,7 +34,11 @@ class Group extends \Src\Controller\Controller
 
         if ($isDelete) {
 
-          $this->delete("group", "group_id", $id);
+          $res = $this->delete("group", "group_id", $id);
+
+          if ($res) {
+            \Src\App::redirect("error");
+          }
           \Src\App::redirect("group");
 
         } else {

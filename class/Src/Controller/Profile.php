@@ -21,7 +21,7 @@ class Profile extends \Src\Controller\Controller
     $this->dashboardInfos = ProfileModel::dashboardInfos();
   }
 
-  public function dispatch($id = null, bool $isApi = false)
+  public function dispatch($id = null, bool $isApi = false, $isDelete = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -35,9 +35,13 @@ class Profile extends \Src\Controller\Controller
 
       if ($id != 0) {
 
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+        if ($isDelete) {
 
-          $this->delete("profile", "profile_id", $id);
+          $res = $this->delete("profile", "profile_id", $id);
+
+          if ($res) {
+            \Src\App::redirect("error");
+          }
           \Src\App::redirect("profile");
 
         } else {

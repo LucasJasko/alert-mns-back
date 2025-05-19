@@ -39,11 +39,11 @@ class Router
         array_shift($matches);
 
         if (isset($isApi) && $isApi) {
-          $matches[] = $isApi;
+          $matches["isApi"] = $isApi;
         }
 
         if (isset($isDelete) && $isDelete) {
-          $matches[] = $isDelete;
+          $matches["isDelete"] = $isDelete;
         }
 
         call_user_func_array($handler, $matches);

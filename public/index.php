@@ -41,9 +41,9 @@ Router::add("/profile", function ($isApi = false) {
   $controller->dispatch();
 });
 
-Router::add("/profile/{id}", function ($id, $isApi = false) {
+Router::add("/profile/{id}", function ($id, $isApi = false, $isDelete = false) {
   $controller = new Src\Controller\Profile();
-  $controller->dispatch($id, $isApi);
+  $controller->dispatch($id, $isApi, $isDelete);
 });
 
 Router::add("/params", function ($isApi = false) {
@@ -52,9 +52,9 @@ Router::add("/params", function ($isApi = false) {
 });
 
 // ATENTION: les routes sont bindé dans l'ordre de leur apparition dans l'URL
-Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
+Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false, $isDelete = false) {
   $controller = new Src\Controller\Params();
-  $controller->dispatch($id, $tab, $isApi);
+  $controller->dispatch($tab, $id, $isApi, $isDelete);
 });
 
 Router::add("/stats", function ($isApi = false) {

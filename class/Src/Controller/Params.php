@@ -61,7 +61,7 @@ class Params extends \Src\Controller\Controller
     }
   }
 
-  public function dispatch($id = null, $tab = null, $isApi = false)
+  public function dispatch($tab = null, $id = null, $isApi = false, $isDelete = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -74,13 +74,15 @@ class Params extends \Src\Controller\Controller
 
       if ($id != 0) {
 
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+        if ($isDelete) {
 
           $res = $this->delete($tab, $tab . "_id", $id);
-          if ($res != null) {
+
+          if ($res) {
             \Src\App::redirect("error");
           }
           \Src\App::redirect("params");
+
         } else {
           $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
         }
