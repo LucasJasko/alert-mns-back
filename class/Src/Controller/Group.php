@@ -19,7 +19,7 @@ class Group extends \Src\Controller\Controller
     $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
-  public function dispatch($id = null, bool $isApi = false)
+  public function dispatch($id = null, bool $isApi = false, bool $isDelete = false)
   {
 
     \Core\Controller\Auth::protect();
@@ -32,16 +32,19 @@ class Group extends \Src\Controller\Controller
 
       if ($id != 0) {
 
-        if (isset($_GET["process"]) && $_GET["process"] == "delete") {
+        if ($isDelete) {
 
           $this->delete("group", "group_id", $id);
           \Src\App::redirect("group");
+
         } else {
           $this->getModelForm("group", $id, $this->formInfos);
         }
+
       } else {
         $this->getEmptyModelForm("group", $this->formInfos);
       }
+
     } else {
       $this->getGroupDashboard();
     }

@@ -31,9 +31,9 @@ Router::add("/group", function ($isApi = false) {
   $controller->dispatch();
 });
 
-Router::add("/group/{id}", function ($id, $isApi = false) {
+Router::add("/group/{id}", function ($id, $isApi = false, $isDelete = false) {
   $controller = new Src\Controller\Group();
-  $controller->dispatch($id, $isApi);
+  $controller->dispatch($id, $isApi, $isDelete);
 });
 
 Router::add("/profile", function ($isApi = false) {

@@ -53,6 +53,7 @@ class Profile extends \Src\Controller\Controller
 
   public function getProfileDashboard()
   {
+
     $recordset = $this->db->getField("profile", "profile_id");
     $clearedRecordset = $this->clearRecordset($recordset, "profile");
     $profiles = $this->getModelsFromRecordset($clearedRecordset, "Profile");

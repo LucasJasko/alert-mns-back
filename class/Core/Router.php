@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use \Core\Controller\Auth;
+
 class Router
 {
   private static array $routes = [];
@@ -13,15 +15,19 @@ class Router
 
   public static function dispatch(string $path): void
   {
+    Auth::initSession();
 
     if (str_starts_with($path, "/api")) {
       $isApi = true;
       $path = substr($path, 4);
     }
 
-    if (isset($_SESSION["delete_key"]) && str_ends_with($path, "/" . $_SESSION["delete_key"])) {
+    $sessionToken = Auth::sessionToken();
+    $sessionDeleteToken = !empty($sessionToken) ? $_SESSION["delete_key"] : null;
+
+    if (isset($sessionDeleteToken) && str_ends_with($path, "/" . $sessionDeleteToken)) {
       $isDelete = true;
-      $path = str_replace("/" . $_SESSION["delete_key"], "", $path);
+      $path = str_replace("/" . $sessionDeleteToken, "", $path);
     }
 
     foreach (self::$routes as $route => $handler) {
@@ -47,7 +53,7 @@ class Router
     }
 
     http_response_code(404);
-    if ($isApi) {
+    if (isset($isApi) && $isApi) {
       echo json_encode(["message" => "Service introuvable"]);
     } else {
       \Src\App::redirect("page404");

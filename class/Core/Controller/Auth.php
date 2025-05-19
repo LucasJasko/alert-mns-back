@@ -23,7 +23,7 @@ class Auth
 
       if ($res["role_id"] == 1) {
 
-        session_start();
+        self::isSession() ? "" : session_start();
         $_SESSION["logged"] = "OK";
         $_SESSION["delete_key"] = bin2hex(random_bytes(32));
 
@@ -92,10 +92,25 @@ class Auth
 
   public static function protect()
   {
-    session_start();
+    self::isSession() ? "" : session_start();
     if (!isset($_SESSION["logged"]) || $_SESSION["logged"] != "OK") {
       \Src\App::redirect("login");
       exit();
     }
+  }
+
+  public static function initSession()
+  {
+    session_start();
+  }
+
+  public static function isSession()
+  {
+    return session_status() == 2 ? true : false;
+  }
+
+  public static function sessionToken()
+  {
+    return isset($_SESSION["logged"]) ? $_SESSION["logged"] : "";
   }
 }
