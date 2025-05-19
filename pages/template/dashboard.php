@@ -26,18 +26,18 @@
 
                 for ($fieldValueIndex = 0; $fieldValueIndex < count($data[$dataIndex][$fieldName]); $fieldValueIndex++) {
 
-                  foreach ($data[$dataIndex][$fieldName][$fieldValueIndex] as $post => $department) {
-                    echo $post . " de " . $department;
-                    echo "</br>";
-                  }
+                  foreach ($data[$dataIndex][$fieldName][$fieldValueIndex] as $post => $department) { ?>
+                    <?= $post . " de " . $department; ?>
+                    </br>
+                  <?php }
 
                 }
 
-              } else {
+              } else { ?>
 
-                echo $data[$dataIndex][$fieldName];
+                <?= $data[$dataIndex][$fieldName] ?>
 
-              } ?>
+              <?php } ?>
 
             </td>
 

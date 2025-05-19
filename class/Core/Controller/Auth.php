@@ -25,17 +25,22 @@ class Auth
 
         session_start();
         $_SESSION["logged"] = "OK";
+        $_SESSION["delete_key"] = bin2hex(random_bytes(32));
+
         $this->response = [
           'success' => true,
           'message' => 'Utilisateur connecté'
         ];
+
         Log::writeLog("L'administrateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+
       } else {
         $this->response = [
           'success' => false,
           'message' => "Vous n'etes pas autorisé à vous connecter."
         ];
       }
+
     } else {
       $this->response = [
         'success' => false,

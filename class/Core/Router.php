@@ -19,6 +19,11 @@ class Router
       $path = substr($path, 4);
     }
 
+    if (isset($_SESSION["delete_key"]) && str_ends_with($path, "/" . $_SESSION["delete_key"])) {
+      $isDelete = true;
+      $path = str_replace("/" . $_SESSION["delete_key"], "", $path);
+    }
+
     foreach (self::$routes as $route => $handler) {
 
       $pattern = preg_replace("#\{\w+\}#", "([^\/]+)", $route);
@@ -28,9 +33,11 @@ class Router
         array_shift($matches);
 
         if (isset($isApi) && $isApi) {
-
           $matches[] = $isApi;
+        }
 
+        if (isset($isDelete) && $isDelete) {
+          $matches[] = $isDelete;
         }
 
         call_user_func_array($handler, $matches);
