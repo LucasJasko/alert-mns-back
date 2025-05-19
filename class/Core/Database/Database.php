@@ -38,11 +38,11 @@ class Database
   {
     $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
-      $sql .= $value . ", ";
+      $sql .= $key . ", ";
     }
     $sql .= ") VALUES ( ";
     foreach ($fields as $key => $value) {
-      $sql .= ":" . $value . ", ";
+      $sql .= ":" . $key . ", ";
     }
     $sql .= ")";
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
@@ -169,7 +169,7 @@ class Database
     $fields = [];
     for ($i = 0; $i < count($raw); $i++) {
       foreach ($raw[$i] as $k => $v) {
-        $fields[$i] = $v;
+        $fields[$v] = "";
       }
     }
 

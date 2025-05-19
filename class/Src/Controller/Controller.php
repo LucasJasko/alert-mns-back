@@ -63,7 +63,7 @@ abstract class Controller extends \Core\Controller\Controller
     return $fields;
   }
 
-  public function getModelForm(string $modelName, int $id, array $formInfos, $redirectPage = "")
+  public function getModelForm(string $modelName, int $id, array $formInfos, $redirectPage = "", $linkedId = "")
   {
     $profileData = $this->modelData($id, $modelName);
     $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos);
@@ -71,10 +71,21 @@ abstract class Controller extends \Core\Controller\Controller
     return $form->getForm($profileData);
   }
 
-  public function getEmptyModelForm(string $modelName, array $formInfos, $redirectPage = "")
+  public function getEmptyModelForm(string $modelName, array $formInfos, $redirectPage = "", $linkedId = "")
   {
     $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos);
     $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
+
+    if (array_key_exists("profile_id", $fieldsOfTable)) {
+      $fieldsOfTable["situation_id"] = [["" => ""]];
+    }
+
+    if (array_key_exists("room_id", $fieldsOfTable) && array_key_exists("room_id", $fieldsOfTable)) {
+      $fieldsOfTable["group_id"] = $linkedId;
+    }
+
+
+
 
     return $form->getEmptyForm($fieldsOfTable, [$modelName . "_id"]);
   }

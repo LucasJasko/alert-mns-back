@@ -33,10 +33,11 @@ abstract class Model
   public function createNewModel(string $table, array $data)
   {
     $fields = $this->getFieldsOfModel($table);
-    for ($i = 0; $i < count($fields); $i++) {
-      if (!isset($data[$fields[$i]]))
-        $data[$fields[$i]] = "";
+    foreach ($fields as $key => $value) {
+      if (!isset($data[$key]))
+        $data[$key] = "";
     }
+
     $this->db->createOne($this->tableName, $data, $fields);
     // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
   }

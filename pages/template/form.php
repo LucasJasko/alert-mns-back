@@ -18,9 +18,11 @@
     <form class="form" action="/<?= $redirectPage ?>" method="post">
 
 
-      <a class="return-link" href="/<?= $redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
+      <a class="return-link" href="/<?= $returnPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
       <?php
+
+      var_dump($displayedData);
       foreach ($displayedData as $dataField => $dataValue) {
 
         $label = $formInfos["form_fields"][$dataField]["label"];
@@ -32,7 +34,7 @@
         <label for="<?= $dataField ?>"> <?= $label ?> :</label>
 
         <?php
-        if (str_contains($dataField, $tableName) || ($displayedData["room_id"] && $dataField == "group_id")) {
+        if (str_contains($dataField, $tableName)) {
           ?>
           <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
             <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>>
@@ -42,12 +44,12 @@
 
           if (is_array($dataValue)) {
 
-            empty($dataValue) ? $dataValue[] = [["" => ""]] : "";
 
             switch ($dataField) {
 
               case "situation_id":
 
+                empty($dataValue) ? $dataValue[] = [["" => ""]] : "";
                 for ($index = 0; $index < count($dataValue); $index++) {
 
                   foreach ($dataValue[$index] as $post => $department) { ?>
@@ -104,7 +106,9 @@
                     <option value="">-- Sélectionnez un salon à éditer --</option>
 
                     <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
-                      <option value="<?= $dataValue[$i]["room_id"] ?>"><?= $dataValue[$i]["room_name"] ?></option>
+                      <option value="<?= $dataValue[$i]["room_id"] ?>">
+                        <?= $dataValue[$i]["room_name"] ?>
+                      </option>
                     <?php } ?>
 
                   </select>
@@ -122,32 +126,43 @@
 
                   editSelect.addEventListener("change", () => {
                     editButton.href = "/room/" + groupID + "/" + editSelect.value;
+                    if (editSelect.value == "") {
+                      editButton.style.backgroundColor = "grey";
+                    }
+
                   });
                 </script>
 
                 <?php break;
             }
           } else {
-            ?>
-            <select name="<?= $dataField ?>">
+            if (str_contains("group_id", $dataField) && isset($formInfos["form_fields"]["room_id"])) {
+              $group = new \Src\Entity\Group($dataValue);
+              ?>
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $group->name(); ?>
+                disabled <?= $attributes ?>>
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $group->id(); ?> hidden
+                <?= $attributes ?>>
 
-              <?php
-              $options = \Src\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
+            <?php } else { ?>
+              <select name="<?= $dataField ?>">
 
-              for ($i = 0; $i < count($options); $i++) {
+                <?php
+                $options = \Src\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
 
-                $fieldName = str_replace("_id", "_name", $dataField);
-                ?>
+                for ($i = 0; $i < count($options); $i++) {
 
-                <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $displayedData[$dataField] ? "selected" : "" ?>>
-                  <?= $options[$i][$fieldName] ?>
-                </option>
+                  $fieldName = str_replace("_id", "_name", $dataField);
+                  ?>
 
-              <?php } ?>
+                  <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $displayedData[$dataField] ? "selected" : "" ?>>
+                    <?= $options[$i][$fieldName] ?>
+                  </option>
 
-            </select>
+                <?php } ?>
 
-            <?php
+              </select>
+            <?php }
           }
         }
       }

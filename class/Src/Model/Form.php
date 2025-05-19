@@ -27,27 +27,33 @@ class Form
 
     $formInfos = $this->formInfos;
     $redirectPage = $this->redirectPage;
+
+    if (str_contains($redirectPage, "room/")) {
+      // TODO a terme ce code est a modifier car il genere le lien de retour pour des ID allant jusqu'à 9 !!
+      $returnPage = substr(str_replace("room", "group", $redirectPage), 0, 7);
+    } else {
+      $returnPage = $redirectPage;
+    }
     $displayedData = $this->displayedData;
     $tableName = $this->tableName;
 
     require ROOT . "/pages/template/form.php";
   }
 
-  public function getEmptyForm(array $fieldsOfTable, array $except = [])
+  public function getEmptyForm(array $displayedData, array $except = [])
   {
-    foreach ($fieldsOfTable as $key => $value) {
-      $this->displayedData[$value] = "";
-    }
-
-    if (array_key_exists("profile_id", $this->displayedData)) {
-      $this->displayedData["situation_id"] = [["" => ""]];
-    }
-
+    $this->displayedData = $displayedData;
     $this->compareData($except);
 
+    $displayedData = $this->displayedData;
     $formInfos = $this->formInfos;
     $redirectPage = $this->redirectPage;
-    $displayedData = $this->displayedData;
+
+    if (str_contains($redirectPage, "room/")) {
+      $returnPage = substr(str_replace("room", "group", $redirectPage), 0, 7);
+    } else {
+      $returnPage = $redirectPage;
+    }
     $tableName = $this->tableName;
 
     require ROOT . "/pages/template/form.php";
