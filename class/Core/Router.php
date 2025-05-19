@@ -28,7 +28,9 @@ class Router
         array_shift($matches);
 
         if (isset($isApi) && $isApi) {
+
           $matches[] = $isApi;
+
         }
 
         call_user_func_array($handler, $matches);

@@ -37,10 +37,12 @@ class Form
   {
     foreach ($fieldsOfTable as $key => $value) {
       $this->displayedData[$value] = "";
-      if ($value == "situation_id") {
-        $this->displayedData[$value] = [["" => ""]];
-      }
     }
+
+    if (array_key_exists("profile_id", $this->displayedData)) {
+      $this->displayedData["situation_id"] = [["" => ""]];
+    }
+
     $this->compareData($except);
 
     $formInfos = $this->formInfos;

@@ -41,8 +41,7 @@
 
           if (is_array($dataValue)) {
 
-            if (empty($dataValue))
-              $dataValue[] = [["" => ""]];
+            empty($dataValue) ? $dataValue[] = [["" => ""]] : "";
 
             switch ($dataField) {
 
@@ -54,27 +53,33 @@
 
                     <div class="dbl-select__container">
 
-                      <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][post_id]">
+                      <select class="dbl-select" name="situation_id[<?= $index ?>][post_id]">
                         <option value="">-- Poste --</option>
 
                         <?php
                         $options = \Src\Model\Form::getDataOfTable("post");
                         for ($i = 0; $i < count($options); $i++) {
                           ?>
+
                           <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>>
                             <?= $options[$i]["post_name"] ?>
                           </option>
+
                         <?php } ?>
 
                       </select>
 
-                      <select class="dbl-select" name="<?= $dataField ?>[<?= $index ?>][department_id]">
+                      <select class="dbl-select" name="situation_id[<?= $index ?>][department_id]">
+
                         <option value="">-- Département --</option>
 
                         <?php
                         $options = \Src\Model\Form::getDataOfTable("department");
+
                         for ($i = 0; $i < count($options); $i++) { ?>
+
                           <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
+
                         <?php } ?>
 
                       </select>
@@ -90,6 +95,7 @@
                 <?php break;
 
               case "room_id": ?>
+
                 <div class="edit-select__container">
 
                   <select class="edit-select">
@@ -115,12 +121,16 @@
 
               <?php
               $options = \Src\Model\Form::getDataOfTable(str_replace("_id", "", $dataField));
+
               for ($i = 0; $i < count($options); $i++) {
+
                 $fieldName = str_replace("_id", "_name", $dataField);
                 ?>
+
                 <option value="<?= $options[$i][$dataField] ?>" <?= $options[$i][$fieldName] == $displayedData[$dataField] ? "selected" : "" ?>>
                   <?= $options[$i][$fieldName] ?>
                 </option>
+
               <?php } ?>
 
             </select>
