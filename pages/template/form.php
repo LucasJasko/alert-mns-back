@@ -20,7 +20,8 @@
 
       <a class="return-link" href="/<?= $redirectPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
-      <?php foreach ($displayedData as $dataField => $dataValue) {
+      <?php
+      foreach ($displayedData as $dataField => $dataValue) {
 
         $label = $formInfos["form_fields"][$dataField]["label"];
         $inputType = $formInfos["form_fields"][$dataField]["input_type"];
@@ -31,7 +32,7 @@
         <label for="<?= $dataField ?>"> <?= $label ?> :</label>
 
         <?php
-        if (str_contains($dataField, $tableName)) {
+        if (str_contains($dataField, $tableName) || ($displayedData["room_id"] && $dataField == "group_id")) {
           ?>
           <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
             <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>>
@@ -111,7 +112,18 @@
                   <a class="valid-button edit-button" href=""> <i class='fa-solid fa-pen'></i></a>
                 </div>
 
-                <button class="valid-button plus-btn">Créer un nouveau salon</button>
+                <a class="valid-button add-room-btn new-room" href="/room/<?= $displayedData["group_id"] ?>/0">Créer un nouveau
+                  salon</a>
+
+                <script>
+                  const editSelect = document.querySelector(".edit-select");
+                  const editButton = document.querySelector(".edit-button");
+                  const groupID = document.querySelector("#group_id").value;
+
+                  editSelect.addEventListener("change", () => {
+                    editButton.href = "/room/" + groupID + "/" + editSelect.value;
+                  });
+                </script>
 
                 <?php break;
             }

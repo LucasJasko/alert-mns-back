@@ -36,6 +36,11 @@ Router::add("/group/{id}", function ($id, $isApi = false, $isDelete = false) {
   $controller->dispatch($id, $isApi, $isDelete);
 });
 
+Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi = false, $isDelete = false) {
+  $controller = new Src\Controller\Room();
+  $controller->dispatch($group_id, $room_id, $isApi, $isDelete);
+});
+
 Router::add("/profile", function ($isApi = false) {
   $controller = new Src\Controller\Profile();
   $controller->dispatch();

@@ -5,8 +5,8 @@ namespace Src\Entity;
 class Room extends \Src\Model\Model
 {
 
-  private $state = "1";
-  private $type = "1";
+  private $state;
+  private $type;
   private $group;
 
   protected static array $formInfos = [
@@ -18,11 +18,17 @@ class Room extends \Src\Model\Model
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
+      "group_id" => [
+        "label" => "Groupe du salon",
+        "placeholder" => "",
+        "input_type" => "text",
+        "attributes" => "required readonly"
+      ],
       "room_name" => [
         "label" => "Nom du salon",
         "placeholder" => "",
         "input_type" => "text",
-        "attributes" => "required readonly"
+        "attributes" => "required"
       ],
       "state_id" => [
         "label" => "Etat du salon",
@@ -36,12 +42,7 @@ class Room extends \Src\Model\Model
         "input_type" => "text",
         "attributes" => "required"
       ],
-      "group_id" => [
-        "label" => "Group du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
+
     ]
   ];
 
@@ -62,6 +63,22 @@ class Room extends \Src\Model\Model
     }
   }
 
+  protected function hydrate($row, $table)
+  {
+    foreach ($row as $key => $value) {
+      if (str_contains($key, "room_")) {
+        $key = str_replace("room_", "", $key);
+      }
+      if (!str_contains($key, "room_")) {
+        $key = str_replace("_id", "", $key);
+      }
+      $method = "set" . $key;
+      if (method_exists($this, $method)) {
+        $this->{$method}($value);
+      }
+    }
+  }
+
   public function setState(int $stateID)
   {
     $instance = new State($stateID);
@@ -75,9 +92,19 @@ class Room extends \Src\Model\Model
   public function setGroup(int $groupID)
   {
     $instance = new Group($groupID);
-    $this->groupe = $instance->name();
+    $this->group = $instance->name();
   }
 
+  public function all()
+  {
+    return [
+      "room_id" => $this->id(),
+      "room_name" => $this->name(),
+      "state_id" => $this->state(),
+      "type_id" => $this->type(),
+      "group_id" => $this->group()
+    ];
+  }
   public function state()
   {
     return $this->state;
@@ -85,5 +112,13 @@ class Room extends \Src\Model\Model
   public function type()
   {
     return $this->type;
+  }
+  public function group()
+  {
+    return $this->group;
+  }
+  public static function formInfos()
+  {
+    return self::$formInfos;
   }
 }
