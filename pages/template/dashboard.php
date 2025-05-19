@@ -56,7 +56,8 @@
 
         <td class='btn__container'>
 
-          <a class='btn btn__delete' href="<?= $page . "/" . $data[$dataIndex][$tab . "_id"] ?>&process=delete"
+          <a class='btn btn__delete'
+            href="<?= $page . ($page == "params" ? "/" . $tab : "") ?>/<?= $data[$dataIndex][$tab . "_id"] ?>/<?= $_SESSION["delete_key"] ?>"
             id="<?= $page ?>">
             <i class='fa-solid fa-trash-can'></i>
           </a>

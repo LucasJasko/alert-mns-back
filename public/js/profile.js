@@ -4,7 +4,7 @@ for (let i = 0; i < tableLines.length; i++) {
   const profileId = tableLines[i].querySelector(".profile_id").innerHTML.replace(/ /g, "");
   const deleteIcon = tableLines[i].querySelector(".btn__delete");
 
-  console.log(profileId);
+  const deleteLink = deleteIcon.href;
 
   deleteIcon.addEventListener("click", (e) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ for (let i = 0; i < tableLines.length; i++) {
         <p class="delete-window__warning-text">Attention: Cette action est irréversible !</p>
         <div class="delete-window__btn-container">
           <button class="delete-window__btn-cancel valid-button">Annuler</button>
-          <a class="delete-window__delete-link" href="/profile/${profileId}/delete">Supprimer l'utilisateur</a>
+          <a class="delete-window__delete-link" href=${deleteLink}>Supprimer l'utilisateur</a>
     </div>
   `;
     wrapper.classList.add("delete-window");
