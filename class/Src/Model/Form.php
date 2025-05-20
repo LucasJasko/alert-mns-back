@@ -9,13 +9,15 @@ class Form
   private array $formInfos;
   private $displayedData = [];
   private string $redirectPage;
+  private string $linkedId;
   private $db;
 
-  public function __construct(string $tableName, string $redirectPage, array $formInfos)
+  public function __construct(string $tableName, string $redirectPage, array $formInfos, $linkedId = "")
   {
     $this->tableName = $tableName;
     $this->redirectPage = $redirectPage;
     $this->formInfos = $formInfos;
+    $this->linkedId = $linkedId;
     $this->db = \Src\App::db();
   }
 
@@ -36,6 +38,8 @@ class Form
     }
     $displayedData = $this->displayedData;
     $tableName = $this->tableName;
+    $linkedId = $this->linkedId;
+    $deleteKey = \Core\Controller\Auth::deleteToken();
 
     require ROOT . "/pages/template/form.php";
   }
@@ -55,6 +59,7 @@ class Form
       $returnPage = $redirectPage;
     }
     $tableName = $this->tableName;
+    $linkedId = $this->linkedId;
 
     require ROOT . "/pages/template/form.php";
   }

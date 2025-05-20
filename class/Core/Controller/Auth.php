@@ -113,4 +113,9 @@ class Auth
   {
     return isset($_SESSION["logged"]) ? $_SESSION["logged"] : "";
   }
+
+  public static function deleteToken()
+  {
+    return isset($_SESSION["logged"]) ? $_SESSION["delete_key"] : "";
+  }
 }

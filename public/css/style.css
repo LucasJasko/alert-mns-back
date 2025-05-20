@@ -364,3 +364,15 @@ select {
 .delete-window__delete-link:hover {
   text-decoration: underline;
 }
+
+.delete-room {
+  background-color: var(--deletered);
+  border-color: var(--deletered);
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+}
+
+.delete-room:hover {
+  color: var(--deletered);
+}

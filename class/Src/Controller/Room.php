@@ -17,34 +17,39 @@ class Room extends \Src\Controller\Controller
 
   public function dispatch($group_id, $room_id, bool $isApi = false, bool $isDelete = false)
   {
-
-    var_dump($group_id);
-    var_dump($room_id);
-
     if ($_POST) {
       $this->submitData($_POST);
-      // \Src\App::redirect("group/" . $group_id);
+      \Src\App::redirect("group");
     }
 
     if ($room_id != 0) {
-      $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+      if ($isDelete) {
+        $res = $this->delete("room", "room_id", $room_id);
+
+        if ($res) {
+          \Src\App::redirect("error");
+        }
+        \Src\App::redirect("group");
+
+      } else {
+        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+      }
     } else {
       $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
     }
   }
 
-  // CETTE METHODE FAIT CRASH LE SERVEUR...
   public function submitData(array $data)
   {
-    var_dump($data);
-    // if (empty($data["room_id"]) || $data["room_id"] == "0") {
-    //   $data["room_id"] = $this->getAvailableId("room", "room_id");
+    // var_dump($data);
+    if (empty($data["room_id"]) || $data["room_id"] == "0") {
+      $data["room_id"] = $this->getAvailableId("room", "room_id");
 
-    //   $this->roomInstance = new RoomModel($data["room_id"], $data);
-    //   $this->roomInstance->createNewModel("room", $data);
-    // } else {
-    //   $this->roomInstance = new RoomModel($data["room_id"]);
-    //   $this->roomInstance->updateModel($data["room_id"], $data);
-    // }
+      $this->roomInstance = new RoomModel($data["room_id"], $data);
+      $this->roomInstance->createNewModel("room", $data);
+    } else {
+      $this->roomInstance = new RoomModel($data["room_id"]);
+      $this->roomInstance->updateModel($data["room_id"], $data);
+    }
   }
 }

@@ -21,8 +21,6 @@
       <a class="return-link" href="/<?= $returnPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
       <?php
-
-      var_dump($displayedData);
       foreach ($displayedData as $dataField => $dataValue) {
 
         $label = $formInfos["form_fields"][$dataField]["label"];
@@ -137,11 +135,10 @@
             }
           } else {
             if (str_contains("group_id", $dataField) && isset($formInfos["form_fields"]["room_id"])) {
-              $group = new \Src\Entity\Group($dataValue);
               ?>
-              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $group->name(); ?>
-                disabled <?= $attributes ?>>
-              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $group->id(); ?> hidden
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $dataValue ?> disabled
+                <?= $attributes ?>>
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $linkedId ?> hidden
                 <?= $attributes ?>>
 
             <?php } else { ?>
@@ -175,6 +172,14 @@
 
       <input class=" table" type="text" value="<?= $redirectPage ?>" hidden>
       <input class="valid-button" type="submit" value="Enregistrer">
+
+      <?php
+      if (str_contains($returnPage, "group/") && array_key_exists("room_id", $displayedData)) {
+        if ($displayedData["room_id"] != "0") { ?>
+          <a class="valid-button delete-room" href="/<?= $redirectPage ?>/<?= $deleteKey ?>">Supprimer le
+            salon</a>
+        <?php }
+      } ?>
 
     </form>
 
