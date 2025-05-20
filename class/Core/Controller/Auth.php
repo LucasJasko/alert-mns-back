@@ -75,13 +75,19 @@ class Auth
 
     if ($res && $pwd == $res["profile_password"]) {
 
-      session_start();
+      if (self::isSession()) {
+        session_unset();
+        session_destroy();
+      }
+
+      self::initSession();
       $_SESSION["logged"] = "OK";
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       return [
         'success' => true,
         'message' => 'Utilisateur connecté'
       ];
+
     } else {
       return [
         'success' => false,

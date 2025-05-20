@@ -32,6 +32,11 @@ class App
     return self::$db;
   }
 
+  public static function clientData()
+  {
+    return json_decode(file_get_contents("php://input"));
+  }
+
   public static function redirect($page)
   {
     header("Location:/" . $page);
