@@ -48,7 +48,6 @@ class Database
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
     $sql = str_replace(", )", " )", $sql);
 
-    var_dump($sql);
     $stmt = $this->db->prepare($sql);
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);

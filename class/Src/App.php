@@ -34,7 +34,7 @@ class App
 
   public static function clientData()
   {
-    return json_decode(file_get_contents("php://input"));
+    return json_decode(file_get_contents("php://input"), true);
   }
 
   public static function redirect($page)

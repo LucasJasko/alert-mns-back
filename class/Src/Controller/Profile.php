@@ -26,32 +26,37 @@ class Profile extends \Src\Controller\Controller
 
     \Core\Controller\Auth::protect();
 
-    if ($_POST) {
-      // TODO message d'erreur lors de l'ajout d'une situation de profile
-      $this->submitData($_POST);
-    }
+    if ($isApi) {
+      echo json_encode($this->modelData($id, "profile"));
+    } else {
 
-    if (isset($id)) {
+      if ($_POST) {
+        // TODO message d'erreur lors de l'ajout d'une situation de profile
+        $this->submitData($_POST);
+      }
 
-      if ($id != 0) {
+      if (isset($id)) {
 
-        if ($isDelete) {
+        if ($id != 0) {
 
-          $res = $this->delete("profile", "profile_id", $id);
+          if ($isDelete) {
 
-          if ($res) {
-            \Src\App::redirect("error");
+            $res = $this->delete("profile", "profile_id", $id);
+
+            if ($res) {
+              \Src\App::redirect("error");
+            }
+            \Src\App::redirect("profile");
+
+          } else {
+            $this->getModelForm("profile", $id, $this->formInfos);
           }
-          \Src\App::redirect("profile");
-
         } else {
-          $this->getModelForm("profile", $id, $this->formInfos);
+          $this->getEmptyModelForm("profile", $this->formInfos);
         }
       } else {
-        $this->getEmptyModelForm("profile", $this->formInfos);
+        $this->getProfileDashboard();
       }
-    } else {
-      $this->getProfileDashboard();
     }
   }
 

@@ -6,7 +6,6 @@ use \Core\Service\Log;
 
 class Auth
 {
-  private array $response;
   private $db;
 
 
@@ -25,9 +24,9 @@ class Auth
 
         self::isSession() ? "" : session_start();
         $_SESSION["logged"] = "OK";
-        $_SESSION["delete_key"] = bin2hex(random_bytes(32));
+        $this->setDeleteToken();
 
-        $this->response = [
+        $response = [
           'success' => true,
           'message' => 'Utilisateur connecté'
         ];
@@ -35,65 +34,25 @@ class Auth
         Log::writeLog("L'administrateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
 
       } else {
-        $this->response = [
+        $response = [
           'success' => false,
           'message' => "Vous n'etes pas autorisé à vous connecter."
         ];
       }
 
     } else {
-      $this->response = [
+      $response = [
         'success' => false,
         'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
       ];
     }
 
-    return $this->response;
+    return $response;
   }
 
-  private function checkAuth(string $email, string $pwd)
+  protected function checkAuth(string $email, string $pwd)
   {
     return $this->db->getFieldsWhereAnd("profile", ["profile_id", "profile_password", "role_id", "profile_name", "profile_surname"], "profile_mail", $email, "profile_password", $pwd);
-  }
-
-  public function clientLogin()
-  {
-    // Réception des données client
-    $rawData = file_get_contents("php://input");
-    $data = json_decode($rawData, true);
-
-    if ($data) {
-      // TODO manque vérification du contenu de data
-      $res = $this->tryLogin(htmlspecialchars($data["profile_mail"]), htmlspecialchars($data["profile_password"]));
-      echo json_encode($res);
-    }
-  }
-
-  public function tryClientLogin(string $email, string $pwd)
-  {
-    $res = $this->checkAuth($email, $pwd);
-
-    if ($res && $pwd == $res["profile_password"]) {
-
-      if (self::isSession()) {
-        session_unset();
-        session_destroy();
-      }
-
-      self::initSession();
-      $_SESSION["logged"] = "OK";
-      Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
-      return [
-        'success' => true,
-        'message' => 'Utilisateur connecté'
-      ];
-
-    } else {
-      return [
-        'success' => false,
-        'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
-      ];
-    }
   }
 
   public static function protect()
@@ -117,11 +76,17 @@ class Auth
 
   public static function sessionToken()
   {
-    return isset($_SESSION["logged"]) ? $_SESSION["logged"] : "";
+    return $_SESSION["logged"];
   }
 
+  public static function setDeleteToken()
+  {
+    if ($_SESSION && !$_SESSION["delete_key"]) {
+      $_SESSION["delete_key"] = bin2hex(random_bytes(32));
+    }
+  }
   public static function deleteToken()
   {
-    return isset($_SESSION["logged"]) ? $_SESSION["delete_key"] : "";
+    return isset($_SESSION["delete_key"]) ? $_SESSION["delete_key"] : "";
   }
 }

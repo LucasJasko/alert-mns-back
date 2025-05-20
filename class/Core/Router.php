@@ -15,17 +15,17 @@ class Router
 
   public static function dispatch(string $path): void
   {
-    Auth::initSession();
 
     if (str_starts_with($path, "/api")) {
       $isApi = true;
       $path = substr($path, 4);
     }
 
-    $sessionToken = Auth::sessionToken();
-    $sessionDeleteToken = !empty($sessionToken) ? $_SESSION["delete_key"] : null;
+    Auth::initSession();
+    Auth::setDeleteToken();
+    $sessionDeleteToken = Auth::deleteToken();
 
-    if (isset($sessionDeleteToken) && str_ends_with($path, "/" . $sessionDeleteToken)) {
+    if (str_ends_with($path, "/" . $sessionDeleteToken)) {
       $isDelete = true;
       $path = str_replace("/" . $sessionDeleteToken, "", $path);
     }
@@ -45,15 +45,14 @@ class Router
         if (isset($isDelete) && $isDelete) {
           $matches["isDelete"] = $isDelete;
         }
-
         call_user_func_array($handler, $matches);
 
         return;
       }
     }
 
-    http_response_code(404);
     if (isset($isApi) && $isApi) {
+      http_response_code(404);
       echo json_encode(["message" => "Service introuvable"]);
     } else {
       \Src\App::redirect("page404");
