@@ -1,0 +1,15 @@
+@font-face {
+  font-family: Inter;
+  src: url("../assets/fonts/Inter-VariableFont_opsz\,wght.ttf");
+}
+
+* {
+  --inkdark: rgb(34, 34, 34);
+  --color1: rgb(231, 232, 216);
+  --color2: rgb(202, 218, 191);
+  --color3: rgb(181, 207, 183);
+  --color4: rgb(188, 159, 139);
+  box-sizing: border-box;
+  font-family: Inter;
+  color: var(--inkdark);
+}
