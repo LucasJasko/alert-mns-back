@@ -22,8 +22,8 @@ class ProfileSituation extends \Src\Model\Model
   {
     $this->clearSituations();
     foreach ($data as $index => $array) {
-      $data[$index]["profile_id"] = $this->id;
-      $this->db->createOne("profile__situation", $data[$index], ["profile_id", "post_id", "department_id"]);
+      $array["profile_id"] = $this->id;
+      $this->db->createOne("profile__situation", $array, ["profile_id", "post_id", "department_id"]);
     }
   }
 

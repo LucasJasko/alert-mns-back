@@ -38,11 +38,11 @@ class Database
   {
     $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
-      $sql .= $key . ", ";
+      $sql .= $value . ", ";
     }
     $sql .= ") VALUES ( ";
     foreach ($fields as $key => $value) {
-      $sql .= ":" . $key . ", ";
+      $sql .= ":" . $value . ", ";
     }
     $sql .= ")";
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
