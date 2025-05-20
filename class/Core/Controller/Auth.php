@@ -3,11 +3,11 @@
 namespace core\controller;
 
 use \Core\Service\Log;
+use \Firebase\JWT\JWT;
 
 class Auth
 {
   private $db;
-
 
   public function __construct()
   {
@@ -23,8 +23,8 @@ class Auth
       if ($res["role_id"] == 1) {
 
         self::isSession() ? "" : session_start();
-        $_SESSION["logged"] = "OK";
-        $this->setDeleteToken();
+        self::setAccessToken($res);
+        self::setDeleteToken();
 
         $response = [
           'success' => true,
@@ -74,9 +74,16 @@ class Auth
     return session_status() == 2 ? true : false;
   }
 
+  public static function setAccessToken(array $data)
+  {
+    if ($_SESSION && !$_SESSION["access_key"]) {
+      $_SESSION["access_key"] = JWT::encode($data, JWT_SECRET_KEY, "RS256");
+    }
+  }
+
   public static function sessionToken()
   {
-    return $_SESSION["logged"];
+    return $_SESSION["access_key"];
   }
 
   public static function setDeleteToken()

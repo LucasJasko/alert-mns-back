@@ -14,3 +14,5 @@ define("PAGE_LIST", [
   "stats",
   "login"
 ]);
+
+define("JWT_SECRET_KEY", "tropbetepourtrouver");

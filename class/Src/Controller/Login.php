@@ -26,6 +26,7 @@ class Login extends \Src\Controller\Controller
 
     } else {
 
+      // TODO problème de connexion au back office
       if (isset($_POST["email"]) && isset($_POST["password"])) {
         // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
         $this->checkAuth($_POST["email"], $_POST["password"]);
