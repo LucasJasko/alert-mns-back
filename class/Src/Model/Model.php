@@ -37,6 +37,8 @@ abstract class Model
       if (!isset($data[$key]))
         $data[$key] = "";
     }
+    var_dump($data);
+    var_dump($fields);
 
     $this->db->createOne($this->tableName, $data, $fields);
     // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");

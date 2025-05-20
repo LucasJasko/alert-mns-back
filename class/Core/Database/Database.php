@@ -38,16 +38,17 @@ class Database
   {
     $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
-      $sql .= $value . ", ";
+      $sql .= $key . ", ";
     }
     $sql .= ") VALUES ( ";
     foreach ($fields as $key => $value) {
-      $sql .= ":" . $value . ", ";
+      $sql .= ":" . $key . ", ";
     }
     $sql .= ")";
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
     $sql = str_replace(", )", " )", $sql);
 
+    var_dump($sql);
     $stmt = $this->db->prepare($sql);
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);
