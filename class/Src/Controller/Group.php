@@ -22,35 +22,41 @@ class Group extends \Src\Controller\Controller
   public function dispatch($id = null, bool $isApi = false, bool $isDelete = false)
   {
 
-    \Core\Controller\Auth::protect();
+    if ($isApi) {
 
-    if ($_POST) {
-      $this->submitData($_POST);
-    }
+    } else {
 
-    if (isset($id)) {
+      \Core\Controller\Auth::protect();
 
-      if ($id != 0) {
+      if ($_POST) {
+        $this->submitData($_POST);
+      }
 
-        if ($isDelete) {
+      if (isset($id)) {
 
-          $res = $this->delete("group", "group_id", $id);
+        if ($id != 0) {
 
-          if ($res) {
-            \Src\App::redirect("error");
+          if ($isDelete) {
+
+            $res = $this->delete("group", "group_id", $id);
+
+            if ($res) {
+              \Src\App::redirect("error");
+            }
+            \Src\App::redirect("group");
+
+          } else {
+            $this->getModelForm("group", $id, $this->formInfos);
           }
-          \Src\App::redirect("group");
 
         } else {
-          $this->getModelForm("group", $id, $this->formInfos);
+          $this->getEmptyModelForm("group", $this->formInfos);
         }
 
       } else {
-        $this->getEmptyModelForm("group", $this->formInfos);
+        $this->getGroupDashboard();
       }
 
-    } else {
-      $this->getGroupDashboard();
     }
 
   }

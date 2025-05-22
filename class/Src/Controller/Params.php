@@ -64,33 +64,38 @@ class Params extends \Src\Controller\Controller
   public function dispatch($tab = null, $id = null, $isApi = false, $isDelete = false)
   {
 
-    \Core\Controller\Auth::protect();
+    if ($isApi) {
 
-    if ($_POST) {
-      $this->submitData($_POST, $_POST["table_name"]);
-    }
+    } else {
 
-    if (isset($id) && isset($tab)) {
+      \Core\Controller\Auth::protect();
 
-      if ($id != 0) {
+      if ($_POST) {
+        $this->submitData($_POST, $_POST["table_name"]);
+      }
 
-        if ($isDelete) {
+      if (isset($id) && isset($tab)) {
 
-          $res = $this->delete($tab, $tab . "_id", $id);
+        if ($id != 0) {
 
-          if ($res) {
-            \Src\App::redirect("error");
+          if ($isDelete) {
+
+            $res = $this->delete($tab, $tab . "_id", $id);
+
+            if ($res) {
+              \Src\App::redirect("error");
+            }
+            \Src\App::redirect("params");
+
+          } else {
+            $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
           }
-          \Src\App::redirect("params");
-
         } else {
-          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
+          $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
         }
       } else {
-        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
+        $this->getParamsDashboard();
       }
-    } else {
-      $this->getParamsDashboard();
     }
   }
 

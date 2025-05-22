@@ -31,7 +31,11 @@ class Auth extends \Core\Controller\Auth
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       $res = [
         'success' => true,
-        'message' => 'Utilisateur connecté'
+        'message' => 'Utilisateur connecté',
+        "data" => [
+          "accessToken" => "Token",
+          "UID" => $res["profile_id"]
+        ]
       ];
 
     } else {

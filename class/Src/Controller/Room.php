@@ -17,25 +17,31 @@ class Room extends \Src\Controller\Controller
 
   public function dispatch($group_id, $room_id, bool $isApi = false, bool $isDelete = false)
   {
-    if ($_POST) {
-      $this->submitData($_POST);
-      \Src\App::redirect("group");
-    }
 
-    if ($room_id != 0) {
-      if ($isDelete) {
-        $res = $this->delete("room", "room_id", $room_id);
+    if ($isApi) {
 
-        if ($res) {
-          \Src\App::redirect("error");
-        }
-        \Src\App::redirect("group");
-
-      } else {
-        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
-      }
     } else {
-      $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+
+      if ($_POST) {
+        $this->submitData($_POST);
+        \Src\App::redirect("group");
+      }
+
+      if ($room_id != 0) {
+        if ($isDelete) {
+          $res = $this->delete("room", "room_id", $room_id);
+
+          if ($res) {
+            \Src\App::redirect("error");
+          }
+          \Src\App::redirect("group");
+
+        } else {
+          $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+        }
+      } else {
+        $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+      }
     }
   }
 
