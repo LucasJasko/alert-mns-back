@@ -64,8 +64,10 @@ class Form
     require ROOT . "/pages/template/form.php";
   }
 
-  private function compareData(array $except)
-  {
+  private function
+    compareData(
+    array $except
+  ) {
     foreach ($this->displayedData as $key => $value) {
       if (in_array($key, $except)) {
         unset($this->displayedData[$key]);

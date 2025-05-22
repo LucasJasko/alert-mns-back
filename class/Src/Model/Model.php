@@ -20,11 +20,6 @@ abstract class Model
     $this->tableName = $tableName;
   }
 
-  public function getFieldsOfModel($table)
-  {
-    return $this->db->getFieldsOfTable($table);
-  }
-
   public function getDBModel(int $id)
   {
     return $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -32,20 +27,27 @@ abstract class Model
 
   public function createNewModel(string $table, array $data)
   {
-    $fields = $this->getFieldsOfModel($table);
+    $fields = $this->db->getFieldsOfTable($table);
+
     foreach ($fields as $key => $value) {
-      if (!isset($data[$key]))
-        $data[$key] = "";
+      if (!isset($data[$value]))
+        $data[$value] = "";
+    }
+
+    if (isset($data["profile_password"])) {
+      $data["profile_password"] = password_hash($data["profile_password"], PASSWORD_DEFAULT);
     }
 
     $this->db->createOne($this->tableName, $data, $fields);
-    // \core\Log::writeLog("Un groupe a été ajouté à la base de donnée.");
+    \Core\Service\Log::writeLog($this->tableName . " a été ajouté à la base de donnée.");
   }
 
   public function updateModel(int $id, array $newData)
   {
-    $this->data = $newData;
-    $this->db->updateOne($this->tableName, $this->data, $this->searchField, $id);
+    if (isset($newData["profile_password"])) {
+      $newData["profile_password"] = password_hash($newData["profile_password"], PASSWORD_DEFAULT);
+    }
+    $this->db->updateOne($this->tableName, $newData, $this->searchField, $id);
   }
 
   public function deleteModel(int $id)

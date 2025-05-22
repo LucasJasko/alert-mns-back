@@ -36,13 +36,14 @@ class Database
 
   public function createOne(string $table, array $data, array $fields)
   {
+    // NE PAS CHANGER CET ORDRE D ASSIGNATION, si besoin de changement, modifier la data passé en argument
     $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
-      $sql .= $key . ", ";
+      $sql .= $value . ", ";
     }
     $sql .= ") VALUES ( ";
-    foreach ($fields as $key => $value) {
-      $sql .= ":" . $key . ", ";
+    foreach ($fields as $value) {
+      $sql .= ":" . $value . ", ";
     }
     $sql .= ")";
     $sql = str_replace(", ) VALUES", " ) VALUES", $sql);
@@ -169,6 +170,22 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getMultipleWhere(string $table, array $target, string $field, $value)
+  {
+    $sql = "SELECT ";
+    for ($i = 0; $i < count($target); $i++) {
+      if ($i != count($target) - 1) {
+        $sql .= $target[$i] . ", ";
+      } else {
+        $sql .= $target[$i];
+      }
+    }
+    $sql .= " FROM `" . $table . "` WHERE " . $field . " = :" . $field;
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([":" . $field => $value]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getFieldsOfTable(string $table)
   {
     $stmt = $this->db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
@@ -178,7 +195,7 @@ class Database
     $fields = [];
     for ($i = 0; $i < count($raw); $i++) {
       foreach ($raw[$i] as $k => $v) {
-        $fields[$v] = "";
+        $fields[$i] = $v;
       }
     }
 
