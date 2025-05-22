@@ -20,8 +20,20 @@ class App
 
   private static function loadClass($class)
   {
-    $str = ROOT . "\class\\" . $class . ".php";
-    require_once $str;
+    $local = ROOT . "\class\\" . $class . ".php";
+
+    if (file_exists($local)) {
+      require_once $local;
+    } else {
+      foreach (VENDORS as $packageName => $path) {
+        if ($class == $packageName) {
+          require_once $path;
+        }
+      }
+    }
+
+
+
   }
 
   public static function db()

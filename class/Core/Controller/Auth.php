@@ -1,64 +1,28 @@
 <?php
 
-namespace core\controller;
-
-use \Core\Service\Log;
-use \Firebase\JWT\JWT;
+namespace Core\Controller;
 
 class Auth
 {
-  private $db;
-
-  public function __construct()
-  {
-    $this->db = \Src\App::db();
-  }
-
-  public function tryLogin(string $email, string $pwd)
-  {
-    $res = $this->checkAuth($email, $pwd);
-
-    if ($res && $pwd == $res["profile_password"]) {
-
-      if ($res["role_id"] == 1) {
-
-        self::isSession() ? "" : session_start();
-        self::setAccessToken($res);
-        self::setDeleteToken();
-
-        $response = [
-          'success' => true,
-          'message' => 'Utilisateur connecté'
-        ];
-
-        Log::writeLog("L'administrateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
-
-      } else {
-        $response = [
-          'success' => false,
-          'message' => "Vous n'etes pas autorisé à vous connecter."
-        ];
-      }
-
-    } else {
-      $response = [
-        'success' => false,
-        'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
-      ];
-    }
-
-    return $response;
-  }
-
-  protected function checkAuth(string $email, string $pwd)
-  {
-    return $this->db->getFieldsWhereAnd("profile", ["profile_id", "profile_password", "role_id", "profile_name", "profile_surname"], "profile_mail", $email, "profile_password", $pwd);
-  }
+  protected static $accessKey;
 
   public static function protect()
   {
-    self::isSession() ? "" : session_start();
-    if (!isset($_SESSION["logged"]) || $_SESSION["logged"] != "OK") {
+    self::initSession();
+
+    if (!isset($_SESSION["access_key"])) {
+      \Src\App::redirect("login");
+      exit();
+    }
+
+    ob_start();
+    require ROOT . "/config/env/publickey.crt";
+    $key = ob_get_contents();
+    ob_end_clean();
+
+    try {
+      $decoded = \Firebase\JWT\JWT::decode($_SESSION["access_key"], new \Firebase\JWT\Key($key, "RS256"));
+    } catch (\Exception $e) {
       \Src\App::redirect("login");
       exit();
     }
@@ -66,7 +30,7 @@ class Auth
 
   public static function initSession()
   {
-    session_start();
+    self::isSession() ? "" : session_start();
   }
 
   public static function isSession()
@@ -76,8 +40,26 @@ class Auth
 
   public static function setAccessToken(array $data)
   {
-    if ($_SESSION && !$_SESSION["access_key"]) {
-      $_SESSION["access_key"] = JWT::encode($data, JWT_SECRET_KEY, "RS256");
+    if (self::isSession() && !isset($_SESSION["access_key"])) {
+
+      ob_start();
+      require ROOT . "/config/env/privatekey.pem";
+      $key = ob_get_contents();
+      ob_end_clean();
+
+      $issuedAt = time();
+      $payload = [
+        "iss" => "lienapi",
+        "aud" => "lienapi",
+        "iat" => $issuedAt,
+        "nbf" => $issuedAt,
+        "data" => [
+          "une" => "superdata",
+        ]
+      ];
+
+      self::$accessKey = \Firebase\JWT\JWT::encode($payload, $key, "RS256");
+      $_SESSION["access_key"] = self::$accessKey;
     }
   }
 
@@ -88,7 +70,7 @@ class Auth
 
   public static function setDeleteToken()
   {
-    if ($_SESSION && !$_SESSION["delete_key"]) {
+    if (self::isSession() && isset($_SESSION["delete_key"])) {
       $_SESSION["delete_key"] = bin2hex(random_bytes(32));
     }
   }

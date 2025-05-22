@@ -16,3 +16,8 @@ define("PAGE_LIST", [
 ]);
 
 define("JWT_SECRET_KEY", "tropbetepourtrouver");
+
+define("VENDORS", [
+  "Firebase\JWT\JWT" => ROOT . "\\vendor\\firebase\php-jwt\src\JWT.php",
+  "Firebase\JWT\Key" => ROOT . "\\vendor\\firebase\php-jwt\src\Key.php"
+]);

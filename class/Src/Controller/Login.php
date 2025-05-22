@@ -7,11 +7,6 @@ class Login extends \Src\Controller\Controller
 
   private $auth;
 
-  public function __construct()
-  {
-    $this->auth = new \Src\Api\Auth();
-  }
-
   public function dispatch(bool $isApi)
   {
 
@@ -21,7 +16,7 @@ class Login extends \Src\Controller\Controller
       http_response_code(200);
 
       if (!empty($data["email"] && !empty($data["password"]))) {
-        $this->auth->clientAuth($data);
+        \Src\Controller\Auth::apiAuth($data);
       }
 
     } else {
@@ -29,26 +24,22 @@ class Login extends \Src\Controller\Controller
       // TODO problème de connexion au back office
       if (isset($_POST["email"]) && isset($_POST["password"])) {
         // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
-        $this->checkAuth($_POST["email"], $_POST["password"]);
+
+        $res = \Src\Controller\Auth::auth($_POST["email"], $_POST["password"]);
+
+        if ($res["success"]) {
+
+          \Src\App::redirect("profile");
+
+        } else {
+
+          return $res;
+        }
       } else {
         require ROOT . "/pages/login.php";
       }
 
     }
 
-  }
-
-  public function checkAuth(string $email, string $pwd)
-  {
-    $res = $this->auth->tryLogin($email, $pwd);
-
-    if ($res["success"]) {
-
-      \Src\App::redirect("profile");
-
-    } else {
-
-      return $res;
-    }
   }
 }

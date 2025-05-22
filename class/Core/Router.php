@@ -16,6 +16,9 @@ class Router
   public static function dispatch(string $path): void
   {
 
+    $isApi = false;
+    $isDelete = false;
+
     if (str_starts_with($path, "/api")) {
       $isApi = true;
       $path = substr($path, 4);

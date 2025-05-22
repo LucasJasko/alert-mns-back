@@ -94,6 +94,13 @@ class Database
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function getFieldWhere(string $table, string $target, string $field, $value)
+  {
+    $stmt = $this->db->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
+    $stmt->execute([":" . $field => $value]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
@@ -103,13 +110,22 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getOneWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
+  {
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
+    $stmt->bindValue(":" . $field1, $field1Value);
+    $stmt->bindValue(":" . $field2, $field2Value);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function getFieldWhereAnd(string $table, string $target, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
     $stmt->execute();
-    return $stmt->fetch();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getFieldsWhereAnd(string $table, array $target, string $field1, string $field1Value, string $field2, string $field2Value)
@@ -127,7 +143,7 @@ class Database
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
     $stmt->execute();
-    return $stmt->fetch();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getField(string $table, string $field)
@@ -135,13 +151,6 @@ class Database
     $stmt = $this->db->prepare("SELECT " . $field . " FROM `" . $table . "` ORDER BY " . $field . " ASC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-  }
-
-  public function getFieldWhere(string $table, string $target, string $field, $value)
-  {
-    $stmt = $this->db->prepare("SELECT " . $target . " FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    $stmt->execute([":" . $field => $value]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   public function getFieldsWhere(string $table, array $target, string $field, $value)
