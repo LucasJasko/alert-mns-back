@@ -21,9 +21,7 @@ class Login extends \Src\Controller\Controller
 
     } else {
 
-      // TODO problème de connexion au back office
       if (isset($_POST["email"]) && isset($_POST["password"])) {
-        // TODO Gérer les cas d'utilisateur non admin, rediriger vers login
 
         $res = \Src\Controller\Auth::auth($_POST["email"], $_POST["password"]);
 

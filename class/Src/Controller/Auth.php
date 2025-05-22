@@ -14,11 +14,10 @@ class Auth extends \Core\Controller\Auth
       $pwd = htmlspecialchars($data["password"]);
 
       $db = \Src\App::db();
-      $res = $db->getFieldsWhereAnd("profile", ["role_id", "profile_password"], "profile_mail", $email, "profile_password", $pwd);
+      $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
     }
 
-    // TODO password_verify($res, $res["profile_password"]);
-    if ($res && $pwd == $res["profile_password"]) {
+    if ($res && password_verify($pwd, $res["profile_password"])) {
 
       if (self::isSession()) {
         session_unset();
@@ -26,7 +25,9 @@ class Auth extends \Core\Controller\Auth
       }
 
       self::initSession();
-      $_SESSION["logged"] = "OK";
+      self::setAccessToken($res);
+      self::setDeleteToken();
+
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
       $res = [
         'success' => true,

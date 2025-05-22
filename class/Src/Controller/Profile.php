@@ -31,7 +31,6 @@ class Profile extends \Src\Controller\Controller
     } else {
 
       if ($_POST) {
-        // TODO message d'erreur lors de l'ajout d'une situation de profile
         $this->submitData($_POST);
       }
 
