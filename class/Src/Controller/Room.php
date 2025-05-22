@@ -41,7 +41,6 @@ class Room extends \Src\Controller\Controller
 
   public function submitData(array $data)
   {
-    // var_dump($data);
     if (empty($data["room_id"]) || $data["room_id"] == "0") {
       $data["room_id"] = $this->getAvailableId("room", "room_id");
 

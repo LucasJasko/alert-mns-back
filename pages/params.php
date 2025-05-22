@@ -43,6 +43,7 @@
   </main>
 
   <input type="text" class="target" value="Paramétrages" hidden>
+
   <script src="js/index.js"></script>
   <script src="js/params.js"></script>
 </body>
