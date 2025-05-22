@@ -24,11 +24,13 @@ class Profile extends \Src\Controller\Controller
   public function dispatch($id = null, bool $isApi = false, $isDelete = false)
   {
 
-    \Core\Controller\Auth::protect();
-
     if ($isApi) {
+
       echo json_encode($this->modelData($id, "profile"));
+
     } else {
+
+      \Core\Controller\Auth::protect();
 
       if ($_POST) {
         $this->submitData($_POST);
