@@ -10,6 +10,7 @@ class Auth
   {
     self::initSession();
 
+
     if (!isset($_SESSION["access_key"])) {
       \Src\App::redirect("login");
       exit();
@@ -70,7 +71,7 @@ class Auth
 
   public static function setDeleteToken()
   {
-    if (self::isSession() && isset($_SESSION["delete_key"])) {
+    if (self::isSession() && !isset($_SESSION["delete_key"])) {
       $_SESSION["delete_key"] = bin2hex(random_bytes(32));
     }
   }
