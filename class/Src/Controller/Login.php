@@ -33,7 +33,9 @@ class Login extends \Src\Controller\Controller
 
         } else {
 
-          return $res;
+          $err = $res["message"];
+          require ROOT . "/pages/login.php";
+
         }
       } else {
         require ROOT . "/pages/login.php";

@@ -76,6 +76,8 @@ abstract class Controller extends \Core\Controller\Controller
     $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos, $linkedId);
     $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
 
+    $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
+
     if (array_key_exists("profile_id", $fieldsOfTable)) {
       $fieldsOfTable["situation_id"] = [["" => ""]];
     }

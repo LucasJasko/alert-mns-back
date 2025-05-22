@@ -1,5 +1,3 @@
-<?php $err = null; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,8 +17,7 @@
       <input type="text" name="email" placeholder="email">
       <input type="password" name="password" placeholder="password">
       <input class="valid-button" type="submit" value="Connexion"> <br>
-      <?php if (!is_null($err))
-        echo $err; ?>
+      <?= isset($err) ? $err : "" ?>
     </form>
   </div>
 

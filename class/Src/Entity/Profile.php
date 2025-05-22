@@ -150,7 +150,7 @@ class Profile extends \Src\Model\Model
   }
   public function setPassword(string $password)
   {
-    $this->password = password_hash(htmlspecialchars($password), PASSWORD_DEFAULT);
+    $this->password = htmlspecialchars($password);
   }
   public function setPicture(string|null $picture)
   {

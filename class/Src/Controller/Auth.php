@@ -3,7 +3,6 @@
 namespace Src\Controller;
 
 use \Core\Service\Log;
-// TODO Intégrer hors autoloader le jwt car pas possible de lire en dehors du dossier class
 
 class Auth extends \Core\Controller\Auth
 {
@@ -47,10 +46,9 @@ class Auth extends \Core\Controller\Auth
   public static function auth(string $email, string $pwd)
   {
     $db = \Src\App::db();
-    $res = $db->getFieldsWhereAnd("profile", ["role_id", "profile_password", "profile_name", "profile_surname"], "profile_mail", $email, "profile_password", $pwd);
+    $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
 
-    // TODO password_verify($res, $res["profile_password"]);
-    if ($res && $pwd == $res["profile_password"]) {
+    if ($res && password_verify($pwd, $res["profile_password"])) {
 
       if ($res["role_id"] == 1) {
 
@@ -68,7 +66,7 @@ class Auth extends \Core\Controller\Auth
       } else {
         $response = [
           'success' => false,
-          'message' => "Vous n'etes pas autorisé à vous connecter."
+          'message' => "Échec de la connexion : Vous n'etes pas autorisé à vous connecter."
         ];
       }
 
