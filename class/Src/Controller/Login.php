@@ -5,8 +5,6 @@ namespace Src\Controller;
 class Login extends \Src\Controller\Controller
 {
 
-  private $auth;
-
   public function dispatch(bool $isApi)
   {
 
@@ -16,7 +14,9 @@ class Login extends \Src\Controller\Controller
       http_response_code(200);
 
       if (!empty($data["email"] && !empty($data["password"]))) {
-        \Src\Controller\Auth::apiAuth($data);
+        $apiAuth = new \Src\Api\Auth();
+        $apiAuth->apiAuth($data);
+
       }
 
     } else {

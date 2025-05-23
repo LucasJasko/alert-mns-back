@@ -20,3 +20,5 @@ Il nécessite aussi les programmes tiers suivant:
 - Composer
 - OpenSSL
 - Perl
+
+TODO voir pourquoi pas possible de définir une clé en auto incrément sur certaines tables de la bdd

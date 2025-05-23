@@ -67,6 +67,11 @@ Router::add("/stats", function ($isApi = false) {
   $controller->dispatch();
 });
 
+Router::add("/auth", function ($isApi = true, $apiKey) {
+  $apiAuth = new \Src\Api\Auth();
+  $apiAuth->dispatch($isApi, $apiKey);
+});
+
 Router::add("/error", function ($isApi = false) {
   require_once "../pages/error.php";
 });

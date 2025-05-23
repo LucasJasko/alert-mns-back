@@ -7,47 +7,6 @@ use \Core\Service\Log;
 class Auth extends \Core\Controller\Auth
 {
 
-  public static function apiAuth($data)
-  {
-    if ($data) {
-      $email = htmlspecialchars($data["email"]);
-      $pwd = htmlspecialchars($data["password"]);
-
-      $db = \Src\App::db();
-      $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
-    }
-
-    if ($res && password_verify($pwd, $res["profile_password"])) {
-
-      if (self::isSession()) {
-        session_unset();
-        session_destroy();
-      }
-
-      self::initSession();
-      self::setAccessToken($res);
-      self::setDeleteToken();
-
-      Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
-      $res = [
-        'success' => true,
-        'message' => 'Utilisateur connecté',
-        "data" => [
-          "accessToken" => "Token",
-          "UID" => $res["profile_id"]
-        ]
-      ];
-
-    } else {
-      $res = [
-        'success' => false,
-        'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
-      ];
-    }
-
-    echo json_encode($res);
-  }
-
   public static function auth(string $email, string $pwd)
   {
     $db = \Src\App::db();
@@ -58,7 +17,11 @@ class Auth extends \Core\Controller\Auth
       if ($res["role_id"] == 1) {
 
         self::initSession();
-        self::setAccessToken($res);
+
+        if (!isset($_SESSION["access_key"])) {
+          $_SESSION["access_key"] = self::setAccessToken($res);
+        }
+
         self::setDeleteToken();
 
         $response = [
