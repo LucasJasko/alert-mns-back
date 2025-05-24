@@ -15,7 +15,7 @@ class Room extends \Src\Controller\Controller
     $this->formInfos = RoomModel::formInfos();
   }
 
-  public function dispatch($group_id, $room_id, bool $isApi = false, bool $isDelete = false)
+  public function dispatch($group_id, $room_id, $del, bool $isApi = false)
   {
 
     if ($isApi) {
@@ -28,8 +28,12 @@ class Room extends \Src\Controller\Controller
       }
 
       if ($room_id != 0) {
-        if ($isDelete) {
-          $res = $this->delete("room", "room_id", $room_id);
+
+        $room = new RoomModel($room_id);
+
+        if ($del == $_SESSION["delete_key"]) {
+
+          $res = $room->deleteModel();
 
           if ($res) {
             \Src\App::redirect("error");

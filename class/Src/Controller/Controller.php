@@ -88,9 +88,4 @@ abstract class Controller extends \Core\Controller\Controller
 
     return $form->getEmptyForm($fieldsOfTable, [$modelName . "_id"]);
   }
-
-  public function delete(string $table, string $field, int $id)
-  {
-    return $this->db->deleteOne($table, $field, $id);
-  }
 }

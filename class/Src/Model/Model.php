@@ -50,10 +50,14 @@ abstract class Model
     $this->db->updateOne($this->tableName, $newData, $this->searchField, $id);
   }
 
-  public function deleteModel(int $id)
+  public function deleteModel()
   {
-    $this->db->deleteOne($this->tableName, $this->searchField, $id);
-    // \core\Log::writeLog("Le groupe " . $id . " a été supprimé de la base de donnée.");
+    try {
+      $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
+      // \core\Log::writeLog("Le groupe " . $id . " a été supprimé de la base de donnée.");
+    } catch (\PDOException $e) {
+      return $e;
+    }
   }
 
 

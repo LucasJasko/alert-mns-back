@@ -11,7 +11,7 @@ class Stats extends \Src\Controller\Controller
 
   public function dispatch()
   {
-    \Core\Controller\Auth::protect();
+    \Src\Controller\Auth::protect();
     $this->getView();
   }
 

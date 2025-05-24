@@ -10,8 +10,9 @@ class Login extends \Src\Controller\Controller
 
     if ($isApi) {
 
+      // TODO voir pourquoi php génère un phpsessid dans les cookies
+
       $data = \Src\App::clientData();
-      http_response_code(200);
 
       if (!empty($data["email"] && !empty($data["password"]))) {
         $apiAuth = new \Src\Api\Auth();

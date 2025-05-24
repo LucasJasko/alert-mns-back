@@ -17,20 +17,10 @@ class Router
   {
 
     $isApi = false;
-    $isDelete = false;
 
     if (str_starts_with($path, "/api")) {
       $isApi = true;
       $path = substr($path, 4);
-    }
-
-    Auth::initSession();
-    Auth::setDeleteToken();
-    $sessionDeleteToken = Auth::deleteToken();
-
-    if (str_ends_with($path, "/" . $sessionDeleteToken)) {
-      $isDelete = true;
-      $path = str_replace("/" . $sessionDeleteToken, "", $path);
     }
 
     foreach (self::$routes as $route => $handler) {
@@ -41,13 +31,10 @@ class Router
 
         array_shift($matches);
 
-        if (isset($isApi) && $isApi) {
+        if ($isApi) {
           $matches["isApi"] = $isApi;
         }
 
-        if (isset($isDelete) && $isDelete) {
-          $matches["isDelete"] = $isDelete;
-        }
         call_user_func_array($handler, $matches);
 
         return;

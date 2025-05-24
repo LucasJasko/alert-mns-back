@@ -31,14 +31,24 @@ Router::add("/group", function ($isApi = false) {
   $controller->dispatch();
 });
 
-Router::add("/group/{id}", function ($id, $isApi = false, $isDelete = false) {
+Router::add("/group/{id}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Group();
-  $controller->dispatch($id, $isApi, $isDelete);
+  $controller->dispatch($id, $isApi);
 });
 
-Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi = false, $isDelete = false) {
+Router::add("/group/{id}/{del}", function ($id, $del, $isApi = false) {
+  $controller = new Src\Controller\Group();
+  $controller->dispatch($id, $del, $isApi);
+});
+
+Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi = false) {
   $controller = new Src\Controller\Room();
-  $controller->dispatch($group_id, $room_id, $isApi, $isDelete);
+  $controller->dispatch($group_id, $room_id, $isApi);
+});
+
+Router::add("/room/{group_id}/{room_id}/{del}", function ($group_id, $room_id, $del, $isApi = false) {
+  $controller = new Src\Controller\Room();
+  $controller->dispatch($group_id, $room_id, $del, $isApi);
 });
 
 Router::add("/profile", function ($isApi = false) {
@@ -46,9 +56,14 @@ Router::add("/profile", function ($isApi = false) {
   $controller->dispatch();
 });
 
-Router::add("/profile/{id}", function ($id, $isApi = false, $isDelete = false) {
+Router::add("/profile/{id}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Profile();
-  $controller->dispatch($id, $isApi, $isDelete);
+  $controller->dispatch($id, $isApi);
+});
+
+Router::add("/profile/{id}/{del}", function ($id, $del, $isApi = false) {
+  $controller = new Src\Controller\Profile();
+  $controller->dispatch($id, $del, $isApi);
 });
 
 Router::add("/params", function ($isApi = false) {
@@ -56,10 +71,14 @@ Router::add("/params", function ($isApi = false) {
   $controller->dispatch();
 });
 
-// ATENTION: les routes sont bindé dans l'ordre de leur apparition dans l'URL
-Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false, $isDelete = false) {
+Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
   $controller = new Src\Controller\Params();
-  $controller->dispatch($tab, $id, $isApi, $isDelete);
+  $controller->dispatch($tab, $id, $isApi);
+});
+
+Router::add("/params/{tab}/{id}/{del}", function ($tab, $id, $del, $isApi = false) {
+  $controller = new Src\Controller\Params();
+  $controller->dispatch($tab, $id, $del, $isApi);
 });
 
 Router::add("/stats", function ($isApi = false) {
@@ -67,9 +86,9 @@ Router::add("/stats", function ($isApi = false) {
   $controller->dispatch();
 });
 
-Router::add("/auth", function ($isApi = true, $apiKey) {
+Router::add("/auth", function ($isApi = true) {
   $apiAuth = new \Src\Api\Auth();
-  $apiAuth->dispatch($isApi, $apiKey);
+  $apiAuth->dispatch($isApi);
 });
 
 Router::add("/error", function ($isApi = false) {

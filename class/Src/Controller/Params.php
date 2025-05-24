@@ -61,14 +61,14 @@ class Params extends \Src\Controller\Controller
     }
   }
 
-  public function dispatch($tab = null, $id = null, $isApi = false, $isDelete = false)
+  public function dispatch($tab = null, $id = null, $del = null, $isApi = false)
   {
 
     if ($isApi) {
 
     } else {
 
-      \Core\Controller\Auth::protect();
+      \Src\Controller\Auth::protect();
 
       if ($_POST) {
         $this->submitData($_POST, $_POST["table_name"]);
@@ -76,11 +76,14 @@ class Params extends \Src\Controller\Controller
 
       if (isset($id) && isset($tab)) {
 
+        $modelName = "\Src\Entity\\" . ucfirst($tab);
+        $model = new $modelName($id);
+
         if ($id != 0) {
 
-          if ($isDelete) {
+          if ($del == $_SESSION["delete_key"]) {
 
-            $res = $this->delete($tab, $tab . "_id", $id);
+            $res = $model->deleteModel();
 
             if ($res) {
               \Src\App::redirect("error");

@@ -2,30 +2,8 @@
 
 namespace Core\Controller;
 
-class Auth
+abstract class Auth
 {
-
-  public static function protect()
-  {
-    self::initSession();
-
-    if (!isset($_SESSION["access_key"])) {
-      \Src\App::redirect("login");
-      exit();
-    }
-
-    ob_start();
-    require ROOT . "/config/env/publickey.crt";
-    $key = ob_get_contents();
-    ob_end_clean();
-
-    try {
-      $decoded = \Firebase\JWT\JWT::decode($_SESSION["access_key"], new \Firebase\JWT\Key($key, "RS256"));
-    } catch (\Exception $e) {
-      \Src\App::redirect("login");
-      exit();
-    }
-  }
   public static function initSession()
   {
     self::isSession() ? "" : session_start();
@@ -34,17 +12,14 @@ class Auth
   {
     return session_status() == 2 ? true : false;
   }
-  public static function setDeleteToken()
+  public static function generateDeleteToken()
   {
-    if (self::isSession() && !isset($_SESSION["delete_key"])) {
-      $_SESSION["delete_key"] = bin2hex(random_bytes(32));
-    }
+    return bin2hex(random_bytes(32));
   }
-  public static function deleteToken()
+  public static function sessionDeleteToken()
   {
     return isset($_SESSION["delete_key"]) ? $_SESSION["delete_key"] : "";
   }
-
   public static function setAccessToken(array $data)
   {
 
@@ -67,4 +42,5 @@ class Auth
     return \Firebase\JWT\JWT::encode($payload, $key, "RS256");
 
   }
+
 }

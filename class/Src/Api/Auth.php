@@ -8,10 +8,13 @@ class Auth extends \Core\Controller\Auth
 {
   private $accessKey;
 
-  public function dispatch($isApi, $apiKey)
+  public function dispatch($isApi)
   {
 
-    $this->setAccessKey($apiKey);
+    http_response_code(200);
+    $data = \Src\App::clientData();
+
+    $this->setAccessKey($data);
 
     if ($isApi) {
 
@@ -27,6 +30,7 @@ class Auth extends \Core\Controller\Auth
   {
 
     if (!isset($this->accessKey)) {
+      http_response_code(401);
       echo json_encode("erreur, accessToken non défini coté serveur");
       exit();
     }
@@ -63,10 +67,11 @@ class Auth extends \Core\Controller\Auth
         'message' => 'Utilisateur connecté',
         "data" => [
           "accessToken" => self::setAccessToken($res),
-          "deleteToken" => self::setDeleteToken(),
+          "deleteToken" => self::generateDeleteToken(),
           "UID" => $res["profile_id"]
         ]
       ];
+      $this->setHttpCookie($res["data"]["accessToken"]);
 
     } else {
       $res = [
@@ -85,14 +90,15 @@ class Auth extends \Core\Controller\Auth
 
   public function setHttpCookie($apiKey)
   {
+    //  TODO configurer le front et le back pour correspondre au même sous-domaine (par exemple alert-mns et api.alert-mns) et ainsi pouvoir utiliser sameSite en Stric
     setcookie(
       "auth_key",
       $apiKey,
       [
-        "expires" => time() + 3600,
+        "expires" => time() + 900,
         "path" => "/",                     // Chemin
-        "domain" => "tondomaine.com",     // (laisser vide en local)
-        "secure" => false,                 // true pour HTTPS
+        "domain" => "",     // (laisser vide en local)
+        "secure" => true,                 // true pour HTTPS
         "httponly" => true,               // Inaccessible depuis JS
         "samesite" => "Strict"            // Pour éviter CSRF
       ]

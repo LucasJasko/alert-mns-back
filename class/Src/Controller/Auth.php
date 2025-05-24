@@ -7,6 +7,28 @@ use \Core\Service\Log;
 class Auth extends \Core\Controller\Auth
 {
 
+  public static function protect()
+  {
+    self::initSession();
+
+    if (!isset($_SESSION["access_key"])) {
+      \Src\App::redirect("login");
+      exit();
+    }
+
+    ob_start();
+    require ROOT . "/config/env/publickey.crt";
+    $key = ob_get_contents();
+    ob_end_clean();
+
+    try {
+      $decoded = \Firebase\JWT\JWT::decode($_SESSION["access_key"], new \Firebase\JWT\Key($key, "RS256"));
+    } catch (\Exception $e) {
+      \Src\App::redirect("login");
+      exit();
+    }
+  }
+
   public static function auth(string $email, string $pwd)
   {
     $db = \Src\App::db();
@@ -22,7 +44,9 @@ class Auth extends \Core\Controller\Auth
           $_SESSION["access_key"] = self::setAccessToken($res);
         }
 
-        self::setDeleteToken();
+        if (!isset($_SESSION["delete_key"])) {
+          $_SESSION["delete_key"] = self::generateDeleteToken();
+        }
 
         $response = [
           'success' => true,

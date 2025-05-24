@@ -19,14 +19,14 @@ class Group extends \Src\Controller\Controller
     $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
-  public function dispatch($id = null, bool $isApi = false, bool $isDelete = false)
+  public function dispatch($id = null, $del = null, bool $isApi = false)
   {
 
     if ($isApi) {
 
     } else {
 
-      \Core\Controller\Auth::protect();
+      \Src\Controller\Auth::protect();
 
       if ($_POST) {
         $this->submitData($_POST);
@@ -36,9 +36,11 @@ class Group extends \Src\Controller\Controller
 
         if ($id != 0) {
 
-          if ($isDelete) {
+          $group = new GroupModel($id);
 
-            $res = $this->delete("group", "group_id", $id);
+          if ($del == $_SESSION["delete_key"]) {
+
+            $res = $group->deleteModel();
 
             if ($res) {
               \Src\App::redirect("error");
