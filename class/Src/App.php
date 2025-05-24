@@ -31,9 +31,6 @@ class App
         }
       }
     }
-
-
-
   }
 
   public static function db()

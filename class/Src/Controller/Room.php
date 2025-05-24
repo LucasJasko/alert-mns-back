@@ -19,7 +19,7 @@ class Room extends \Src\Controller\Controller
   {
 
     if ($isApi) {
-
+      // Process API
     } else {
 
       if ($_POST) {

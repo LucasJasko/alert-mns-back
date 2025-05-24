@@ -65,7 +65,7 @@ class Params extends \Src\Controller\Controller
   {
 
     if ($isApi) {
-
+      // Process API
     } else {
 
       \Src\Controller\Auth::protect();

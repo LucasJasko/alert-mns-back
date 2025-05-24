@@ -5,6 +5,8 @@ namespace Src\Entity;
 class Theme extends \Src\Model\Model
 {
 
+  private int $id;
+  private string $name;
   protected static array $formInfos = [
     "form_title" => "Modification du thème",
     "form_fields" => [
@@ -34,7 +36,7 @@ class Theme extends \Src\Model\Model
     $this->searchField = "theme_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -45,6 +47,37 @@ class Theme extends \Src\Model\Model
     }
   }
 
+  public function deleteModel()
+  {
+    try {
+      $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
+      \core\Service\Log::writeLog("Le thème " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+    } catch (\PDOException $e) {
+      return $e;
+    }
+  }
+
+  public function setFormTitle()
+  {
+    self::$formInfos["form_title"] .= $this->name();
+  }
+  public function setId(int $id)
+  {
+    $this->id = $id;
+  }
+  public function setName(string $name)
+  {
+    $this->name = $name;
+  }
+  public function setTableName($tableName)
+  {
+    $this->tableName = $tableName;
+  }
+  public function setSearchField($searchField)
+  {
+    $this->searchField = $searchField;
+  }
+
   public function all()
   {
     return [
@@ -52,7 +85,22 @@ class Theme extends \Src\Model\Model
       "theme_name" => $this->name(),
     ];
   }
-
+  public function id()
+  {
+    return htmlspecialchars($this->id);
+  }
+  public function name()
+  {
+    return htmlspecialchars($this->name);
+  }
+  public function tableName()
+  {
+    return htmlspecialchars($this->tableName);
+  }
+  public function searchField()
+  {
+    return htmlspecialchars($this->searchField);
+  }
   public static function formInfos()
   {
     return self::$formInfos;
@@ -60,9 +108,5 @@ class Theme extends \Src\Model\Model
   public static function dashboardInfos()
   {
     return self::$dashboardInfos;
-  }
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
   }
 }

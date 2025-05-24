@@ -2,14 +2,11 @@
 
 namespace Src\Entity;
 
-class Notif extends \Src\Model\Model
+class Token extends \Src\Model\Model
 {
-  private int $id;
 
-  function __construct($id)
-  {
-    $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
-  }
+  private int $id;
+  private string $value;
 
   public function deleteModel()
   {

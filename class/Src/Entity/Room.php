@@ -5,6 +5,8 @@ namespace Src\Entity;
 class Room extends \Src\Model\Model
 {
 
+  private int $id;
+  private string $name;
   private $state;
   private $type;
   private $group;
@@ -52,7 +54,7 @@ class Room extends \Src\Model\Model
     $this->searchField = "room_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -79,6 +81,32 @@ class Room extends \Src\Model\Model
     }
   }
 
+  public function deleteModel()
+  {
+    try {
+      $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
+      \core\Service\Log::writeLog("Le salon " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+    } catch (\PDOException $e) {
+      return $e;
+    }
+  }
+
+  public function setId(int $id)
+  {
+    $this->id = $id;
+  }
+  public function setName(string $name)
+  {
+    $this->name = $name;
+  }
+  public function setTableName($tableName)
+  {
+    $this->tableName = $tableName;
+  }
+  public function setSearchField($searchField)
+  {
+    $this->searchField = $searchField;
+  }
   public function setState(int $stateID)
   {
     $instance = new State($stateID);
@@ -95,6 +123,7 @@ class Room extends \Src\Model\Model
     $this->group = $instance->name();
   }
 
+
   public function all()
   {
     return [
@@ -105,17 +134,33 @@ class Room extends \Src\Model\Model
       "group_id" => $this->group()
     ];
   }
+  public function id()
+  {
+    return htmlspecialchars($this->id);
+  }
+  public function name()
+  {
+    return htmlspecialchars($this->name);
+  }
+  public function tableName()
+  {
+    return htmlspecialchars($this->tableName);
+  }
+  public function searchField()
+  {
+    return htmlspecialchars($this->searchField);
+  }
   public function state()
   {
-    return $this->state;
+    return htmlspecialchars($this->state);
   }
   public function type()
   {
-    return $this->type;
+    return htmlspecialchars($this->type);
   }
   public function group()
   {
-    return $this->group;
+    return htmlspecialchars($this->group);
   }
   public static function formInfos()
   {

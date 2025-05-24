@@ -9,20 +9,12 @@ abstract class Model
   protected $searchField;
   protected $data;
 
-  protected int $id;
-  protected string $name;
-
   public function initdb(string $tableName, string $searchField)
   {
     $this->db = \Src\App::db();
 
     $this->searchField = $searchField;
     $this->tableName = $tableName;
-  }
-
-  public function getDBModel(int $id)
-  {
-    return $this->db->getOneWhere($this->tableName, $this->searchField, $id);
   }
 
   public function createNewModel(string $table, array $data)
@@ -50,16 +42,6 @@ abstract class Model
     $this->db->updateOne($this->tableName, $newData, $this->searchField, $id);
   }
 
-  public function deleteModel()
-  {
-    try {
-      $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      // \core\Log::writeLog("Le groupe " . $id . " a été supprimé de la base de donnée.");
-    } catch (\PDOException $e) {
-      return $e;
-    }
-  }
-
 
   protected function hydrate($row, $table)
   {
@@ -69,39 +51,5 @@ abstract class Model
         $this->{$method}($value);
       }
     }
-  }
-
-  public function setId(int $id)
-  {
-    $this->id = $id;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
-  public function setTableName($tableName)
-  {
-    $this->tableName = $tableName;
-  }
-  public function setSearchField($searchField)
-  {
-    $this->searchField = $searchField;
-  }
-
-  public function id()
-  {
-    return htmlspecialchars($this->id);
-  }
-  public function name()
-  {
-    return htmlspecialchars($this->name);
-  }
-  public function tableName()
-  {
-    return htmlspecialchars($this->tableName);
-  }
-  public function searchField()
-  {
-    return htmlspecialchars($this->searchField);
   }
 }

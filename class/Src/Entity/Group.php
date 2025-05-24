@@ -4,9 +4,11 @@ namespace Src\Entity;
 
 class Group extends \Src\Model\Model
 {
+  private int $id;
+  private string $name;
   private $state;
   private $type;
-  private $room;
+  private array $room;
 
   protected static array $formInfos = [
     "form_title" => "Modification du groupe ",
@@ -57,7 +59,7 @@ class Group extends \Src\Model\Model
     $this->searchField = "group_id";
 
     $this->initdb($this->tableName, $this->searchField);
-    $row = $this->getDBModel($id);
+    $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
 
     if ($row) {
       if (count($row) != 0) {
@@ -82,6 +84,16 @@ class Group extends \Src\Model\Model
       }
     }
     $this->setRoom($this->id);
+  }
+
+  public function deleteModel()
+  {
+    try {
+      $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
+      \core\Service\Log::writeLog("Le groupe " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+    } catch (\PDOException $e) {
+      return $e;
+    }
   }
 
   public function all()
@@ -110,18 +122,25 @@ class Group extends \Src\Model\Model
     $res = $this->db->getAllWhere("room", "group_id", $groupID);
     $this->room = $res;
   }
-
-  public function state()
+  public function setFormTitle()
   {
-    return $this->state;
+    self::$formInfos["form_title"] .= $this->name();
   }
-  public function type()
+  public function setId(int $id)
   {
-    return $this->type;
+    $this->id = $id;
   }
-  public function room()
+  public function setName(string $name)
   {
-    return $this->room;
+    $this->name = $name;
+  }
+  public function setTableName($tableName)
+  {
+    $this->tableName = $tableName;
+  }
+  public function setSearchField($searchField)
+  {
+    $this->searchField = $searchField;
   }
 
   public static function formInfos()
@@ -132,8 +151,33 @@ class Group extends \Src\Model\Model
   {
     return self::$dashboardInfos;
   }
-  public function setFormTitle()
+  public function id()
   {
-    self::$formInfos["form_title"] .= $this->name();
+    return htmlspecialchars($this->id);
   }
+  public function name()
+  {
+    return htmlspecialchars($this->name);
+  }
+  public function tableName()
+  {
+    return htmlspecialchars($this->tableName);
+  }
+  public function searchField()
+  {
+    return htmlspecialchars($this->searchField);
+  }
+  public function state()
+  {
+    return htmlspecialchars($this->state);
+  }
+  public function type()
+  {
+    return htmlspecialchars($this->type);
+  }
+  public function room()
+  {
+    return $this->room;
+  }
+
 }

@@ -14,7 +14,7 @@ class Auth extends \Core\Controller\Auth
     http_response_code(200);
     $data = \Src\App::clientData();
 
-    $this->setAccessKey($data);
+    $this->accessKey = $data;
 
     if ($isApi) {
 
@@ -48,16 +48,10 @@ class Auth extends \Core\Controller\Auth
     }
   }
 
-  public function apiAuth($data)
+  public function apiAuth($email, $pwd)
   {
-
-    if ($data) {
-      $email = htmlspecialchars($data["email"]);
-      $pwd = htmlspecialchars($data["password"]);
-
-      $db = \Src\App::db();
-      $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
-    }
+    $db = \Src\App::db();
+    $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
 
     if ($res && password_verify($pwd, $res["profile_password"])) {
 
@@ -71,7 +65,8 @@ class Auth extends \Core\Controller\Auth
           "UID" => $res["profile_id"]
         ]
       ];
-      $this->setHttpCookie($res["data"]["accessToken"]);
+      //  TODO configurer le front et le back pour correspondre au même sous-domaine (par exemple alert-mns et api.alert-mns) et ainsi pouvoir utiliser sameSite en Stric
+      $this->setHttpOnlyCookie("auth_key", $res["data"]["accessToken"]);
 
     } else {
       $res = [
@@ -83,17 +78,11 @@ class Auth extends \Core\Controller\Auth
     echo json_encode($res);
   }
 
-  public function setAccessKey($accessKey)
+  public function setHttpOnlyCookie($name, $value)
   {
-    $this->accessKey = $accessKey;
-  }
-
-  public function setHttpCookie($apiKey)
-  {
-    //  TODO configurer le front et le back pour correspondre au même sous-domaine (par exemple alert-mns et api.alert-mns) et ainsi pouvoir utiliser sameSite en Stric
     setcookie(
-      "auth_key",
-      $apiKey,
+      $name,
+      $value,
       [
         "expires" => time() + 900,
         "path" => "/",                     // Chemin
@@ -104,4 +93,22 @@ class Auth extends \Core\Controller\Auth
       ]
     );
   }
+
+  public function setClientCookie($name, $value)
+  {
+    setcookie(
+      $name,
+      $value,
+      [
+        "expires" => time() + 900,
+        "path" => "/",                     // Chemin
+        "domain" => "",     // (laisser vide en local)
+        "secure" => true,                 // true pour HTTPS
+        "httponly" => false,               // accessible depuis JS
+        "samesite" => "Strict"            // Pour éviter CSRF
+      ]
+    );
+  }
+
+
 }
