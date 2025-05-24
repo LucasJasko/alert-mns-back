@@ -41,8 +41,6 @@ class Auth extends \Core\Controller\Auth
     $db = \Src\App::db();
 
     if ($res = $db->getFieldWhere("token", "token_value", "profile_id", $this->id)) {
-      var_dump($res);
-      var_dump($_COOKIE);
       // $unhash = password_verify($res["token_value"]);
 
       // $decoded = \Firebase\JWT\JWT::decode($this->accessKey, new \Firebase\JWT\Key($unhash, "RS256"));
@@ -75,6 +73,12 @@ class Auth extends \Core\Controller\Auth
 
       $refreshToken = password_hash(self::newJWToken($res), PASSWORD_DEFAULT);
       $accessToken = self::newJWToken($res);
+
+      $oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
+
+      if ($oldToken) {
+        $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
+      }
 
       $token = new \Src\Entity\Token();
       $token->createNewModel("token", [
