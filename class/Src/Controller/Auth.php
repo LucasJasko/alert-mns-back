@@ -9,6 +9,8 @@ class Auth extends \Core\Controller\Auth
 
   public static function protect()
   {
+
+    // ICI AUSSI LE BUT EST DE SAVOIR SI UN REFRESH TOKEN EXISTE EN BASE
     self::initSession();
 
     if (!isset($_SESSION["access_key"])) {
@@ -41,7 +43,7 @@ class Auth extends \Core\Controller\Auth
         self::initSession();
 
         if (!isset($_SESSION["access_key"])) {
-          $_SESSION["access_key"] = self::setAccessToken($res);
+          $_SESSION["access_key"] = self::newJWToken($res);
         }
 
         if (!isset($_SESSION["delete_key"])) {

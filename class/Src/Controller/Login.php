@@ -11,13 +11,14 @@ class Login extends \Src\Controller\Controller
     if ($isApi) {
 
       // TODO voir pourquoi php génère un phpsessid dans les cookies
+      // TODO trouver un moyen d'effectuer une suppression côté client car actuellement, seulemenet possible côté back
+      // TODO voir ce que sont les private state token dans DevTool
 
       $data = \Src\App::clientData();
 
       if (!empty($data["email"] && !empty($data["password"]))) {
         $apiAuth = new \Src\Api\Auth();
         $apiAuth->apiAuth($data["email"], $data["password"]);
-
       }
 
     } else {

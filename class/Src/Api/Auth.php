@@ -7,34 +7,53 @@ use \Core\Service\Log;
 class Auth extends \Core\Controller\Auth
 {
   private $accessKey;
+  private $id;
 
   public function dispatch($isApi)
   {
 
-    http_response_code(200);
-    $data = \Src\App::clientData();
-
-    $this->accessKey = $data;
 
     if ($isApi) {
 
+      http_response_code(200);
       $this->apiProtect();
 
     } else {
-      echo "Chemin inconnu";
+      http_response_code(401);
     }
 
   }
 
   public function apiProtect()
   {
+    $data = \Src\App::clientData();
+
+    var_dump($data);
+
+    $this->accessKey = $data["access_key"];
+    $this->id = $data["id"];
 
     if (!isset($this->accessKey)) {
-      http_response_code(401);
-      echo json_encode("erreur, accessToken non défini coté serveur");
+      echo json_encode("erreur, accessToken non défini.");
       exit();
     }
 
+    $db = \Src\App::db();
+
+    if ($res = $db->getFieldWhere("token", "token_value", "profile_id", $this->id)) {
+      var_dump($res);
+      var_dump($_COOKIE);
+      // $unhash = password_verify($res["token_value"]);
+
+      // $decoded = \Firebase\JWT\JWT::decode($this->accessKey, new \Firebase\JWT\Key($unhash, "RS256"));
+      // var_dump($decoded);
+    }
+
+
+  }
+
+  public function decode()
+  {
     ob_start();
     require ROOT . "/config/env/publickey.crt";
     $key = ob_get_contents();
@@ -42,9 +61,8 @@ class Auth extends \Core\Controller\Auth
 
     try {
       $decoded = \Firebase\JWT\JWT::decode($this->accessKey, new \Firebase\JWT\Key($key, "RS256"));
+      var_dump($decoded);
     } catch (\Exception $e) {
-      echo json_encode("erreur: " . $e);
-      exit();
     }
   }
 
@@ -55,18 +73,33 @@ class Auth extends \Core\Controller\Auth
 
     if ($res && password_verify($pwd, $res["profile_password"])) {
 
+      $refreshToken = password_hash(self::newJWToken($res), PASSWORD_DEFAULT);
+      $accessToken = self::newJWToken($res);
+
+      $token = new \Src\Entity\Token();
+      $token->createNewModel("token", [
+        "token_value" => $refreshToken,
+        "token_expiration_time" => time() + 2592000, // 30 jours
+        "token_creation_time" => time(),
+        "token_user_agent" => $_SERVER["HTTP_USER_AGENT"],
+        "profile_id" => $res["profile_id"],
+      ]);
+      // TODO faire une fonction de comparaison du temps actuel avec les temps d'expiration des token de la table token, et supprimé ceux expirés
+
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+
       $res = [
         'success' => true,
         'message' => 'Utilisateur connecté',
         "data" => [
-          "accessToken" => self::setAccessToken($res),
+          "accessToken" => $accessToken,
           "deleteToken" => self::generateDeleteToken(),
           "UID" => $res["profile_id"]
         ]
       ];
       //  TODO configurer le front et le back pour correspondre au même sous-domaine (par exemple alert-mns et api.alert-mns) et ainsi pouvoir utiliser sameSite en Stric
-      $this->setHttpOnlyCookie("auth_key", $res["data"]["accessToken"]);
+      $this->setClientCookie("access_key", $accessToken);
+      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
 
     } else {
       $res = [
@@ -84,12 +117,12 @@ class Auth extends \Core\Controller\Auth
       $name,
       $value,
       [
-        "expires" => time() + 900,
-        "path" => "/",                     // Chemin
-        "domain" => "",     // (laisser vide en local)
-        "secure" => true,                 // true pour HTTPS
-        "httponly" => true,               // Inaccessible depuis JS
-        "samesite" => "Strict"            // Pour éviter CSRF
+        "expires" => time() + 2592000,
+        "path" => "/",
+        "domain" => "alert-mns-back",
+        "secure" => false,
+        "httponly" => true,
+        "samesite" => "Strict",
       ]
     );
   }
@@ -100,12 +133,12 @@ class Auth extends \Core\Controller\Auth
       $name,
       $value,
       [
-        "expires" => time() + 900,
-        "path" => "/",                     // Chemin
-        "domain" => "",     // (laisser vide en local)
-        "secure" => true,                 // true pour HTTPS
-        "httponly" => false,               // accessible depuis JS
-        "samesite" => "Strict"            // Pour éviter CSRF
+        "expires" => time() + 2592000,
+        "path" => "/",
+        "domain" => "alert-mns-back",
+        "secure" => false,
+        "httponly" => false,
+        "samesite" => "Strict",
       ]
     );
   }

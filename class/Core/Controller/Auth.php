@@ -20,7 +20,7 @@ abstract class Auth
   {
     return isset($_SESSION["delete_key"]) ? $_SESSION["delete_key"] : "";
   }
-  public static function setAccessToken(array $data)
+  public static function newJWToken(array $data)
   {
 
     ob_start();
@@ -34,9 +34,7 @@ abstract class Auth
       "aud" => "lienapi",
       "iat" => $issuedAt,
       "nbf" => $issuedAt,
-      "data" => [
-        "une" => "superdata",
-      ]
+      "data" => $data
     ];
 
     return \Firebase\JWT\JWT::encode($payload, $key, "RS256");
