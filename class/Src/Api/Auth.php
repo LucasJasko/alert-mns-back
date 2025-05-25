@@ -6,51 +6,56 @@ use \Core\Service\Log;
 
 class Auth extends \Core\Controller\Auth
 {
-  private $accessKey;
   private $id;
 
   public function dispatch($isApi)
   {
 
-
     if ($isApi) {
 
-      http_response_code(200);
       $this->apiProtect();
 
     } else {
-      http_response_code(401);
+      http_response_code(403);
     }
 
   }
 
   public function apiProtect()
   {
-    $data = \Src\App::clientData();
+    if (isset($_COOKIE["refresh_key"])) {
 
-    var_dump($data);
+      http_response_code(200);
+      $refreshKey = $this->decode($_COOKIE["refresh_key"]);
 
-    $this->accessKey = $data["access_key"];
-    $this->id = $data["id"];
+      $id = $refreshKey->data->profile_id;
 
-    if (!isset($this->accessKey)) {
-      echo json_encode("erreur, accessToken non défini.");
-      exit();
+      $db = \Src\App::db();
+
+      if ($res = $db->getMultipleWhere("token", ["token_value", "profile_id"], "profile_id", $id)) {
+
+        if (password_verify($_COOKIE["refresh_key"], $res["token_value"])) {
+
+          $response = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_id", $res["profile_id"]);
+
+          echo json_encode([
+            "accessToken" => self::newJWToken($response),
+            "UID" => $res["profile_id"],
+            "deleteToken" => self::generateDeleteToken(),
+          ]);
+        }
+      }
+
+    } else {
+      if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+        http_response_code(204);
+      } else {
+        http_response_code(403);
+      }
     }
-
-    $db = \Src\App::db();
-
-    if ($res = $db->getFieldWhere("token", "token_value", "profile_id", $this->id)) {
-      // $unhash = password_verify($res["token_value"]);
-
-      // $decoded = \Firebase\JWT\JWT::decode($this->accessKey, new \Firebase\JWT\Key($unhash, "RS256"));
-      // var_dump($decoded);
-    }
-
-
   }
 
-  public function decode()
+  public function decode($jwt)
   {
     ob_start();
     require ROOT . "/config/env/publickey.crt";
@@ -58,9 +63,9 @@ class Auth extends \Core\Controller\Auth
     ob_end_clean();
 
     try {
-      $decoded = \Firebase\JWT\JWT::decode($this->accessKey, new \Firebase\JWT\Key($key, "RS256"));
-      var_dump($decoded);
+      return \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($key, "RS256"));
     } catch (\Exception $e) {
+      return $e;
     }
   }
 
@@ -71,39 +76,31 @@ class Auth extends \Core\Controller\Auth
 
     if ($res && password_verify($pwd, $res["profile_password"])) {
 
-      $refreshToken = password_hash(self::newJWToken($res), PASSWORD_DEFAULT);
-      $accessToken = self::newJWToken($res);
+      $refreshToken = self::newJWToken($res);
 
       $oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
-
       if ($oldToken) {
         $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
       }
 
       $token = new \Src\Entity\Token();
-      $token->createNewModel("token", [
-        "token_value" => $refreshToken,
-        "token_expiration_time" => time() + 2592000, // 30 jours
-        "token_creation_time" => time(),
-        "token_user_agent" => $_SERVER["HTTP_USER_AGENT"],
-        "profile_id" => $res["profile_id"],
-      ]);
+      $token->createNewToken(password_hash($refreshToken, PASSWORD_DEFAULT), $_SERVER["HTTP_USER_AGENT"], $res["profile_id"]);
+
       // TODO faire une fonction de comparaison du temps actuel avec les temps d'expiration des token de la table token, et supprimé ceux expirés
 
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
+
+      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
 
       $res = [
         'success' => true,
         'message' => 'Utilisateur connecté',
         "data" => [
-          "accessToken" => $accessToken,
+          "accessToken" => self::newJWToken($res),
+          "UID" => $res["profile_id"],
           "deleteToken" => self::generateDeleteToken(),
-          "UID" => $res["profile_id"]
         ]
       ];
-      //  TODO configurer le front et le back pour correspondre au même sous-domaine (par exemple alert-mns et api.alert-mns) et ainsi pouvoir utiliser sameSite en Stric
-      $this->setClientCookie("access_key", $accessToken);
-      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
 
     } else {
       $res = [

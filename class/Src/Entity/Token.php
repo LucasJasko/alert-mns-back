@@ -33,6 +33,17 @@ class Token extends \Src\Model\Model
     }
   }
 
+  public function createNewToken($refreshToken, $serverUserAgent, $resProfileId)
+  {
+    $this->createNewModel("token", [
+      "token_value" => $refreshToken,
+      "token_expiration_time" => time() + 2592000, // 30 jours
+      "token_creation_time" => time(),
+      "token_user_agent" => $serverUserAgent,
+      "profile_id" => $resProfileId,
+    ]);
+  }
+
   public function deleteModel($id)
   {
     try {
