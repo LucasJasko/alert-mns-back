@@ -10,23 +10,6 @@ abstract class Controller extends \Core\Controller\Controller
     parent::__construct();
   }
 
-  public function getAvailableId($table, $field)
-  {
-    $res = $this->db->getField($table, $field);
-    $id = 1;
-    $notFound = true;
-    while ($notFound) {
-      for ($i = 0; $i < count($res); $i++) {
-        if ($id == $res[$i][$field]) {
-          $id += 1;
-        } else {
-          $notFound = false;
-          return $id;
-        }
-      }
-    }
-  }
-
   public function modelData($id, $modelName)
   {
     $modelPath = "Src\Entity\\" . ucfirst($modelName);

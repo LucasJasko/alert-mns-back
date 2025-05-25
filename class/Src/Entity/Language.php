@@ -57,7 +57,14 @@ class Language extends \Src\Model\Model
       return $e;
     }
   }
-
+  public function submitData(array $data)
+  {
+    if (empty($data["language_id"])) {
+      $this->createNewModel("language", $data);
+    } else {
+      $this->updateModel($data["language_id"], $data);
+    }
+  }
   public function setFormTitle()
   {
     self::$formInfos["form_title"] .= $this->name();

@@ -6,14 +6,13 @@ use \Core\Service\Log;
 
 class Auth extends \Core\Controller\Auth
 {
-  private $id;
 
   public function dispatch($isApi)
   {
 
     if ($isApi) {
 
-      $this->apiProtect();
+      $this->newAccessKey();
 
     } else {
       http_response_code(403);
@@ -21,12 +20,12 @@ class Auth extends \Core\Controller\Auth
 
   }
 
-  public function apiProtect()
+  public function newAccessKey()
   {
     if (isset($_COOKIE["refresh_key"])) {
 
       http_response_code(200);
-      $refreshKey = $this->decode($_COOKIE["refresh_key"]);
+      $refreshKey = self::decodeJWT($_COOKIE["refresh_key"]);
 
       $id = $refreshKey->data->profile_id;
 
@@ -52,20 +51,6 @@ class Auth extends \Core\Controller\Auth
       } else {
         http_response_code(403);
       }
-    }
-  }
-
-  public function decode($jwt)
-  {
-    ob_start();
-    require ROOT . "/config/env/publickey.crt";
-    $key = ob_get_contents();
-    ob_end_clean();
-
-    try {
-      return \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($key, "RS256"));
-    } catch (\Exception $e) {
-      return $e;
     }
   }
 

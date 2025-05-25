@@ -31,7 +31,6 @@ abstract class Model
     }
 
     $this->db->createOne($this->tableName, $data, $fields);
-    \Core\Service\Log::writeLog($this->tableName . " a été ajouté à la base de donnée.");
   }
 
   public function updateModel(int $id, array $newData)

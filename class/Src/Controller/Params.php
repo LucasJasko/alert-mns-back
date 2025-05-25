@@ -61,7 +61,7 @@ class Params extends \Src\Controller\Controller
     }
   }
 
-  public function dispatch($tab = null, $id = null, $del = null, $isApi = false)
+  public function dispatch($tab = null, $id = null, $isApi = false)
   {
 
     if ($isApi) {
@@ -70,35 +70,41 @@ class Params extends \Src\Controller\Controller
 
       \Src\Controller\Auth::protect();
 
-      if ($_POST) {
-        $this->submitData($_POST, $_POST["table_name"]);
-      }
-
       if (isset($id) && isset($tab)) {
-
-        $modelName = "\Src\Entity\\" . ucfirst($tab);
-        $model = new $modelName($id);
 
         if ($id != 0) {
 
-          if ($del == $_SESSION["delete_key"]) {
+          $modelName = "\Src\Entity\\" . ucfirst($tab);
+          $model = new $modelName($id);
 
-            $res = $model->deleteModel();
+          if ($_POST) {
 
-            if ($res) {
-              \Src\App::redirect("error");
+            unset($_POST["table_name"]);
+
+            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
+
+              $res = $model->deleteModel();
+
+              if ($res) {
+                \Src\App::redirect("error");
+              }
+              \Src\App::redirect("params");
             }
-            \Src\App::redirect("params");
+
+            $model->submitData($_POST);
 
           } else {
             $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
           }
+
         } else {
           $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
         }
+
       } else {
         $this->getParamsDashboard();
       }
+
     }
   }
 
@@ -118,24 +124,5 @@ class Params extends \Src\Controller\Controller
     $paramsConfig = $this->paramsConfig;
 
     require_once ROOT . "/pages/params.php";
-  }
-
-  public function submitData(array $data, string $tab)
-  {
-    $model = "\Src\Entity\\" . ucfirst($tab);
-    unset($data["table_name"]);
-
-    if (empty($data[$tab . "_id"])) {
-      $availableId = $this->getAvailableId($tab, $tab . "_id");
-      $data[$tab . "_id"] = $availableId;
-
-      $this->paramInstance = new $model($data[$tab . "_id"], $data);
-      $this->paramInstance->createNewModel($tab, $data);
-    } else {
-      $modelId = $data[$tab . "_id"];
-
-      $this->paramInstance = new $model($modelId);
-      $this->paramInstance->updateModel($modelId, $data);
-    }
   }
 }

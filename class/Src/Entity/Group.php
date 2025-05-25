@@ -96,6 +96,15 @@ class Group extends \Src\Model\Model
     }
   }
 
+  public function submitModel(array $data)
+  {
+    if (empty($data["group_id"])) {
+      $this->createNewModel("group", $data);
+    } else {
+      $this->updateModel($data["group_id"], $data);
+    }
+  }
+
   public function all()
   {
     return [

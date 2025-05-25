@@ -58,6 +58,14 @@ class Department extends \Src\Model\Model
       return $e;
     }
   }
+  public function submitData(array $data)
+  {
+    if (empty($data["department_id"])) {
+      $this->createNewModel("department", $data);
+    } else {
+      $this->updateModel($data["department_id"], $data);
+    }
+  }
 
   public function setFormTitle()
   {

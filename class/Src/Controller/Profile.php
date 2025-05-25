@@ -21,20 +21,14 @@ class Profile extends \Src\Controller\Controller
     $this->dashboardInfos = ProfileModel::dashboardInfos();
   }
 
-  public function dispatch($id = null, $del = null, bool $isApi = false)
+  public function dispatch($id = null, bool $isApi = false)
   {
 
     if ($isApi) {
-
-      echo json_encode($this->modelData($id, "profile"));
-
+      // echo json_encode($this->modelData($id, "profile"));
     } else {
 
       \Src\Controller\Auth::protect();
-
-      if ($_POST) {
-        $this->submitData($_POST);
-      }
 
       if (isset($id)) {
 
@@ -42,14 +36,19 @@ class Profile extends \Src\Controller\Controller
 
           $profile = new ProfileModel($id);
 
-          if ($del == $_SESSION["delete_key"]) {
+          if ($_POST) {
 
-            $res = $profile->deleteModel();
+            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
 
-            if ($res) {
-              \Src\App::redirect("error");
+              $res = $profile->deleteModel();
+
+              if ($res) {
+                \Src\App::redirect("error");
+              }
+              \Src\App::redirect("profile");
             }
-            \Src\App::redirect("profile");
+
+            $profile->submitModel($_POST);
 
           } else {
             $this->getModelForm("profile", $id, $this->formInfos);
@@ -60,6 +59,7 @@ class Profile extends \Src\Controller\Controller
       } else {
         $this->getProfileDashboard();
       }
+
     }
   }
 
@@ -76,42 +76,5 @@ class Profile extends \Src\Controller\Controller
     $page = "profile";
 
     require_once ROOT . "/pages/profile.php";
-  }
-
-  public function submitData(array $data)
-  {
-    if (empty($data["profile_id"])) {
-      $availableId = $this->getAvailableId("profile", "profile_id");
-      $data["profile_id"] = $availableId;
-
-      $profileSituation = $this->isolateSituations($data);
-      unset($data["situation_id"]);
-      $this->profileInstance = new ProfileModel($data["profile_id"], $data);
-      $this->profileInstance->createNewModel("profile", $data);
-
-      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
-      $profileSituationInstance->updateSituations($profileSituation);
-    } else {
-
-      $profileSituation = $this->isolateSituations($data);
-      unset($data["situation_id"]);
-      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
-      $profileSituationInstance->updateSituations($profileSituation);
-
-      $this->profileInstance = new ProfileModel($data["profile_id"]);
-      $this->profileInstance->updateModel($data["profile_id"], $data);
-    }
-  }
-
-  private function isolateSituations($data)
-  {
-    $profileSituation = $data["situation_id"];
-    for ($i = 0; $i <= count($profileSituation); $i++) {
-      if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
-        unset($profileSituation[$i]);
-      }
-    }
-
-    return array_unique($profileSituation, SORT_REGULAR);
   }
 }

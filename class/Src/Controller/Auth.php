@@ -9,23 +9,9 @@ class Auth extends \Core\Controller\Auth
 
   public static function protect()
   {
-
-    // ICI AUSSI LE BUT EST DE SAVOIR SI UN REFRESH TOKEN EXISTE EN BASE
     self::initSession();
 
     if (!isset($_SESSION["access_key"])) {
-      \Src\App::redirect("login");
-      exit();
-    }
-
-    ob_start();
-    require ROOT . "/config/env/publickey.crt";
-    $key = ob_get_contents();
-    ob_end_clean();
-
-    try {
-      $decoded = \Firebase\JWT\JWT::decode($_SESSION["access_key"], new \Firebase\JWT\Key($key, "RS256"));
-    } catch (\Exception $e) {
       \Src\App::redirect("login");
       exit();
     }

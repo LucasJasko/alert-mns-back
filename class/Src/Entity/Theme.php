@@ -56,6 +56,14 @@ class Theme extends \Src\Model\Model
       return $e;
     }
   }
+  public function submitData(array $data)
+  {
+    if (empty($data["theme_id"])) {
+      $this->createNewModel("theme", $data);
+    } else {
+      $this->updateModel($data["theme_id"], $data);
+    }
+  }
 
   public function setFormTitle()
   {

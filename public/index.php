@@ -36,9 +36,9 @@ Router::add("/group/{id}", function ($id, $isApi = false) {
   $controller->dispatch($id, $isApi);
 });
 
-Router::add("/group/{id}/{del}", function ($id, $del, $isApi = false) {
+Router::add("/group/{id}/{del}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Group();
-  $controller->dispatch($id, $del, $isApi);
+  $controller->dispatch($id, $isApi);
 });
 
 Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi = false) {
@@ -46,9 +46,9 @@ Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi 
   $controller->dispatch($group_id, $room_id, $isApi);
 });
 
-Router::add("/room/{group_id}/{room_id}/{del}", function ($group_id, $room_id, $del, $isApi = false) {
+Router::add("/room/{group_id}/{room_id}/{del}", function ($group_id, $room_id, $isApi = false) {
   $controller = new Src\Controller\Room();
-  $controller->dispatch($group_id, $room_id, $del, $isApi);
+  $controller->dispatch($group_id, $room_id, $isApi);
 });
 
 Router::add("/profile", function ($isApi = false) {
@@ -61,9 +61,9 @@ Router::add("/profile/{id}", function ($id, $isApi = false) {
   $controller->dispatch($id, $isApi);
 });
 
-Router::add("/profile/{id}/{del}", function ($id, $del, $isApi = false) {
+Router::add("/profile/{id}/{del}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Profile();
-  $controller->dispatch($id, $del, $isApi);
+  $controller->dispatch($id, $isApi);
 });
 
 Router::add("/params", function ($isApi = false) {
@@ -76,9 +76,9 @@ Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
   $controller->dispatch($tab, $id, $isApi);
 });
 
-Router::add("/params/{tab}/{id}/{del}", function ($tab, $id, $del, $isApi = false) {
+Router::add("/params/{tab}/{id}/{del}", function ($tab, $id, $isApi = false) {
   $controller = new Src\Controller\Params();
-  $controller->dispatch($tab, $id, $del, $isApi);
+  $controller->dispatch($tab, $id, $isApi);
 });
 
 Router::add("/stats", function ($isApi = false) {

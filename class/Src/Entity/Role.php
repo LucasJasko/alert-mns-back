@@ -57,6 +57,14 @@ class Role extends \Src\Model\Model
       return $e;
     }
   }
+  public function submitData(array $data)
+  {
+    if (empty($data["role_id"])) {
+      $this->createNewModel("role", $data);
+    } else {
+      $this->updateModel($data["role_id"], $data);
+    }
+  }
 
   public function setFormTitle()
   {

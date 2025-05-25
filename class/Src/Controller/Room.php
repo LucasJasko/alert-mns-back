@@ -51,8 +51,7 @@ class Room extends \Src\Controller\Controller
 
   public function submitData(array $data)
   {
-    if (empty($data["room_id"]) || $data["room_id"] == "0") {
-      $data["room_id"] = $this->getAvailableId("room", "room_id");
+    if (empty($data["room_id"])) {
 
       $this->roomInstance = new RoomModel($data["room_id"], $data);
       $this->roomInstance->createNewModel("room", $data);

@@ -56,6 +56,14 @@ class Post extends \Src\Model\Model
       return $e;
     }
   }
+  public function submitData(array $data)
+  {
+    if (empty($data["post_id"])) {
+      $this->createNewModel("post", $data);
+    } else {
+      $this->updateModel($data["post_id"], $data);
+    }
+  }
 
   public function setFormTitle()
   {

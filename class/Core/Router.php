@@ -2,8 +2,6 @@
 
 namespace Core;
 
-use \Core\Controller\Auth;
-
 class Router
 {
   private static array $routes = [];
@@ -43,7 +41,7 @@ class Router
 
     if (isset($isApi) && $isApi) {
       http_response_code(404);
-      echo json_encode(["message" => "Service introuvable"]);
+      echo json_encode('Service introuvable');
     } else {
       \Src\App::redirect("page404");
     }

@@ -6,7 +6,7 @@ use Src\Entity\Group as GroupModel;
 
 class Group extends \Src\Controller\Controller
 {
-  private $groupInstance;
+  private $group;
   private $dashboardInfos;
   private $form;
   public $formInfos;
@@ -19,7 +19,7 @@ class Group extends \Src\Controller\Controller
     $this->dashboardInfos = GroupModel::dashboardInfos();
   }
 
-  public function dispatch($id = null, $del = null, bool $isApi = false)
+  public function dispatch($id = null, bool $isApi = false)
   {
 
     if ($isApi) {
@@ -28,24 +28,26 @@ class Group extends \Src\Controller\Controller
 
       \Src\Controller\Auth::protect();
 
-      if ($_POST) {
-        $this->submitData($_POST);
-      }
-
       if (isset($id)) {
 
         if ($id != 0) {
 
           $group = new GroupModel($id);
 
-          if ($del == $_SESSION["delete_key"]) {
+          if ($_POST) {
 
-            $res = $group->deleteModel();
+            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
 
-            if ($res) {
-              \Src\App::redirect("error");
+              $res = $group->deleteModel();
+
+              if ($res) {
+                \Src\App::redirect("error");
+              }
+              \Src\App::redirect("group");
+
             }
-            \Src\App::redirect("group");
+
+            $group->submitModel($_POST);
 
           } else {
             $this->getModelForm("group", $id, $this->formInfos);
@@ -63,8 +65,6 @@ class Group extends \Src\Controller\Controller
 
   }
 
-
-
   public function getGroupDashboard()
   {
     $recordset = $this->db->getField("group", "group_id");
@@ -77,20 +77,5 @@ class Group extends \Src\Controller\Controller
     $page = "group";
 
     require_once ROOT . "/pages/group.php";
-  }
-
-  public function submitData(array $data)
-  {
-    if (empty($data["group_id"])) {
-      $availableId = $this->getAvailableId("group", "group_id");
-      $data["group_id"] = $availableId;
-
-      $this->groupInstance = new GroupModel($data["group_id"], $data);
-      $this->groupInstance->createNewModel("group", $data);
-    } else {
-
-      $this->groupInstance = new GroupModel($data["group_id"]);
-      $this->groupInstance->updateModel($data["group_id"], $data);
-    }
   }
 }

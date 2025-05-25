@@ -150,6 +150,39 @@ class Profile extends \Src\Model\Model
     }
   }
 
+  public function submitModel(array $data)
+  {
+    if (empty($data["profile_id"])) {
+
+      $profileSituation = $this->isolateSituations($data);
+      unset($data["situation_id"]);
+      $this->createNewModel("profile", $data);
+
+      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
+      $profileSituationInstance->updateSituations($profileSituation);
+    } else {
+
+      $profileSituation = $this->isolateSituations($data);
+      unset($data["situation_id"]);
+      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
+      $profileSituationInstance->updateSituations($profileSituation);
+
+      $this->updateModel($data["profile_id"], $data);
+    }
+  }
+
+  private function isolateSituations($data)
+  {
+    $profileSituation = $data["situation_id"];
+    for ($i = 0; $i <= count($profileSituation); $i++) {
+      if (empty($profileSituation[$i]["post_id"]) || empty($profileSituation[$i]["department_id"])) {
+        unset($profileSituation[$i]);
+      }
+    }
+
+    return array_unique($profileSituation, SORT_REGULAR);
+  }
+
   public function setFormTitle()
   {
     self::$formInfos["form_title"] .= $this->name();

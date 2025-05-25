@@ -40,5 +40,18 @@ abstract class Auth
     return \Firebase\JWT\JWT::encode($payload, $key, "RS256");
 
   }
+  public function decodeJWT($jwt)
+  {
+    ob_start();
+    require ROOT . "/config/env/publickey.crt";
+    $key = ob_get_contents();
+    ob_end_clean();
+
+    try {
+      return \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($key, "RS256"));
+    } catch (\Exception $e) {
+      return $e;
+    }
+  }
 
 }

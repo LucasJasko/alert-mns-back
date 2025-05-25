@@ -56,6 +56,14 @@ class Status extends \Src\Model\Model
       return $e;
     }
   }
+  public function submitData(array $data)
+  {
+    if (empty($data["status_id"])) {
+      $this->createNewModel("status", $data);
+    } else {
+      $this->updateModel($data["status_id"], $data);
+    }
+  }
 
   public function setFormTitle()
   {
