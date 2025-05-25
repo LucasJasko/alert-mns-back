@@ -12,7 +12,7 @@ class Form
   private string $linkedId;
   private $db;
 
-  public function __construct(string $tableName, string $redirectPage, array $formInfos, $linkedId = "")
+  public function __construct(string $tableName, string $redirectPage, array $formInfos = [], $linkedId = "")
   {
     $this->tableName = $tableName;
     $this->redirectPage = $redirectPage;
@@ -85,5 +85,29 @@ class Form
   public static function getDataOfTable($table)
   {
     return \Src\App::db()->getAll($table);
+  }
+
+  public function delete($deleteKey, $id, $isApi)
+  {
+    if ($isApi) {
+      // Process API
+    } else {
+
+      if ($deleteKey == $_SESSION["delete_key"]) {
+
+        $modelName = "\Src\Entity\\" . ucfirst($this->tableName);
+        $model = new $modelName($id);
+
+        $res = $model->deleteModel();
+
+        if ($res) {
+          \Src\App::redirect("error");
+        }
+        \Src\App::redirect($this->redirectPage);
+
+      }
+
+    }
+
   }
 }

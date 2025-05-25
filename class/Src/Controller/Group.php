@@ -28,30 +28,23 @@ class Group extends \Src\Controller\Controller
 
       \Src\Controller\Auth::protect();
 
+
+      // TODO voir comment passer par le modèle pour soumettre les données car plus d'id pour initialiser l'objet, éventuellement récupérer l'id avec les données adjacentes
+
+      if ($_POST) {
+
+        var_dump($_POST);
+
+        $group = new GroupModel($_POST["group_id"]);
+        $group->submitModel($_POST);
+
+      }
+
       if (isset($id)) {
 
         if ($id != 0) {
 
-          $group = new GroupModel($id);
-
-          if ($_POST) {
-
-            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
-
-              $res = $group->deleteModel();
-
-              if ($res) {
-                \Src\App::redirect("error");
-              }
-              \Src\App::redirect("group");
-
-            }
-
-            $group->submitModel($_POST);
-
-          } else {
-            $this->getModelForm("group", $id, $this->formInfos);
-          }
+          $this->getModelForm("group", $id, $this->formInfos);
 
         } else {
           $this->getEmptyModelForm("group", $this->formInfos);

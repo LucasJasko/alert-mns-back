@@ -81,16 +81,6 @@ class Params extends \Src\Controller\Controller
 
             unset($_POST["table_name"]);
 
-            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
-
-              $res = $model->deleteModel();
-
-              if ($res) {
-                \Src\App::redirect("error");
-              }
-              \Src\App::redirect("params");
-            }
-
             $model->submitData($_POST);
 
           } else {

@@ -38,16 +38,6 @@ class Profile extends \Src\Controller\Controller
 
           if ($_POST) {
 
-            if (isset($_POST["delete_key"]) && $_POST["delete_key"] == $_SESSION["delete_key"]) {
-
-              $res = $profile->deleteModel();
-
-              if ($res) {
-                \Src\App::redirect("error");
-              }
-              \Src\App::redirect("profile");
-            }
-
             $profile->submitModel($_POST);
 
           } else {

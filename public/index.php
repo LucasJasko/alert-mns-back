@@ -36,7 +36,7 @@ Router::add("/group/{id}", function ($id, $isApi = false) {
   $controller->dispatch($id, $isApi);
 });
 
-Router::add("/group/{id}/{del}", function ($id, $isApi = false) {
+Router::add("/group/{id}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Group();
   $controller->dispatch($id, $isApi);
 });
@@ -46,7 +46,7 @@ Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi 
   $controller->dispatch($group_id, $room_id, $isApi);
 });
 
-Router::add("/room/{group_id}/{room_id}/{del}", function ($group_id, $room_id, $isApi = false) {
+Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi = false) {
   $controller = new Src\Controller\Room();
   $controller->dispatch($group_id, $room_id, $isApi);
 });
@@ -61,7 +61,7 @@ Router::add("/profile/{id}", function ($id, $isApi = false) {
   $controller->dispatch($id, $isApi);
 });
 
-Router::add("/profile/{id}/{del}", function ($id, $isApi = false) {
+Router::add("/profile/{id}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Profile();
   $controller->dispatch($id, $isApi);
 });
@@ -76,7 +76,7 @@ Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
   $controller->dispatch($tab, $id, $isApi);
 });
 
-Router::add("/params/{tab}/{id}/{del}", function ($tab, $id, $isApi = false) {
+Router::add("/params/{tab}/{id}", function ($tab, $id, $isApi = false) {
   $controller = new Src\Controller\Params();
   $controller->dispatch($tab, $id, $isApi);
 });
@@ -84,6 +84,11 @@ Router::add("/params/{tab}/{id}/{del}", function ($tab, $id, $isApi = false) {
 Router::add("/stats", function ($isApi = false) {
   $controller = new Src\Controller\Stats();
   $controller->dispatch();
+});
+
+Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function ($tableName, $id, $redirectpage, $deleteKey, $isApi = false) {
+  $controller = new Src\Model\Form($tableName, $redirectpage);
+  $controller->delete($deleteKey, $id, $isApi);
 });
 
 Router::add("/auth", function ($isApi = true) {
