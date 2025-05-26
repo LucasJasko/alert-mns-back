@@ -32,24 +32,21 @@ class Group extends \Src\Controller\Controller
     if (isset($id)) {
 
       if ($_POST) {
-
         $group = new GroupModel($id);
         $group->submitModel($_POST);
-
+        \Src\App::redirect("group");
       }
 
       if ($id != 0) {
-
         $this->getModelForm("group", $id, $this->formInfos);
-
-      } else {
-        $this->getEmptyModelForm("group", $this->formInfos);
+        return;
       }
 
-    } else {
-      $this->getGroupDashboard();
+      $this->getEmptyModelForm("group", $this->formInfos);
+      return;
     }
 
+    $this->getGroupDashboard();
   }
 
   public function getGroupDashboard()

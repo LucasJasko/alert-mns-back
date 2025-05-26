@@ -137,6 +137,7 @@ class Profile extends \Src\Model\Model
         $this->{$method}($value);
       }
     }
+    // TODO cette méthode doit être exécuté après que la ligne soit créé
     $this->setSituation($this->id);
   }
 

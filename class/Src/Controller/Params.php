@@ -55,7 +55,7 @@ class Params extends \Src\Controller\Controller
   {
     parent::__construct();
     foreach ($this->paramsConfig as $table => $v) {
-      $model = "\Src\Entity\\" . ucfirst($table);
+      $model = "\Src\Model\Entity\\" . ucfirst($table);
       $this->formsInfos[$table] = $model::formInfos();
       $this->dashboardsInfos[$table] = $model::dashboardInfos();
     }
@@ -75,7 +75,7 @@ class Params extends \Src\Controller\Controller
 
       if ($id != 0) {
 
-        $modelName = "\Src\Entity\\" . ucfirst($tab);
+        $modelName = "\Src\Model\Entity\\" . ucfirst($tab);
         $model = new $modelName($id);
 
         if ($_POST) {

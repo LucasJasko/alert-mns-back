@@ -32,23 +32,21 @@ class Profile extends \Src\Controller\Controller
 
     if (isset($id)) {
 
-      if ($id != 0) {
-
+      if ($_POST) {
         $profile = new ProfileModel($id);
-
-        if ($_POST) {
-
-          $profile->submitModel($_POST);
-
-        } else {
-          $this->getModelForm("profile", $id, $this->formInfos);
-        }
-      } else {
-        $this->getEmptyModelForm("profile", $this->formInfos);
+        $profile->submitModel($_POST);
       }
-    } else {
-      $this->getProfileDashboard();
+
+      if ($id != 0) {
+        $this->getModelForm("profile", $id, $this->formInfos);
+        return;
+      }
+
+      $this->getEmptyModelForm("profile", $this->formInfos);
+      return;
     }
+
+    $this->getProfileDashboard();
   }
 
   public function getProfileDashboard()

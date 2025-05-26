@@ -10,6 +10,8 @@ class Group extends \Src\Model\Model
   private $type;
   private array $room;
 
+  // TODO faire une classe général Entity plutôt que Model
+
   protected static array $formInfos = [
     "form_title" => "Modification du groupe ",
     "form_fields" => [
@@ -104,7 +106,6 @@ class Group extends \Src\Model\Model
     } else {
       $this->updateModel($data["group_id"], $data);
     }
-    \Src\App::redirect("group");
   }
 
   public function all()

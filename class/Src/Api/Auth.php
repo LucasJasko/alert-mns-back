@@ -75,7 +75,7 @@ class Auth extends \Core\Auth\Auth
 
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
 
-      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
+      $this->setHttpOnlyCookie("refresh_key", $refreshToken, 2592000);
 
       $res = [
         'success' => true,
@@ -97,13 +97,13 @@ class Auth extends \Core\Auth\Auth
     echo json_encode($res);
   }
 
-  public function setHttpOnlyCookie($name, $value)
+  public function setHttpOnlyCookie($name, $value, $expirationTime)
   {
     setcookie(
       $name,
       $value,
       [
-        "expires" => time() + 2592000,
+        "expires" => time() + $expirationTime,
         "path" => "/",
         "domain" => "alert-mns-back",
         "secure" => false,
@@ -113,13 +113,13 @@ class Auth extends \Core\Auth\Auth
     );
   }
 
-  public function setClientCookie($name, $value)
+  public function setClientCookie($name, $value, $expirationTime)
   {
     setcookie(
       $name,
       $value,
       [
-        "expires" => time() + 2592000,
+        "expires" => time() + $expirationTime,
         "path" => "/",
         "domain" => "alert-mns-back",
         "secure" => false,
@@ -128,6 +128,4 @@ class Auth extends \Core\Auth\Auth
       ]
     );
   }
-
-
 }

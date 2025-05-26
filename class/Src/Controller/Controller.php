@@ -12,7 +12,7 @@ abstract class Controller extends \Core\Controller\Controller
 
   public function modelData($id, $modelName)
   {
-    $modelPath = "Src\Entity\\" . ucfirst($modelName);
+    $modelPath = "Src\Model\Entity\\" . ucfirst($modelName);
     $groupInstance = new $modelPath($id);
     return $groupInstance->all();
   }
