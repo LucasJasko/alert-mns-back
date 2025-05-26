@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-use Src\Entity\Group as GroupModel;
+use Src\Model\Entity\Group as GroupModel;
 
 class Group extends \Src\Controller\Controller
 {

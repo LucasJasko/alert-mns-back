@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
 class Reaction extends \Src\Model\Model
 {

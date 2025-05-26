@@ -1,23 +1,23 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Situation extends \Src\Model\Model
+class State extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification de la situation",
+    "form_title" => "Modification de l'état",
     "form_fields" => [
-      "situation_id" => [
-        "label" => "Identifiant de la situation",
+      "state_id" => [
+        "label" => "Identifiant de l'état",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "situation_name" => [
-        "label" => "Nom de la situation",
+      "state_name" => [
+        "label" => "Nom de l'état",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -26,15 +26,15 @@ class Situation extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "situation_id" => "ID",
-    "situation_name" => "Nom",
+    "state_id" => "ID",
+    "state_name" => "Nom",
   ];
+
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "situation";
-    $this->searchField = "situation_id";
-
+    $this->tableName = "state";
+    $this->searchField = "state_id";
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
 
@@ -51,7 +51,7 @@ class Situation extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("La situation " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("L'état " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }

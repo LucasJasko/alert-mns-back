@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
 class NotifType extends \Src\Model\Model
 {

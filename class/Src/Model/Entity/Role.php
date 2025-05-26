@@ -1,23 +1,24 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Status extends \Src\Model\Model
+class Role extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
+
   protected static array $formInfos = [
-    "form_title" => "Modification du statut",
+    "form_title" => "Modification du rôle",
     "form_fields" => [
-      "status_id" => [
-        "label" => "Identifiant du statut",
+      "role_id" => [
+        "label" => "Identifiant du rôle",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "status_name" => [
-        "label" => "Nom du statut",
+      "role_name" => [
+        "label" => "Nom du rôle",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -26,14 +27,14 @@ class Status extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "status_id" => "ID",
-    "status_name" => "Nom",
+    "role_id" => "ID",
+    "role_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "status";
-    $this->searchField = "status_id";
+    $this->tableName = "role";
+    $this->searchField = "role_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -51,17 +52,17 @@ class Status extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("Le statut " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("Le rôle " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }
   }
   public function submitData(array $data)
   {
-    if (empty($data["status_id"])) {
-      $this->createNewModel("status", $data);
+    if (empty($data["role_id"])) {
+      $this->createNewModel("role", $data);
     } else {
-      $this->updateModel($data["status_id"], $data);
+      $this->updateModel($data["role_id"], $data);
     }
     \Src\App::redirect("params");
   }
@@ -87,12 +88,21 @@ class Status extends \Src\Model\Model
     $this->searchField = $searchField;
   }
 
+
   public function all()
   {
     return [
-      "status_id" => $this->id(),
-      "status_name" => $this->name(),
+      "role_id" => $this->id(),
+      "role_name" => $this->name(),
     ];
+  }
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
   }
   public function id()
   {
@@ -109,13 +119,5 @@ class Status extends \Src\Model\Model
   public function searchField()
   {
     return htmlspecialchars($this->searchField);
-  }
-  public static function formInfos()
-  {
-    return self::$formInfos;
-  }
-  public static function dashboardInfos()
-  {
-    return self::$dashboardInfos;
   }
 }

@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-use Src\Entity\Room as RoomModel;
+use Src\Model\Entity\Room as RoomModel;
 
 class Room extends \Src\Controller\Controller
 {

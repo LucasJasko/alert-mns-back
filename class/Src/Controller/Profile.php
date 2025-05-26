@@ -2,8 +2,7 @@
 
 namespace Src\Controller;
 
-use Src\Entity\Profile as ProfileModel;
-use Src\Relation\ProfileSituation;
+use Src\Model\Entity\Profile as ProfileModel;
 
 class Profile extends \Src\Controller\Controller
 {

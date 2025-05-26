@@ -68,7 +68,7 @@ class Auth extends \Core\Auth\Auth
         $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
       }
 
-      $token = new \Src\Entity\Token();
+      $token = new \Src\Model\Entity\Token();
       $token->createNewToken(password_hash($refreshToken, PASSWORD_DEFAULT), $_SERVER["HTTP_USER_AGENT"], $res["profile_id"]);
 
       // TODO faire une fonction de comparaison du temps actuel avec les temps d'expiration des token de la table token, et supprimé ceux expirés

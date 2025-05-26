@@ -1,24 +1,25 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Role extends \Src\Model\Model
+class Department extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification du rôle",
+
+    "form_title" => "Modification du département ",
     "form_fields" => [
-      "role_id" => [
-        "label" => "Identifiant du rôle",
+      "department_id" => [
+        "label" => "Identifiant du département",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "role_name" => [
-        "label" => "Nom du rôle",
+      "department_name" => [
+        "label" => "Nom du département",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -27,14 +28,14 @@ class Role extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "role_id" => "ID",
-    "role_name" => "Nom",
+    "department_id" => "ID",
+    "department_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "role";
-    $this->searchField = "role_id";
+    $this->tableName = "department";
+    $this->searchField = "department_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -52,19 +53,18 @@ class Role extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("Le rôle " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("Le département " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }
   }
   public function submitData(array $data)
   {
-    if (empty($data["role_id"])) {
-      $this->createNewModel("role", $data);
+    if (empty($data["department_id"])) {
+      $this->createNewModel("department", $data);
     } else {
-      $this->updateModel($data["role_id"], $data);
+      $this->updateModel($data["department_id"], $data);
     }
-    \Src\App::redirect("params");
   }
 
   public function setFormTitle()
@@ -88,12 +88,11 @@ class Role extends \Src\Model\Model
     $this->searchField = $searchField;
   }
 
-
   public function all()
   {
     return [
-      "role_id" => $this->id(),
-      "role_name" => $this->name(),
+      "department_id" => $this->id(),
+      "department_name" => $this->name(),
     ];
   }
   public static function formInfos()

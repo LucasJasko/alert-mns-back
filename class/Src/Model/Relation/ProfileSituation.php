@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Relation;
+namespace Src\Model\Relation;
 
 class ProfileSituation extends \Src\Model\Model
 {
@@ -39,8 +39,8 @@ class ProfileSituation extends \Src\Model\Model
     $situationList = [];
     $relation = $this->situations();
     for ($i = 0; $i < count($relation); $i++) {
-      $post = new \Src\Entity\Post($relation[$i]["post_id"]);
-      $department = new \Src\Entity\Department($relation[$i]["department_id"]);
+      $post = new \Src\Model\Entity\Post($relation[$i]["post_id"]);
+      $department = new \Src\Model\Entity\Department($relation[$i]["department_id"]);
       $situationList[] = [$post->name() => $department->name()];
     }
     return $situationList;

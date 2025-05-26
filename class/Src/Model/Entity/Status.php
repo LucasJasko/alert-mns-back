@@ -1,23 +1,23 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class State extends \Src\Model\Model
+class Status extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification de l'état",
+    "form_title" => "Modification du statut",
     "form_fields" => [
-      "state_id" => [
-        "label" => "Identifiant de l'état",
+      "status_id" => [
+        "label" => "Identifiant du statut",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "state_name" => [
-        "label" => "Nom de l'état",
+      "status_name" => [
+        "label" => "Nom du statut",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -26,15 +26,15 @@ class State extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "state_id" => "ID",
-    "state_name" => "Nom",
+    "status_id" => "ID",
+    "status_name" => "Nom",
   ];
-
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "state";
-    $this->searchField = "state_id";
+    $this->tableName = "status";
+    $this->searchField = "status_id";
+
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
 
@@ -51,10 +51,19 @@ class State extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("L'état " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("Le statut " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }
+  }
+  public function submitData(array $data)
+  {
+    if (empty($data["status_id"])) {
+      $this->createNewModel("status", $data);
+    } else {
+      $this->updateModel($data["status_id"], $data);
+    }
+    \Src\App::redirect("params");
   }
 
   public function setFormTitle()
@@ -78,6 +87,13 @@ class State extends \Src\Model\Model
     $this->searchField = $searchField;
   }
 
+  public function all()
+  {
+    return [
+      "status_id" => $this->id(),
+      "status_name" => $this->name(),
+    ];
+  }
   public function id()
   {
     return htmlspecialchars($this->id);

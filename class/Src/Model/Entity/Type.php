@@ -1,25 +1,23 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Department extends \Src\Model\Model
+class Type extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
-
   protected static array $formInfos = [
-
-    "form_title" => "Modification du département ",
+    "form_title" => "Modification du type",
     "form_fields" => [
-      "department_id" => [
-        "label" => "Identifiant du département",
+      "type_id" => [
+        "label" => "Identifiant du type",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "department_name" => [
-        "label" => "Nom du département",
+      "type_name" => [
+        "label" => "Nom du type",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -28,14 +26,14 @@ class Department extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "department_id" => "ID",
-    "department_name" => "Nom",
+    "type_id" => "ID",
+    "type_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "department";
-    $this->searchField = "department_id";
+    $this->tableName = "type";
+    $this->searchField = "type_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -53,17 +51,9 @@ class Department extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("Le département " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("Le type " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
-    }
-  }
-  public function submitData(array $data)
-  {
-    if (empty($data["department_id"])) {
-      $this->createNewModel("department", $data);
-    } else {
-      $this->updateModel($data["department_id"], $data);
     }
   }
 
@@ -88,21 +78,6 @@ class Department extends \Src\Model\Model
     $this->searchField = $searchField;
   }
 
-  public function all()
-  {
-    return [
-      "department_id" => $this->id(),
-      "department_name" => $this->name(),
-    ];
-  }
-  public static function formInfos()
-  {
-    return self::$formInfos;
-  }
-  public static function dashboardInfos()
-  {
-    return self::$dashboardInfos;
-  }
   public function id()
   {
     return htmlspecialchars($this->id);
@@ -118,5 +93,13 @@ class Department extends \Src\Model\Model
   public function searchField()
   {
     return htmlspecialchars($this->searchField);
+  }
+  public static function formInfos()
+  {
+    return self::$formInfos;
+  }
+  public static function dashboardInfos()
+  {
+    return self::$dashboardInfos;
   }
 }

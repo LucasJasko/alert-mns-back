@@ -1,24 +1,23 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Language extends \Src\Model\Model
+class Post extends \Src\Model\Model
 {
-
   private int $id;
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification de la langue",
+    "form_title" => "Modification du poste",
     "form_fields" => [
-      "language_id" => [
-        "label" => "Identifiant de la langue",
+      "post_id" => [
+        "label" => "Identifiant du poste",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "language_name" => [
-        "label" => "Nom de la langue",
+      "post_name" => [
+        "label" => "Nom du poste",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -27,14 +26,14 @@ class Language extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "language_id" => "ID",
-    "language_name" => "Nom"
+    "post_id" => "ID",
+    "post_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "language";
-    $this->searchField = "language_id";
+    $this->tableName = "post";
+    $this->searchField = "post_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -52,20 +51,21 @@ class Language extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("La langue " . $this->id() . " : " . $this->name() . " a été supprimée de la base de donnée.");
+      \core\Service\Log::writeLog("Le poste " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }
   }
   public function submitData(array $data)
   {
-    if (empty($data["language_id"])) {
-      $this->createNewModel("language", $data);
+    if (empty($data["post_id"])) {
+      $this->createNewModel("post", $data);
     } else {
-      $this->updateModel($data["language_id"], $data);
+      $this->updateModel($data["post_id"], $data);
     }
     \Src\App::redirect("params");
   }
+
   public function setFormTitle()
   {
     self::$formInfos["form_title"] .= $this->name();
@@ -91,8 +91,8 @@ class Language extends \Src\Model\Model
   public function all()
   {
     return [
-      "language_id" => $this->id(),
-      "language_name" => $this->name(),
+      "post_id" => $this->id(),
+      "post_name" => $this->name(),
     ];
   }
   public static function formInfos()

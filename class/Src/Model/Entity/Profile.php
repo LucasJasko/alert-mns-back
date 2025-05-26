@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-use Src\Relation\ProfileSituation;
+use Src\Model\Relation\ProfileSituation;
 
 class Profile extends \Src\Model\Model
 {

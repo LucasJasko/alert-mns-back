@@ -1,23 +1,23 @@
 <?php
 
-namespace Src\Entity;
+namespace Src\Model\Entity;
 
-class Theme extends \Src\Model\Model
+class Situation extends \Src\Model\Model
 {
 
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification du thème",
+    "form_title" => "Modification de la situation",
     "form_fields" => [
-      "theme_id" => [
-        "label" => "Identifiant du thème",
+      "situation_id" => [
+        "label" => "Identifiant de la situation",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required readonly"
       ],
-      "theme_name" => [
-        "label" => "Nom du thème",
+      "situation_name" => [
+        "label" => "Nom de la situation",
         "placeholder" => "",
         "input_type" => "text",
         "attributes" => "required"
@@ -26,14 +26,14 @@ class Theme extends \Src\Model\Model
   ];
 
   protected static array $dashboardInfos = [
-    "theme_id" => "ID",
-    "theme_name" => "Nom",
+    "situation_id" => "ID",
+    "situation_name" => "Nom",
   ];
 
   public function __construct(int $id, $newData = [])
   {
-    $this->tableName = "theme";
-    $this->searchField = "theme_id";
+    $this->tableName = "situation";
+    $this->searchField = "situation_id";
 
     $this->initdb($this->tableName, $this->searchField);
     $row = $this->db->getOneWhere($this->tableName, $this->searchField, $id);
@@ -51,19 +51,10 @@ class Theme extends \Src\Model\Model
   {
     try {
       $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-      \core\Service\Log::writeLog("Le thème " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
+      \core\Service\Log::writeLog("La situation " . $this->id() . " : " . $this->name() . " a été supprimé de la base de donnée.");
     } catch (\PDOException $e) {
       return $e;
     }
-  }
-  public function submitData(array $data)
-  {
-    if (empty($data["theme_id"])) {
-      $this->createNewModel("theme", $data);
-    } else {
-      $this->updateModel($data["theme_id"], $data);
-    }
-    \Src\App::redirect("params");
   }
 
   public function setFormTitle()
@@ -87,13 +78,6 @@ class Theme extends \Src\Model\Model
     $this->searchField = $searchField;
   }
 
-  public function all()
-  {
-    return [
-      "theme_id" => $this->id(),
-      "theme_name" => $this->name(),
-    ];
-  }
   public function id()
   {
     return htmlspecialchars($this->id);
