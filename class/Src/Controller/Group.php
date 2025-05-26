@@ -31,35 +31,25 @@ class Group extends \Src\Controller\Controller
 
     if (isset($id)) {
 
+      $group = new GroupModel($id);
+
       if ($_POST) {
-        $group = new GroupModel($id);
         $group->submitModel($_POST);
         \Src\App::redirect("group");
       }
 
       if ($id != 0) {
-        $this->getModelForm("group", $id, $this->formInfos);
+        $form = new \Src\Model\Form("group", "group/$id", $this->formInfos);
+        $form->getForm($group->all(), "Modification du groupe $id");
         return;
       }
 
-      $this->getEmptyModelForm("group", $this->formInfos);
+      // unset($formInfos[$modelName . "_id"]);
+      $form = new \Src\Model\Form("group", "group/0", $this->formInfos);
+      $form->getEmptyForm($this->db->getFieldsOfTable("group"), "Création d'un nouveau groupe", ["group_id"]);
       return;
     }
 
-    $this->getGroupDashboard();
-  }
-
-  public function getGroupDashboard()
-  {
-    $recordset = $this->db->getField("group", "group_id");
-    $clearedRecordset = $this->clearRecordset($recordset, "group");
-    $groups = $this->getModelsFromRecordset($clearedRecordset, "Group");
-    $fields = $this->unsetFieldsToRender($this->dashboardInfos, $this->fieldsToNotRender);
-
-    $data = $groups;
-    $tab = "group";
-    $page = "group";
-
-    require_once ROOT . "/pages/group.php";
+    $this->getDashboard("group", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
 }

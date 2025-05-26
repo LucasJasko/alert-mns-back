@@ -15,7 +15,7 @@ class Room extends \Src\Controller\Controller
     $this->formInfos = RoomModel::formInfos();
   }
 
-  public function dispatch($group_id, $room_id, $del, bool $isApi = false)
+  public function dispatch($group_id, $room_id, bool $isApi = false)
   {
 
     if ($isApi) {
@@ -23,41 +23,23 @@ class Room extends \Src\Controller\Controller
       return;
     }
 
-    if ($_POST) {
-      $this->submitData($_POST);
-      \Src\App::redirect("group");
-    }
+    \Src\Auth\Auth::protect();
 
-    if ($room_id != 0) {
 
-      $room = new RoomModel($room_id);
+    if (isset($room_id) && isset($group_id)) {
 
-      if ($del == $_SESSION["delete_key"]) {
-
-        $res = $room->deleteModel();
-
-        if ($res) {
-          \Src\App::redirect("error");
-        }
+      if ($_POST) {
+        $room = new RoomModel($room_id);
+        $room->submitData($_POST);
         \Src\App::redirect("group");
-
-      } else {
-        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
       }
-    } else {
+
+      if ($room_id != 0) {
+        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+        return;
+      }
+
       $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
-    }
-  }
-
-  public function submitData(array $data)
-  {
-    if (empty($data["room_id"])) {
-
-      $this->roomInstance = new RoomModel($data["room_id"], $data);
-      $this->roomInstance->createNewModel("room", $data);
-    } else {
-      $this->roomInstance = new RoomModel($data["room_id"]);
-      $this->roomInstance->updateModel($data["room_id"], $data);
     }
   }
 }

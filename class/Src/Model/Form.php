@@ -5,72 +5,97 @@ namespace Src\Model;
 class Form
 {
 
-  private string $tableName;
-  private array $formInfos;
-  private $displayedData = [];
-  private string $redirectPage;
-  private string $linkedId;
+  private array $metaInfos;
+  private array $fieldsInfos;
   private $db;
 
-  public function __construct(string $tableName, string $redirectPage, array $formInfos = [], $linkedId = "")
+  public function __construct(string $tableName, string $redirectPage, array $fieldsInfos = [], $linkedId = "")
   {
-    $this->tableName = $tableName;
-    $this->redirectPage = $redirectPage;
-    $this->formInfos = $formInfos;
-    $this->linkedId = $linkedId;
+    $this->fieldsInfos = $fieldsInfos;
     $this->db = \Src\App::db();
+
+    $this->metaInfos = [
+      "table_name" => $tableName,
+      "redirect_page" => $redirectPage,
+      "linked_id" => $linkedId,
+      "delete_key" => $_SESSION["delete_key"]
+    ];
+
   }
 
-  public function getForm(array $data, array $except = [])
+  public function delete($deleteKey, $id, $isApi)
   {
-    $this->displayedData = $data;
+
+    \Src\Auth\Auth::protect();
+
+    if ($isApi) {
+      // Process API
+    } else {
+
+      if ($deleteKey == $_SESSION["delete_key"]) {
+
+        $modelName = "\Src\Model\Entity\\" . ucfirst($this->metaInfos["table_name"]);
+        $model = new $modelName($id);
+
+        $res = $model->deleteModel();
+
+        if ($res) {
+          \Src\App::redirect("error");
+        }
+        \Src\App::redirect($this->metaInfos["redirect_page"]);
+
+      }
+
+    }
+
+  }
+
+  public function getForm(array $displayedData, string $formTitle, array $except = [])
+  {
     $except = $this->remakeExcept($except);
-    $this->compareData($except);
+    $displayedData = $this->compareData($displayedData, $except);
 
-    $formInfos = $this->formInfos;
-    $redirectPage = $this->redirectPage;
+    $fieldsInfos = $this->fieldsInfos;
+    $metaInfos = $this->metaInfos;
 
-    if (str_contains($redirectPage, "room/")) {
+    if (str_contains($metaInfos["redirect_page"], "room/")) {
       // TODO a terme ce code est a modifier car il genere le lien de retour pour des ID allant jusqu'à 9 !!
-      $returnPage = substr(str_replace("room", "group", $redirectPage), 0, 7);
+      $returnPage = substr(str_replace("room", "group", $metaInfos["redirect_page"]), 0, 7);
     } else {
-      $returnPage = $redirectPage;
+      $returnPage = $metaInfos["redirect_page"];
     }
-    $displayedData = $this->displayedData;
-    $tableName = $this->tableName;
-    $linkedId = $this->linkedId;
-    $deleteKey = $_SESSION["delete_key"];
 
     require ROOT . "/pages/template/form.php";
   }
 
-  public function getEmptyForm(array $displayedData, array $except = [])
+  public function getEmptyForm(array $displayedData, string $formTitle, array $except = [])
   {
-    $this->displayedData = $displayedData;
-    $this->compareData($except);
+    $displayedData = $this->compareData($displayedData, $except);
 
-    $displayedData = $this->displayedData;
-    $formInfos = $this->formInfos;
-    $redirectPage = $this->redirectPage;
+    $fieldsInfos = $this->fieldsInfos;
+    $metaInfos = $this->metaInfos;
 
-    if (str_contains($redirectPage, "room/")) {
-      $returnPage = substr(str_replace("room", "group", $redirectPage), 0, 7);
+    if (str_contains($metaInfos["redirect_page"], "room/")) {
+      $returnPage = substr(str_replace("room", "group", $metaInfos["redirect_page"]), 0, 7);
     } else {
-      $returnPage = $redirectPage;
+      $returnPage = $metaInfos["redirect_page"];
     }
-    $tableName = $this->tableName;
-    $linkedId = $this->linkedId;
+
+    if ($metaInfos["table_name"] == "room") {
+      $groupName = $this->db->getFieldWhere("group", "group_name", "group_id", $displayedData["group_id"]);
+    }
 
     require ROOT . "/pages/template/form.php";
   }
 
-  private function compareData(array $except)
+  private function compareData($displayedData, array $except)
   {
-    foreach ($this->displayedData as $key => $value) {
+    foreach ($displayedData as $key => $value) {
       if (in_array($key, $except)) {
-        unset($this->displayedData[$key]);
+        unset($displayedData[$key]);
       }
     }
+    return $displayedData;
   }
 
   private function remakeExcept($except)
@@ -87,30 +112,4 @@ class Form
     return \Src\App::db()->getAll($table);
   }
 
-  public function delete($deleteKey, $id, $isApi)
-  {
-
-    \Src\Auth\Auth::protect();
-
-    if ($isApi) {
-      // Process API
-    } else {
-
-      if ($deleteKey == $_SESSION["delete_key"]) {
-
-        $modelName = "\Src\Entity\\" . ucfirst($this->tableName);
-        $model = new $modelName($id);
-
-        $res = $model->deleteModel();
-
-        if ($res) {
-          \Src\App::redirect("error");
-        }
-        \Src\App::redirect($this->redirectPage);
-
-      }
-
-    }
-
-  }
 }

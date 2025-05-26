@@ -10,13 +10,6 @@ abstract class Controller extends \Core\Controller\Controller
     parent::__construct();
   }
 
-  public function modelData($id, $modelName)
-  {
-    $modelPath = "Src\Model\Entity\\" . ucfirst($modelName);
-    $groupInstance = new $modelPath($id);
-    return $groupInstance->all();
-  }
-
   public function clearRecordset($recordset, $tab)
   {
     for ($i = 0; $i < count($recordset); $i++) {
@@ -29,12 +22,14 @@ abstract class Controller extends \Core\Controller\Controller
   {
     for ($i = 0; $i < count($recordset); $i++) {
       $id = $recordset[$i];
-      $models[$i] = $this->modelData($id, $modelName);
+      $modelPath = "Src\Model\Entity\\" . ucfirst($modelName);
+      $modelInstance = new $modelPath($id);
+      $models[$i] = $modelInstance->all();
     }
     return $models;
   }
 
-  public function unsetFieldsToRender(array $fields, array $fieldsToNotRender)
+  public function unsetFieldsToNotRender(array $fields, array $fieldsToNotRender)
   {
     if (count($fieldsToNotRender) != 0) {
       foreach ($fieldsToNotRender as $index => $field) {
@@ -46,19 +41,59 @@ abstract class Controller extends \Core\Controller\Controller
     return $fields;
   }
 
-  public function getModelForm(string $modelName, int $id, array $formInfos, $redirectPage = "", $linkedId = "")
+  public function getDashboard($pageName, $paramsConfig = [], $dashboardInfos = [], $fieldsToNotRender = [])
   {
-    $profileData = $this->modelData($id, $modelName);
-    $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos, $linkedId);
 
-    return $form->getForm($profileData);
+    if ($pageName == "profile" || $pageName == "group") {
+      $recordset = $this->db->getField($pageName, $pageName . "_id");
+      $clearedRecordset = $this->clearRecordset($recordset, $pageName);
+      $profiles = $this->getModelsFromRecordset($clearedRecordset, ucfirst($pageName));
+
+      $fields = $this->unsetFieldsToNotRender($dashboardInfos, $fieldsToNotRender);
+      $data = $profiles;
+      $tab = $pageName;
+      $page = $pageName;
+
+      require_once ROOT . "/pages/" . $pageName . ".php";
+      return;
+    }
+
+    foreach ($paramsConfig as $table => $v) {
+      $recordset = $this->db->getField($table, $table . "_id");
+      $clearedRecordset = $this->clearRecordset($recordset, $table);
+
+      for ($i = 0; $i < count($clearedRecordset); $i++) {
+        $recordsets[$table] = $this->getModelsFromRecordset($clearedRecordset, $table);
+        $ParamsFields[$table][] = $this->db->getFieldsOfTable($table);
+      }
+    }
+
+    require_once ROOT . "/pages/params.php";
   }
 
-  public function getEmptyModelForm(string $modelName, array $formInfos, $redirectPage = "", $linkedId = "")
-  {
-    unset($formInfos["form_fields"][$modelName . "_id"]);
 
-    $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos, $linkedId);
+  // TODO réimplémenter les appels au formualires (getModelForm et getEmptyModelForm) dans les controleurs à l'image du group
+
+  public function getModelForm(string $modelName, int $id, array $formInfos, string $formTitle, $redirectPage = "", $linkedId = "")
+  {
+    $modelPath = "Src\Model\Entity\\" . ucfirst($modelName);
+    $modelInstance = new $modelPath($id);
+    $modelData = $modelInstance->all();
+
+    $form = new \Src\Model\Form($modelName, empty($redirectPage) ? $modelName : $redirectPage, $formInfos, $linkedId);
+
+    $form->getForm($modelData, $formTitle);
+  }
+
+
+
+
+
+  public function getEmptyModelForm(string $modelName, array $formInfos, string $formTitle, $redirectPage = "", $linkedId = "")
+  {
+    unset($formInfos[$modelName . "_id"]);
+
+    $form = new \Src\Model\Form($modelName, empty($redirectPage) ? $modelName : $redirectPage, $formInfos, $linkedId);
     $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
 
     $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
@@ -68,9 +103,12 @@ abstract class Controller extends \Core\Controller\Controller
     }
 
     if (array_key_exists("room_id", $fieldsOfTable) && array_key_exists("room_id", $fieldsOfTable)) {
-      $fieldsOfTable["group_id"] = $linkedId;
+      $fieldsOfTable["model_id"] = $linkedId;
     }
 
-    return $form->getEmptyForm($fieldsOfTable, [$modelName . "_id"]);
+    $form->getEmptyForm($fieldsOfTable, $formTitle, [$modelName . "_id"]);
   }
+
+
+
 }

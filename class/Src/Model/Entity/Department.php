@@ -9,22 +9,18 @@ class Department extends \Src\Model\Model
   private string $name;
 
   protected static array $formInfos = [
-
-    "form_title" => "Modification du département ",
-    "form_fields" => [
-      "department_id" => [
-        "label" => "Identifiant du département",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "department_name" => [
-        "label" => "Nom du département",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "department_id" => [
+      "label" => "Identifiant du département",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "department_name" => [
+      "label" => "Nom du département",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -67,10 +63,6 @@ class Department extends \Src\Model\Model
     }
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

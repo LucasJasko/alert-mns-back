@@ -9,21 +9,18 @@ class Role extends \Src\Model\Model
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification du rôle",
-    "form_fields" => [
-      "role_id" => [
-        "label" => "Identifiant du rôle",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "role_name" => [
-        "label" => "Nom du rôle",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "role_id" => [
+      "label" => "Identifiant du rôle",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "role_name" => [
+      "label" => "Nom du rôle",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -67,10 +64,6 @@ class Role extends \Src\Model\Model
     \Src\App::redirect("params");
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

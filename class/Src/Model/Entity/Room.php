@@ -12,40 +12,36 @@ class Room extends \Src\Model\Model
   private $group;
 
   protected static array $formInfos = [
-    "form_title" => "Modification du salon ",
-    "form_fields" => [
-      "room_id" => [
-        "label" => "Identifiant du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "group_id" => [
-        "label" => "Groupe du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "room_name" => [
-        "label" => "Nom du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      "state_id" => [
-        "label" => "Etat du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      "type_id" => [
-        "label" => "Type du salon",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-
-    ]
+    "room_id" => [
+      "label" => "Identifiant du salon",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "group_id" => [
+      "label" => "Groupe du salon",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "room_name" => [
+      "label" => "Nom du salon",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    "state_id" => [
+      "label" => "Etat du salon",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    "type_id" => [
+      "label" => "Type du salon",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   public function __construct($id, $newData = [])
@@ -79,6 +75,17 @@ class Room extends \Src\Model\Model
         $this->{$method}($value);
       }
     }
+  }
+
+  public function submitData(array $data)
+  {
+
+    if (empty($data["room_id"])) {
+      $this->createNewModel("room", $data);
+      return;
+    }
+
+    $this->updateModel($data["room_id"], $data);
   }
 
   public function deleteModel()

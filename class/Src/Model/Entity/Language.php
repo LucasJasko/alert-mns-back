@@ -9,21 +9,18 @@ class Language extends \Src\Model\Model
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification de la langue",
-    "form_fields" => [
-      "language_id" => [
-        "label" => "Identifiant de la langue",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "language_name" => [
-        "label" => "Nom de la langue",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "language_id" => [
+      "label" => "Identifiant de la langue",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "language_name" => [
+      "label" => "Nom de la langue",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -65,10 +62,6 @@ class Language extends \Src\Model\Model
       $this->updateModel($data["language_id"], $data);
     }
     \Src\App::redirect("params");
-  }
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
   }
   public function setId(int $id)
   {

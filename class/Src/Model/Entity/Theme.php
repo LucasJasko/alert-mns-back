@@ -8,21 +8,18 @@ class Theme extends \Src\Model\Model
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification du thème",
-    "form_fields" => [
-      "theme_id" => [
-        "label" => "Identifiant du thème",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "theme_name" => [
-        "label" => "Nom du thème",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "theme_id" => [
+      "label" => "Identifiant du thème",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "theme_name" => [
+      "label" => "Nom du thème",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -66,10 +63,6 @@ class Theme extends \Src\Model\Model
     \Src\App::redirect("params");
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

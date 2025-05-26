@@ -8,21 +8,18 @@ class Situation extends \Src\Model\Model
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification de la situation",
-    "form_fields" => [
-      "situation_id" => [
-        "label" => "Identifiant de la situation",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "situation_name" => [
-        "label" => "Nom de la situation",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "situation_id" => [
+      "label" => "Identifiant de la situation",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "situation_name" => [
+      "label" => "Nom de la situation",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -57,10 +54,6 @@ class Situation extends \Src\Model\Model
     }
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

@@ -85,33 +85,15 @@ class Params extends \Src\Controller\Controller
           $model->submitData($_POST);
 
         } else {
-          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
+          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "Modification: " . $tab . " N°" . $id, "params");
         }
 
       } else {
-        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
+        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "Création: " . $tab, "params");
       }
 
     } else {
-      $this->getParamsDashboard();
+      $this->getDashboard("params", $this->paramsConfig, $this->dashboardsInfos, []);
     }
-  }
-
-  public function getParamsDashboard()
-  {
-    foreach ($this->paramsConfig as $table => $v) {
-      $recordset = $this->db->getField($table, $table . "_id");
-      $clearedRecordset = $this->clearRecordset($recordset, $table);
-
-      for ($i = 0; $i < count($clearedRecordset); $i++) {
-        $recordsets[$table] = $this->getModelsFromRecordset($clearedRecordset, $table);
-        $ParamsFields[$table][] = $this->db->getFieldsOfTable($table);
-      }
-    }
-
-    $dashboardsInfos = $this->dashboardsInfos;
-    $paramsConfig = $this->paramsConfig;
-
-    require_once ROOT . "/pages/params.php";
   }
 }

@@ -8,21 +8,18 @@ class Status extends \Src\Model\Model
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification du statut",
-    "form_fields" => [
-      "status_id" => [
-        "label" => "Identifiant du statut",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "status_name" => [
-        "label" => "Nom du statut",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "status_id" => [
+      "label" => "Identifiant du statut",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "status_name" => [
+      "label" => "Nom du statut",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -66,10 +63,6 @@ class Status extends \Src\Model\Model
     \Src\App::redirect("params");
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

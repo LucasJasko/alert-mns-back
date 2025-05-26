@@ -38,29 +38,14 @@ class Profile extends \Src\Controller\Controller
       }
 
       if ($id != 0) {
-        $this->getModelForm("profile", $id, $this->formInfos);
+        $this->getModelForm("profile", $id, $this->formInfos, "Modification du profile " . $id);
         return;
       }
 
-      $this->getEmptyModelForm("profile", $this->formInfos);
+      $this->getEmptyModelForm("profile", $this->formInfos, "Création d'un nouveau profile");
       return;
     }
 
-    $this->getProfileDashboard();
-  }
-
-  public function getProfileDashboard()
-  {
-
-    $recordset = $this->db->getField("profile", "profile_id");
-    $clearedRecordset = $this->clearRecordset($recordset, "profile");
-    $profiles = $this->getModelsFromRecordset($clearedRecordset, "Profile");
-
-    $fields = $this->unsetFieldsToRender($this->dashboardInfos, $this->fieldsToNotRender);
-    $data = $profiles;
-    $tab = "profile";
-    $page = "profile";
-
-    require_once ROOT . "/pages/profile.php";
+    $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
 }

@@ -13,12 +13,10 @@
 
   <main class="form__container">
 
-    <h1><?= $formInfos["form_title"] ?></h1>
+    <h1><?= $formTitle ?></h1>
 
 
-    <form class="form"
-      action="/<?= $redirectPage . "/" . (isset($displayedData[$tableName . "_id"]) ? $displayedData[$tableName . "_id"] : 0) ?>"
-      method="post">
+    <form class="form" action="/<?= $redirectPage ?>" method="post">
 
 
       <a class="return-link" href="/<?= $returnPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
@@ -26,10 +24,10 @@
       <?php
       foreach ($displayedData as $dataField => $dataValue) {
 
-        $label = $formInfos["form_fields"][$dataField]["label"];
-        $inputType = $formInfos["form_fields"][$dataField]["input_type"];
-        $placeholder = $formInfos["form_fields"][$dataField]["placeholder"];
-        $attributes = $formInfos["form_fields"][$dataField]["attributes"];
+        $label = $fieldsInfos[$dataField]["label"];
+        $inputType = $fieldsInfos[$dataField]["input_type"];
+        $placeholder = $fieldsInfos[$dataField]["placeholder"];
+        $attributes = $fieldsInfos[$dataField]["attributes"];
         ?>
 
         <label for="<?= $dataField ?>"> <?= $label ?> :</label>
@@ -137,11 +135,12 @@
                 <?php break;
             }
           } else {
-            if (str_contains("group_id", $dataField) && isset($formInfos["form_fields"]["room_name"])) {
+            if (str_contains("group_id", $dataField) && isset($fieldsInfos["form_fields"]["room_name"])) {
+
               ?>
-              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $dataValue ?> disabled
-                <?= $attributes ?>>
-              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $linkedId ?> hidden
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
+                value="<?= $groupName["group_name"] ?>" disabled <?= $attributes ?>>
+              <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value="<?= $linkedId ?>" hidden
                 <?= $attributes ?>>
 
             <?php } else { ?>

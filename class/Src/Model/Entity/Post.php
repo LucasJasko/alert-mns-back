@@ -8,21 +8,18 @@ class Post extends \Src\Model\Model
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification du poste",
-    "form_fields" => [
-      "post_id" => [
-        "label" => "Identifiant du poste",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "post_name" => [
-        "label" => "Nom du poste",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "post_id" => [
+      "label" => "Identifiant du poste",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "post_name" => [
+      "label" => "Nom du poste",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -66,10 +63,6 @@ class Post extends \Src\Model\Model
     \Src\App::redirect("params");
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

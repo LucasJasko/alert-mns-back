@@ -8,21 +8,18 @@ class Type extends \Src\Model\Model
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification du type",
-    "form_fields" => [
-      "type_id" => [
-        "label" => "Identifiant du type",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "type_name" => [
-        "label" => "Nom du type",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "type_id" => [
+      "label" => "Identifiant du type",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "type_name" => [
+      "label" => "Nom du type",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -57,10 +54,6 @@ class Type extends \Src\Model\Model
     }
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

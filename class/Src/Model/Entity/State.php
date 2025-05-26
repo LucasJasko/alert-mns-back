@@ -8,21 +8,18 @@ class State extends \Src\Model\Model
   private int $id;
   private string $name;
   protected static array $formInfos = [
-    "form_title" => "Modification de l'état",
-    "form_fields" => [
-      "state_id" => [
-        "label" => "Identifiant de l'état",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "state_name" => [
-        "label" => "Nom de l'état",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-    ]
+    "state_id" => [
+      "label" => "Identifiant de l'état",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "state_name" => [
+      "label" => "Nom de l'état",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
   ];
 
   protected static array $dashboardInfos = [
@@ -57,10 +54,6 @@ class State extends \Src\Model\Model
     }
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

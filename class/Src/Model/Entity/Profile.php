@@ -19,74 +19,71 @@ class Profile extends \Src\Model\Model
   private array $situation = [];
 
   protected static array $formInfos = [
-    "form_title" => "Modification de l'utilisateur ",
-    "form_fields" => [
-      'profile_id' => [
-        "label" => "Identifiant de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      'profile_name' => [
-        "label" => "Nom de l'utilisateur",
-        "placeholder" => "ex: Jean",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      'profile_surname' => [
-        "label" => "Prénom de l'utilisateur",
-        "placeholder" => "ex: Dupont",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      'profile_mail' => [
-        "label" => "email de l'utilisateur",
-        "placeholder" => "ex: jean.dupont@gmail.com",
-        "input_type" => "email",
-        "attributes" => "required"
-      ],
-      'profile_password' => [
-        "label" => "Mot de passe de l'utilisateur",
-        "placeholder" => "ex: M0nSup&rP@ass98",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      'profile_picture' => [
-        "label" => "Photo de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "file",
-        "attributes" => ""
-      ],
-      'language_id' => [
-        "label" => "Langue de préférence de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "",
-        "attributes" => "required"
-      ],
-      'theme_id' => [
-        "label" => "Thème de préférence de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "",
-        "attributes" => "required"
-      ],
-      'status_id' => [
-        "label" => "Statut de préférence de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "",
-        "attributes" => "required"
-      ],
-      'situation_id' => [
-        "label" => "Situations de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "",
-        "attributes" => "required"
-      ],
-      'role_id' => [
-        "label" => "Rôle de l'utilisateur",
-        "placeholder" => "",
-        "input_type" => "",
-        "attributes" => "required"
-      ]
+    'profile_id' => [
+      "label" => "Identifiant de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    'profile_name' => [
+      "label" => "Nom de l'utilisateur",
+      "placeholder" => "ex: Jean",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    'profile_surname' => [
+      "label" => "Prénom de l'utilisateur",
+      "placeholder" => "ex: Dupont",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    'profile_mail' => [
+      "label" => "email de l'utilisateur",
+      "placeholder" => "ex: jean.dupont@gmail.com",
+      "input_type" => "email",
+      "attributes" => "required"
+    ],
+    'profile_password' => [
+      "label" => "Mot de passe de l'utilisateur",
+      "placeholder" => "ex: M0nSup&rP@ass98",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    'profile_picture' => [
+      "label" => "Photo de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "file",
+      "attributes" => ""
+    ],
+    'language_id' => [
+      "label" => "Langue de préférence de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "",
+      "attributes" => "required"
+    ],
+    'theme_id' => [
+      "label" => "Thème de préférence de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "",
+      "attributes" => "required"
+    ],
+    'status_id' => [
+      "label" => "Statut de préférence de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "",
+      "attributes" => "required"
+    ],
+    'situation_id' => [
+      "label" => "Situations de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "",
+      "attributes" => "required"
+    ],
+    'role_id' => [
+      "label" => "Rôle de l'utilisateur",
+      "placeholder" => "",
+      "input_type" => "",
+      "attributes" => "required"
     ]
   ];
 
@@ -120,7 +117,6 @@ class Profile extends \Src\Model\Model
     } else {
       $this->hydrate($newData, $this->tableName);
     }
-    $this->setFormTitle();
   }
 
   public function hydrate($row, $table)
@@ -186,10 +182,6 @@ class Profile extends \Src\Model\Model
     return array_unique($profileSituation, SORT_REGULAR);
   }
 
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
-  }
   public function setId(int $id)
   {
     $this->id = $id;

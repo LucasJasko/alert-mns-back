@@ -9,11 +9,8 @@ class Access extends \Src\Model\Model
   private string $name;
 
   protected static array $formInfos = [
-    "form_title" => "Modification du groupe ",
-    "form_fields" => [
-      "access_id" => "Identifiant du département",
-      "access_name" => "Nom du département"
-    ]
+    "access_id" => "Identifiant du département",
+    "access_name" => "Nom du département"
   ];
 
   protected static array $dashboardInfos = [
@@ -42,11 +39,6 @@ class Access extends \Src\Model\Model
     } catch (\PDOException $e) {
       return $e;
     }
-  }
-
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
   }
 
   public function setId(int $id)

@@ -13,38 +13,35 @@ class Group extends \Src\Model\Model
   // TODO faire une classe général Entity plutôt que Model
 
   protected static array $formInfos = [
-    "form_title" => "Modification du groupe ",
-    "form_fields" => [
-      "group_id" => [
-        "label" => "Identifiant du groupe",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required readonly"
-      ],
-      "group_name" => [
-        "label" => "Nom du groupe",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      "state_id" => [
-        "label" => "Etat du groupe",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      "type_id" => [
-        "label" => "Type de groupe",
-        "placeholder" => "",
-        "input_type" => "text",
-        "attributes" => "required"
-      ],
-      "room_id" => [
-        "label" => "Salons du groupe",
-        "placeholder" => "",
-        "input_type" => "select",
-        "attributes" => "required"
-      ]
+    "group_id" => [
+      "label" => "Identifiant du groupe",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required readonly"
+    ],
+    "group_name" => [
+      "label" => "Nom du groupe",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    "state_id" => [
+      "label" => "Etat du groupe",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    "type_id" => [
+      "label" => "Type de groupe",
+      "placeholder" => "",
+      "input_type" => "text",
+      "attributes" => "required"
+    ],
+    "room_id" => [
+      "label" => "Salons du groupe",
+      "placeholder" => "",
+      "input_type" => "select",
+      "attributes" => "required"
     ]
   ];
 
@@ -103,9 +100,10 @@ class Group extends \Src\Model\Model
   {
     if (empty($data["group_id"])) {
       $this->createNewModel("group", $data);
-    } else {
-      $this->updateModel($data["group_id"], $data);
+      return;
     }
+
+    $this->updateModel($data["group_id"], $data);
   }
 
   public function all()
@@ -133,10 +131,6 @@ class Group extends \Src\Model\Model
   {
     $res = $this->db->getAllWhere("room", "group_id", $groupID);
     $this->room = $res;
-  }
-  public function setFormTitle()
-  {
-    self::$formInfos["form_title"] .= $this->name();
   }
   public function setId(int $id)
   {

@@ -21,7 +21,7 @@
 
       <?php
       foreach ($paramsConfig as $table => $infos):
-        $fields = $dashboardsInfos[$table];
+        $fields = $dashboardInfos[$table];
         $data = $recordsets[$table];
         $tab = $table;
         $page = "params";
