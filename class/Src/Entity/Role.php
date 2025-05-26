@@ -64,6 +64,7 @@ class Role extends \Src\Model\Model
     } else {
       $this->updateModel($data["role_id"], $data);
     }
+    \Src\App::redirect("params");
   }
 
   public function setFormTitle()

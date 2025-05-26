@@ -4,7 +4,7 @@ namespace Src\Api;
 
 use \Core\Service\Log;
 
-class Auth extends \Core\Controller\Auth
+class Auth extends \Core\Auth\Auth
 {
 
   public function dispatch($isApi)

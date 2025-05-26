@@ -63,6 +63,7 @@ class Status extends \Src\Model\Model
     } else {
       $this->updateModel($data["status_id"], $data);
     }
+    \Src\App::redirect("params");
   }
 
   public function setFormTitle()

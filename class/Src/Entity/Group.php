@@ -55,6 +55,7 @@ class Group extends \Src\Model\Model
 
   public function __construct(int $id, $newData = [])
   {
+    $this->id = $id;
     $this->tableName = "group";
     $this->searchField = "group_id";
 
@@ -103,6 +104,7 @@ class Group extends \Src\Model\Model
     } else {
       $this->updateModel($data["group_id"], $data);
     }
+    \Src\App::redirect("group");
   }
 
   public function all()

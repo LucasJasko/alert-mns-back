@@ -24,36 +24,30 @@ class Group extends \Src\Controller\Controller
 
     if ($isApi) {
       //  Process API
-    } else {
+      return;
+    }
 
-      \Src\Controller\Auth::protect();
+    \Src\Auth\Auth::protect();
 
-
-      // TODO voir comment passer par le modèle pour soumettre les données car plus d'id pour initialiser l'objet, éventuellement récupérer l'id avec les données adjacentes
+    if (isset($id)) {
 
       if ($_POST) {
 
-        var_dump($_POST);
-
-        $group = new GroupModel($_POST["group_id"]);
+        $group = new GroupModel($id);
         $group->submitModel($_POST);
 
       }
 
-      if (isset($id)) {
+      if ($id != 0) {
 
-        if ($id != 0) {
-
-          $this->getModelForm("group", $id, $this->formInfos);
-
-        } else {
-          $this->getEmptyModelForm("group", $this->formInfos);
-        }
+        $this->getModelForm("group", $id, $this->formInfos);
 
       } else {
-        $this->getGroupDashboard();
+        $this->getEmptyModelForm("group", $this->formInfos);
       }
 
+    } else {
+      $this->getGroupDashboard();
     }
 
   }

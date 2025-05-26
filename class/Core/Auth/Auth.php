@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Controller;
+namespace Core\Auth;
 
 abstract class Auth
 {
@@ -40,7 +40,7 @@ abstract class Auth
     return \Firebase\JWT\JWT::encode($payload, $key, "RS256");
 
   }
-  public function decodeJWT($jwt)
+  public static function decodeJWT($jwt)
   {
     ob_start();
     require ROOT . "/config/env/publickey.crt";

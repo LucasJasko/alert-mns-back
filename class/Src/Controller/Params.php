@@ -66,35 +66,34 @@ class Params extends \Src\Controller\Controller
 
     if ($isApi) {
       // Process API
-    } else {
+      return;
+    }
 
-      \Src\Controller\Auth::protect();
+    \Src\Auth\Auth::protect();
 
-      if (isset($id) && isset($tab)) {
+    if (isset($id) && isset($tab)) {
 
-        if ($id != 0) {
+      if ($id != 0) {
 
-          $modelName = "\Src\Entity\\" . ucfirst($tab);
-          $model = new $modelName($id);
+        $modelName = "\Src\Entity\\" . ucfirst($tab);
+        $model = new $modelName($id);
 
-          if ($_POST) {
+        if ($_POST) {
 
-            unset($_POST["table_name"]);
+          unset($_POST["table_name"]);
 
-            $model->submitData($_POST);
-
-          } else {
-            $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
-          }
+          $model->submitData($_POST);
 
         } else {
-          $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
+          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "params");
         }
 
       } else {
-        $this->getParamsDashboard();
+        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "params");
       }
 
+    } else {
+      $this->getParamsDashboard();
     }
   }
 

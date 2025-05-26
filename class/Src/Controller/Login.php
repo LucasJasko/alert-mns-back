@@ -20,27 +20,25 @@ class Login extends \Src\Controller\Controller
         $apiAuth->apiAuth($data["email"], $data["password"]);
       }
 
-    } else {
-
-      if (isset($_POST["email"]) && isset($_POST["password"])) {
-
-        $res = \Src\Controller\Auth::auth($_POST["email"], $_POST["password"]);
-
-        if ($res["success"]) {
-
-          \Src\App::redirect("profile");
-
-        } else {
-
-          $err = $res["message"];
-          require ROOT . "/pages/login.php";
-
-        }
-      } else {
-        require ROOT . "/pages/login.php";
-      }
-
+      return;
     }
 
+    if (isset($_POST["email"]) && isset($_POST["password"])) {
+
+      $res = \Src\Auth\Auth::auth($_POST["email"], $_POST["password"]);
+
+      if ($res["success"]) {
+
+        \Src\App::redirect("profile");
+
+      } else {
+
+        $err = $res["message"];
+        require ROOT . "/pages/login.php";
+
+      }
+    } else {
+      require ROOT . "/pages/login.php";
+    }
   }
 }

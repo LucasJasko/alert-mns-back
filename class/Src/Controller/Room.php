@@ -20,32 +20,32 @@ class Room extends \Src\Controller\Controller
 
     if ($isApi) {
       // Process API
-    } else {
+      return;
+    }
 
-      if ($_POST) {
-        $this->submitData($_POST);
-        \Src\App::redirect("group");
-      }
+    if ($_POST) {
+      $this->submitData($_POST);
+      \Src\App::redirect("group");
+    }
 
-      if ($room_id != 0) {
+    if ($room_id != 0) {
 
-        $room = new RoomModel($room_id);
+      $room = new RoomModel($room_id);
 
-        if ($del == $_SESSION["delete_key"]) {
+      if ($del == $_SESSION["delete_key"]) {
 
-          $res = $room->deleteModel();
+        $res = $room->deleteModel();
 
-          if ($res) {
-            \Src\App::redirect("error");
-          }
-          \Src\App::redirect("group");
-
-        } else {
-          $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+        if ($res) {
+          \Src\App::redirect("error");
         }
+        \Src\App::redirect("group");
+
       } else {
-        $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
       }
+    } else {
+      $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
     }
   }
 

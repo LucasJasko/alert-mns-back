@@ -63,6 +63,7 @@ class Theme extends \Src\Model\Model
     } else {
       $this->updateModel($data["theme_id"], $data);
     }
+    \Src\App::redirect("params");
   }
 
   public function setFormTitle()

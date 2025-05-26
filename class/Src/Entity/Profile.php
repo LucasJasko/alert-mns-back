@@ -169,6 +169,8 @@ class Profile extends \Src\Model\Model
 
       $this->updateModel($data["profile_id"], $data);
     }
+
+    \Src\App::redirect("profile");
   }
 
   private function isolateSituations($data)

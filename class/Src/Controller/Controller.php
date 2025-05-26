@@ -56,6 +56,8 @@ abstract class Controller extends \Core\Controller\Controller
 
   public function getEmptyModelForm(string $modelName, array $formInfos, $redirectPage = "", $linkedId = "")
   {
+    unset($formInfos["form_fields"][$modelName . "_id"]);
+
     $form = new \Src\Model\Form($modelName, !empty($redirectPage) ? $redirectPage : $modelName, $formInfos, $linkedId);
     $fieldsOfTable = $this->db->getFieldsOfTable($modelName);
 

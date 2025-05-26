@@ -63,6 +63,7 @@ class Post extends \Src\Model\Model
     } else {
       $this->updateModel($data["post_id"], $data);
     }
+    \Src\App::redirect("params");
   }
 
   public function setFormTitle()

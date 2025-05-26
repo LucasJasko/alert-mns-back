@@ -15,7 +15,10 @@
 
     <h1><?= $formInfos["form_title"] ?></h1>
 
-    <form class="form" action="/<?= $redirectPage ?>" method="post">
+
+    <form class="form"
+      action="/<?= $redirectPage . "/" . (isset($displayedData[$tableName . "_id"]) ? $displayedData[$tableName . "_id"] : 0) ?>"
+      method="post">
 
 
       <a class="return-link" href="/<?= $returnPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
@@ -35,7 +38,7 @@
         if (str_contains($dataField, $tableName)) {
           ?>
           <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
-            <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>>
+            <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>     <?php ?>>
 
           <?php
         } else {
@@ -48,9 +51,9 @@
               case "situation_id":
 
                 empty($dataValue) ? $dataValue[] = [["" => ""]] : "";
-                for ($index = 0; $index < count($dataValue); $index++) {
+                for ($index = 0; $index < count($dataValue); $index++):
 
-                  foreach ($dataValue[$index] as $post => $department) { ?>
+                  foreach ($dataValue[$index] as $post => $department): ?>
 
                     <div class="dbl-select__container">
 
@@ -59,14 +62,14 @@
 
                         <?php
                         $options = \Src\Model\Form::getDataOfTable("post");
-                        for ($i = 0; $i < count($options); $i++) {
+                        for ($i = 0; $i < count($options); $i++):
                           ?>
 
                           <option value="<?= $options[$i]["post_id"] ?>" <?= $options[$i]["post_name"] == $post ? "selected" : "" ?>>
                             <?= $options[$i]["post_name"] ?>
                           </option>
 
-                        <?php } ?>
+                        <?php endfor ?>
 
                       </select>
 
@@ -77,19 +80,19 @@
                         <?php
                         $options = \Src\Model\Form::getDataOfTable("department");
 
-                        for ($i = 0; $i < count($options); $i++) { ?>
+                        for ($i = 0; $i < count($options); $i++): ?>
 
                           <option value="<?= $options[$i]["department_id"] ?>" <?= $options[$i]["department_name"] == $department ? "selected" : "" ?>><?= $options[$i]["department_name"] ?></option>
 
-                        <?php } ?>
+                        <?php endfor ?>
 
                       </select>
 
                     </div>
 
                     <?php
-                  }
-                } ?>
+                  endforeach;
+                endfor ?>
 
                 <button class="valid-button plus-btn ">Ajouter une situation</button>
 
@@ -103,11 +106,11 @@
 
                     <option value="">-- Sélectionnez un salon à éditer --</option>
 
-                    <?php for ($i = 0; $i < count($dataValue); $i++) { ?>
+                    <?php for ($i = 0; $i < count($dataValue); $i++): ?>
                       <option value="<?= $dataValue[$i]["room_id"] ?>">
                         <?= $dataValue[$i]["room_name"] ?>
                       </option>
-                    <?php } ?>
+                    <?php endfor ?>
 
                   </select>
 
@@ -134,7 +137,7 @@
                 <?php break;
             }
           } else {
-            if (str_contains("group_id", $dataField) && isset($formInfos["form_fields"]["room_id"])) {
+            if (str_contains("group_id", $dataField) && isset($formInfos["form_fields"]["room_name"])) {
               ?>
               <input type='<?= $inputType ?>' name="<?= $dataField ?>" id="<?= $dataField ?>" value=<?= $dataValue ?> disabled
                 <?= $attributes ?>>
@@ -164,22 +167,22 @@
         }
       }
 
-      if ($redirectPage == "params") { ?>
+      if ($redirectPage == "params"): ?>
 
         <input class=" table" type="text" name="table_name" value="<?= $tableName ?>" hidden>
 
-      <?php } ?>
+      <?php endif ?>
 
       <input class=" table" type="text" value="<?= $redirectPage ?>" hidden>
       <input class="valid-button" type="submit" value="Enregistrer">
 
       <?php
-      if (str_contains($returnPage, "group/") && array_key_exists("room_id", $displayedData)) {
-        if ($displayedData["room_id"] != "0") { ?>
+      if (str_contains($returnPage, "group/") && array_key_exists("room_id", $displayedData)):
+        if ($displayedData["room_id"] != "0"): ?>
           <a class="valid-button delete-room" href="/<?= $redirectPage ?>/<?= $deleteKey ?>">Supprimer le
             salon</a>
-        <?php }
-      } ?>
+        <?php endif;
+      endif ?>
 
     </form>
 

@@ -26,30 +26,29 @@ class Profile extends \Src\Controller\Controller
 
     if ($isApi) {
       // echo json_encode($this->modelData($id, "profile"));
-    } else {
+      return;
+    }
 
-      \Src\Controller\Auth::protect();
+    \Src\Auth\Auth::protect();
 
-      if (isset($id)) {
+    if (isset($id)) {
 
-        if ($id != 0) {
+      if ($id != 0) {
 
-          $profile = new ProfileModel($id);
+        $profile = new ProfileModel($id);
 
-          if ($_POST) {
+        if ($_POST) {
 
-            $profile->submitModel($_POST);
+          $profile->submitModel($_POST);
 
-          } else {
-            $this->getModelForm("profile", $id, $this->formInfos);
-          }
         } else {
-          $this->getEmptyModelForm("profile", $this->formInfos);
+          $this->getModelForm("profile", $id, $this->formInfos);
         }
       } else {
-        $this->getProfileDashboard();
+        $this->getEmptyModelForm("profile", $this->formInfos);
       }
-
+    } else {
+      $this->getProfileDashboard();
     }
   }
 
