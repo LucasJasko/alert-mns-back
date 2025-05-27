@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <title>Document</title>
+  <link rel="shortcut icon" href="../assets/img/Speak_32x32.png" type="image/x-icon">
+  <title>Speak admin - Page 404</title>
 </head>
 
 <body>
-  <h1>Alert-MNS: Back-Office</h1>
+  <h1>Speak: Back-Office</h1>
 
   <?php require_once ROOT . "/pages/template/navbar.php" ?>
 
