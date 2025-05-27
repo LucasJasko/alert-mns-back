@@ -66,15 +66,16 @@ Router::add("/stats", function ($isApi = false) {
   $controller->dispatch($isApi);
 });
 
+Router::add("/auth", function ($isApi = true) {
+  $apiAuth = new \Src\Api\Auth();
+  $apiAuth->dispatch($isApi);
+});
+
 Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function ($tableName, $id, $redirectpage, $deleteKey, $isApi = false) {
   $controller = new Src\Model\Form($tableName, $redirectpage);
   $controller->delete($deleteKey, $id, $isApi);
 });
 
-Router::add("/auth", function ($isApi = true) {
-  $apiAuth = new \Src\Api\Auth();
-  $apiAuth->dispatch($isApi);
-});
 
 Router::add("/error", function ($isApi = false) {
   require_once "../pages/error.php";

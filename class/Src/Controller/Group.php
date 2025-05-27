@@ -29,6 +29,8 @@ class Group extends \Src\Controller\Controller
 
     \Src\Auth\Auth::protect();
 
+    var_dump($this->db->lastInsertId());
+
     if (isset($id)) {
 
       $group = new GroupModel($id);
@@ -40,13 +42,16 @@ class Group extends \Src\Controller\Controller
 
       if ($id != 0) {
         $form = new \Src\Model\Form("group", "group/$id", $this->formInfos);
-        $form->getForm($group->all(), "Modification du groupe $id");
+        $form->getForm($group->all(), "Modification du groupe $id", "group");
         return;
       }
 
-      // unset($formInfos[$modelName . "_id"]);
       $form = new \Src\Model\Form("group", "group/0", $this->formInfos);
-      $form->getEmptyForm($this->db->getFieldsOfTable("group"), "Création d'un nouveau groupe", ["group_id"]);
+
+      $fieldsOfTable = $this->db->getFieldsOfTable("group");
+      $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
+
+      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau groupe", "group", ["group_id"]);
       return;
     }
 

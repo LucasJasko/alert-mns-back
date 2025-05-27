@@ -28,18 +28,27 @@ class Room extends \Src\Controller\Controller
 
     if (isset($room_id) && isset($group_id)) {
 
+      $room = new RoomModel($room_id);
+
       if ($_POST) {
-        $room = new RoomModel($room_id);
-        $room->submitData($_POST);
+        $room->submitModel($_POST);
         \Src\App::redirect("group");
       }
 
       if ($room_id != 0) {
-        $this->getModelForm("room", $room_id, $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+
+        $form = new \Src\Model\Form("room", "room/$room_id", $this->formInfos, $group_id);
+        $form->getForm($room->all(), "Modification du salon $room_id", "room");
         return;
       }
 
-      $this->getEmptyModelForm("room", $this->formInfos, "room/" . $group_id . "/" . $room_id, $group_id);
+      //  unset($formInfos[$modelName . "_id"]);
+      $form = new \Src\Model\Form("room", "room/$group_id/0", $this->formInfos, $group_id);
+
+      $fieldsOfTable = $this->db->getFieldsOfTable("room");
+      $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
+
+      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau salon", "group/$group_id", ["room_id"]);
     }
   }
 }

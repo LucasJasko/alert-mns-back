@@ -13,13 +13,13 @@
 
   <main class="form__container">
 
-    <h1><?= $formTitle ?></h1>
+    <h1><?= $metaInfos["form_title"] ?></h1>
 
 
-    <form class="form" action="/<?= $redirectPage ?>" method="post">
+    <form class="form" action="/<?= $metaInfos["redirect_page"] ?>" method="post">
 
 
-      <a class="return-link" href="/<?= $returnPage ?>"><i class="fa-solid fa-arrow-left"></i></a>
+      <a class="return-link" href="/<?= $metaInfos["return_page"] ?>"><i class="fa-solid fa-arrow-left"></i></a>
 
       <?php
       foreach ($displayedData as $dataField => $dataValue) {
@@ -33,7 +33,7 @@
         <label for="<?= $dataField ?>"> <?= $label ?> :</label>
 
         <?php
-        if (str_contains($dataField, $tableName)) {
+        if (str_contains($dataField, $metaInfos["table_name"])) {
           ?>
           <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
             <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>     <?php ?>>
@@ -42,7 +42,6 @@
         } else {
 
           if (is_array($dataValue)) {
-
 
             switch ($dataField) {
 
@@ -166,19 +165,19 @@
         }
       }
 
-      if ($redirectPage == "params"): ?>
+      if ($metaInfos["redirect_page"] == "params"): ?>
 
         <input class=" table" type="text" name="table_name" value="<?= $tableName ?>" hidden>
 
       <?php endif ?>
 
-      <input class=" table" type="text" value="<?= $redirectPage ?>" hidden>
+      <input class=" table" type="text" value="<?= $metaInfos["redirect_page"] ?>" hidden>
       <input class="valid-button" type="submit" value="Enregistrer">
 
       <?php
       if (str_contains($returnPage, "group/") && array_key_exists("room_id", $displayedData)):
         if ($displayedData["room_id"] != "0"): ?>
-          <a class="valid-button delete-room" href="/<?= $redirectPage ?>/<?= $deleteKey ?>">Supprimer le
+          <a class="valid-button delete-room" href="/<?= $metaInfos["redirect_page"] ?>/<?= $deleteKey ?>">Supprimer le
             salon</a>
         <?php endif;
       endif ?>

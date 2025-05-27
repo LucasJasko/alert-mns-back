@@ -73,27 +73,34 @@ class Params extends \Src\Controller\Controller
 
     if (isset($id) && isset($tab)) {
 
-      if ($id != 0) {
+      $modelName = "Src\Model\Entity\\" . ucfirst($tab);
+      $model = new $modelName($id);
 
-        $modelName = "\Src\Model\Entity\\" . ucfirst($tab);
-        $model = new $modelName($id);
-
-        if ($_POST) {
-
-          unset($_POST["table_name"]);
-
-          $model->submitData($_POST);
-
-        } else {
-          $this->getModelForm($tab, $id, $this->formsInfos[$tab], "Modification: " . $tab . " N°" . $id, "params");
-        }
-
-      } else {
-        $this->getEmptyModelForm($tab, $this->formsInfos[$tab], "Création: " . $tab, "params");
+      if ($_POST) {
+        unset($_POST["table_name"]);
+        $model->submitModel($_POST);
+        \Src\App::redirect("params");
+        return;
       }
 
-    } else {
-      $this->getDashboard("params", $this->paramsConfig, $this->dashboardsInfos, []);
+      if ($id != 0) {
+
+        $form = new \Src\Model\Form($tab, "params/$tab/$id", $this->formsInfos[$tab]);
+        $form->getForm($model->all(), "Modification: $tab N° $id", "group");
+        return;
+
+      }
+
+      $form = new \Src\Model\Form($tab, "params/$tab/0", $this->formsInfos[$tab]);
+
+      $fieldsOfTable = $this->db->getFieldsOfTable($tab);
+      $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
+
+      $form->getEmptyForm($fieldsOfTable, "Création: " . $tab, "params", [$tab . "_id"]);
+      return;
+
     }
+    $this->getDashboard("params", $this->paramsConfig, $this->dashboardsInfos, []);
+
   }
 }

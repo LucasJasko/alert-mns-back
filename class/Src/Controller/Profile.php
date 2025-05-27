@@ -32,17 +32,26 @@ class Profile extends \Src\Controller\Controller
 
     if (isset($id)) {
 
+      $profile = new ProfileModel($id);
+
       if ($_POST) {
-        $profile = new ProfileModel($id);
         $profile->submitModel($_POST);
+        \Src\App::redirect("profile");
       }
 
       if ($id != 0) {
-        $this->getModelForm("profile", $id, $this->formInfos, "Modification du profile " . $id);
+        $form = new \Src\Model\Form("profile", "profile/$id", $this->formInfos);
+        $form->getForm($profile->all(), "Modification du profile $id", "profile");
         return;
       }
 
-      $this->getEmptyModelForm("profile", $this->formInfos, "Création d'un nouveau profile");
+      $form = new \Src\Model\Form("profile", "profile/0", $this->formInfos);
+
+      $fieldsOfTable = $this->db->getFieldsOfTable("profile");
+      $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
+      $fieldsOfTable["situation_id"] = [["" => ""]];
+
+      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
       return;
     }
 
