@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="shortcut icon" href="../assets/img/Speak_32x32.png" type="image/x-icon">
-  <title>Speak admin - Gestion des paramètres</title>
+  <title>SPEAK ADMIN - Gestion des paramètres</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
   <div class="header">
     <div class="logo-container">
       <img class="speak-logo" src="../assets/img/Speak_64x64.png" alt="logo de l'application Speak">
-      <span class="logo-span">Speak</span>
+      <span class="logo-span">SPEAK</span>
     </div>
     <div class="title-container">
       <h1>Tableau de bord - Gestion des paramètres de l'application</h1>
