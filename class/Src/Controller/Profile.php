@@ -12,7 +12,6 @@ class Profile extends \Src\Controller\Controller
   public $formInfos;
   private array $fieldsToNotRender = ["profile_password", "language_id", "theme_id", "status_id", "profile_picture"];
 
-
   public function __construct()
   {
     parent::__construct();
