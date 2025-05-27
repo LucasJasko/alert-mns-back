@@ -24,7 +24,15 @@ class Profile extends \Src\Controller\Controller
   {
 
     if ($isApi) {
-      // echo json_encode($this->modelData($id, "profile"));
+
+      \Src\Api\Auth::protect();
+
+      $profile = new ProfileModel($id);
+      $data = $profile->all();
+      unset($data["profile_password"]);
+
+      echo json_encode($data);
+
       return;
     }
 

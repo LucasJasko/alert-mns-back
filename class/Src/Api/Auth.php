@@ -20,6 +20,20 @@ class Auth extends \Core\Auth\Auth
 
   }
 
+  public static function protect()
+  {
+    $db = \Src\App::db();
+    $refreshKey = self::decodeJWT($_COOKIE["refresh_key"]);
+    $id = $refreshKey->data->profile_id;
+    if (!$res = $db->getMultipleWhere("token", ["token_value", "profile_id"], "profile_id", $id)) {
+
+      if (!password_verify($_COOKIE["refresh_key"], $res["token_value"])) {
+        echo json_encode("Session non valide");
+        exit();
+      }
+    }
+  }
+
   public function newAccessKey()
   {
     if (isset($_COOKIE["refresh_key"])) {
@@ -31,6 +45,8 @@ class Auth extends \Core\Auth\Auth
 
       $db = \Src\App::db();
 
+
+      // TODO à terme remplacer cette vérification par une simple comapraison du contenu du refresh token décrypté avec le contenu de la requête
       if ($res = $db->getMultipleWhere("token", ["token_value", "profile_id"], "profile_id", $id)) {
 
         if (password_verify($_COOKIE["refresh_key"], $res["token_value"])) {
@@ -105,7 +121,7 @@ class Auth extends \Core\Auth\Auth
       [
         "expires" => time() + $expirationTime,
         "path" => "/",
-        "domain" => "alert-mns-back",
+        "domain" => "speak",
         "secure" => false,
         "httponly" => true,
         "samesite" => "Strict",
@@ -121,7 +137,7 @@ class Auth extends \Core\Auth\Auth
       [
         "expires" => time() + $expirationTime,
         "path" => "/",
-        "domain" => "alert-mns-back",
+        "domain" => "speak",
         "secure" => false,
         "httponly" => false,
         "samesite" => "Strict",
