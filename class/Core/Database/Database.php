@@ -11,6 +11,7 @@ class Database
   private string $dbName;
   private string $dbUsername;
   private string $dbPassword;
+
   private $db;
 
   public function __construct(string $dbhost, string $dbname, string $dbuser, string $dbpass)
@@ -34,9 +35,13 @@ class Database
     return $this->db;
   }
 
+  public function lastInsertId()
+  {
+    return $this->db->lastInsertId();
+  }
+
   public function createOne(string $table, array $data, array $fields)
   {
-    // NE PAS CHANGER CET ORDRE D ASSIGNATION, si besoin de changement, modifier la data passé en argument
     $sql = "INSERT INTO `" . $table . "` ( ";
     foreach ($fields as $key => $value) {
       $sql .= $value . ", ";
@@ -50,9 +55,11 @@ class Database
     $sql = str_replace(", )", " )", $sql);
 
     $stmt = $this->db->prepare($sql);
+
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);
     }
+
     $stmt->execute();
   }
 
@@ -205,11 +212,7 @@ class Database
   public function deleteOne(string $table, string $field, int $param)
   {
     $stmt = $this->db->prepare("DELETE FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    try {
-      $stmt->execute([":" . $field => $param]);
-    } catch (PDOException $e) {
-      return $e->getCode();
-    }
+    $stmt->execute([":" . $field => $param]);
   }
 
   public function deleteAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)

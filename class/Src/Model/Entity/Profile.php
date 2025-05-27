@@ -103,7 +103,7 @@ class Profile extends \Src\Model\Model
 
   public function __construct($id, $newData = [])
   {
-
+    $this->id = $id;
     $this->tableName = "profile";
     $this->searchField = "profile_id";
 
@@ -133,8 +133,9 @@ class Profile extends \Src\Model\Model
         $this->{$method}($value);
       }
     }
-    // TODO cette méthode doit être exécuté après que la ligne soit créé
-    $this->setSituation($this->id);
+    if ($this->id != 0) {
+      $this->setSituation($this->id);
+    }
   }
 
   public function deleteModel()
@@ -149,25 +150,30 @@ class Profile extends \Src\Model\Model
 
   public function submitModel(array $data)
   {
+
     if (empty($data["profile_id"])) {
 
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
+
       $this->createNewModel("profile", $data);
 
-      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
+      $newModelId = $this->db->lastInsertId();
+      var_dump($newModelId);
+
+      $profileSituationInstance = new ProfileSituation(0);
       $profileSituationInstance->updateSituations($profileSituation);
     } else {
 
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
+
+      $this->updateModel($data["profile_id"], $data);
+
       $profileSituationInstance = new ProfileSituation($data["profile_id"]);
       $profileSituationInstance->updateSituations($profileSituation);
 
-      $this->updateModel($data["profile_id"], $data);
     }
-
-    \Src\App::redirect("profile");
   }
 
   private function isolateSituations($data)

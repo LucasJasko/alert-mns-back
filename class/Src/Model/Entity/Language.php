@@ -54,7 +54,7 @@ class Language extends \Src\Model\Model
       return $e;
     }
   }
-  public function submitData(array $data)
+  public function submitModel(array $data)
   {
     if (empty($data["language_id"])) {
       $this->createNewModel("language", $data);

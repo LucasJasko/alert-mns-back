@@ -77,7 +77,7 @@ class Room extends \Src\Model\Model
     }
   }
 
-  public function submitData(array $data)
+  public function submitModel(array $data)
   {
 
     if (empty($data["room_id"])) {

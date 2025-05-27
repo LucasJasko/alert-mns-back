@@ -15,14 +15,11 @@ class ProfileSituation extends \Src\Model\Model
     $this->initdb($this->tableName, $this->searchField);
   }
 
-  private function clearSituations()
-  {
-    $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
-  }
-
   public function updateSituations($data)
   {
-    $this->clearSituations();
+    var_dump($data);
+    $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
+
     foreach ($data as $index => $array) {
       $array["profile_id"] = $this->id;
       $this->db->createOne("profile__situation", $array, ["profile_id", "post_id", "department_id"]);

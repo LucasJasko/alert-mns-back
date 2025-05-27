@@ -53,7 +53,7 @@ class Theme extends \Src\Model\Model
       return $e;
     }
   }
-  public function submitData(array $data)
+  public function submitModel(array $data)
   {
     if (empty($data["theme_id"])) {
       $this->createNewModel("theme", $data);

@@ -22,3 +22,6 @@ Il nécessite aussi les programmes tiers suivant:
 - Perl
 
 TODO voir pourquoi pas possible de définir une clé en auto incrément sur certaines tables de la bdd
+
+le refresh token généré contient les informations de la requête de connexion,
+puis lorsque l'utilisateur demande un nouveau access avec le refresh, on compare le contenu décrypté du token avec le contenu de la requête de récupération

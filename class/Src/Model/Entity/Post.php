@@ -53,7 +53,7 @@ class Post extends \Src\Model\Model
       return $e;
     }
   }
-  public function submitData(array $data)
+  public function submitModel(array $data)
   {
     if (empty($data["post_id"])) {
       $this->createNewModel("post", $data);
