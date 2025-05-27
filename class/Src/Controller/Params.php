@@ -80,14 +80,12 @@ class Params extends \Src\Controller\Controller
         unset($_POST["table_name"]);
         $model->submitModel($_POST);
         \Src\App::redirect("params");
-        return;
       }
 
       if ($id != 0) {
 
         $form = new \Src\Model\Form($tab, "params/$tab/$id", $this->formsInfos[$tab]);
-        $form->getForm($model->all(), "Modification: $tab N° $id", "group");
-        return;
+        return $form->getForm($model->all(), "Modification: $tab N° $id", "group");
 
       }
 
@@ -96,8 +94,7 @@ class Params extends \Src\Controller\Controller
       $fieldsOfTable = $this->db->getFieldsOfTable($tab);
       $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
 
-      $form->getEmptyForm($fieldsOfTable, "Création: " . $tab, "params", [$tab . "_id"]);
-      return;
+      return $form->getEmptyForm($fieldsOfTable, "Création: " . $tab, "params", [$tab . "_id"]);
 
     }
     $this->getDashboard("params", $this->paramsConfig, $this->dashboardsInfos, []);

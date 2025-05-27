@@ -150,18 +150,16 @@ class Profile extends \Src\Model\Model
 
   public function submitModel(array $data)
   {
+    $data["profile_password"] = password_hash($data["profile_password"], PASSWORD_DEFAULT);
 
     if (empty($data["profile_id"])) {
 
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
 
-      $this->createNewModel("profile", $data);
+      $lastInsertId = $this->createNewModel("profile", $data);
 
-      $newModelId = $this->db->lastInsertId();
-      var_dump($newModelId);
-
-      $profileSituationInstance = new ProfileSituation(0);
+      $profileSituationInstance = new ProfileSituation($lastInsertId);
       $profileSituationInstance->updateSituations($profileSituation);
     } else {
 

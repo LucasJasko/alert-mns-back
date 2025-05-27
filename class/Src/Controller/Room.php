@@ -25,7 +25,6 @@ class Room extends \Src\Controller\Controller
 
     \Src\Auth\Auth::protect();
 
-
     if (isset($room_id) && isset($group_id)) {
 
       $room = new RoomModel($room_id);
@@ -37,12 +36,10 @@ class Room extends \Src\Controller\Controller
 
       if ($room_id != 0) {
 
-        $form = new \Src\Model\Form("room", "room/$room_id", $this->formInfos, $group_id);
-        $form->getForm($room->all(), "Modification du salon $room_id", "room");
-        return;
+        $form = new \Src\Model\Form("room", "room/$group_id/$room_id", $this->formInfos, $group_id);
+        return $form->getForm($room->all(), "Modification du salon $room_id", "group/$group_id");
       }
 
-      //  unset($formInfos[$modelName . "_id"]);
       $form = new \Src\Model\Form("room", "room/$group_id/0", $this->formInfos, $group_id);
 
       $fieldsOfTable = $this->db->getFieldsOfTable("room");

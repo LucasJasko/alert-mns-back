@@ -41,8 +41,7 @@ class Profile extends \Src\Controller\Controller
 
       if ($id != 0) {
         $form = new \Src\Model\Form("profile", "profile/$id", $this->formInfos);
-        $form->getForm($profile->all(), "Modification du profile $id", "profile");
-        return;
+        return $form->getForm($profile->all(), "Modification du profile $id", "profile");
       }
 
       $form = new \Src\Model\Form("profile", "profile/0", $this->formInfos);
@@ -51,8 +50,7 @@ class Profile extends \Src\Controller\Controller
       $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
       $fieldsOfTable["situation_id"] = [["" => ""]];
 
-      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
-      return;
+      return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
     }
 
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);

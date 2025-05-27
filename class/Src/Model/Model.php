@@ -26,18 +26,11 @@ abstract class Model
         $data[$value] = "";
     }
 
-    if (isset($data["profile_password"])) {
-      $data["profile_password"] = password_hash($data["profile_password"], PASSWORD_DEFAULT);
-    }
-
-    $this->db->createOne($this->tableName, $data, $fields);
+    return $this->db->createOne($this->tableName, $data, $fields);
   }
 
   public function updateModel(int $id, array $newData)
   {
-    if (isset($newData["profile_password"])) {
-      $newData["profile_password"] = password_hash($newData["profile_password"], PASSWORD_DEFAULT);
-    }
     $this->db->updateOne($this->tableName, $newData, $this->searchField, $id);
   }
 

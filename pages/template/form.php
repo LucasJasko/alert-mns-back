@@ -177,7 +177,9 @@
       <?php
       if (str_contains($returnPage, "group/") && array_key_exists("room_id", $displayedData)):
         if ($displayedData["room_id"] != "0"): ?>
-          <a class="valid-button delete-room" href="/<?= $metaInfos["redirect_page"] ?>/<?= $deleteKey ?>">Supprimer le
+          <a class="valid-button delete-room"
+            href="/delete/room/<?= $displayedData["room_id"] ?>/group/<?= $_SESSION["delete_key"] ?>">Supprimer
+            le
             salon</a>
         <?php endif;
       endif ?>

@@ -13,7 +13,6 @@ class Database
   private string $dbPassword;
 
   private $db;
-
   public function __construct(string $dbhost, string $dbname, string $dbuser, string $dbpass)
   {
     $this->dbHost = $dbhost;
@@ -59,8 +58,8 @@ class Database
     foreach ($data as $key => $value) {
       $stmt->bindValue(":" . $key, $value);
     }
-
     $stmt->execute();
+    return $this->db->lastInsertId();
   }
 
   public function updateOne(string $table, array $data, string $param, int $id)

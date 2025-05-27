@@ -99,8 +99,7 @@ class Group extends \Src\Model\Model
   public function submitModel(array $data)
   {
     if (empty($data["group_id"])) {
-      $this->createNewModel("group", $data);
-      return;
+      return $this->createNewModel("group", $data);
     }
 
     $this->updateModel($data["group_id"], $data);
