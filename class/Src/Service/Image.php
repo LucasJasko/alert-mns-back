@@ -26,6 +26,10 @@ class Image
           $this->deleteExistingImages();
 
           $filename = "speak-profile-" . $_POST["profile_surname"] . "-" . $_POST["profile_name"];
+
+          $this->pathFile .= $_POST["profile_id"] . "-" . $filename . "/";
+          mkdir($this->pathFile);
+
           $_POST["profile_picture"] = $filename;
 
           $this->createIMG($filename, $extension);

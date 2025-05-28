@@ -6,3 +6,7 @@
 
 # Env
 /config/env/
+
+# upload
+/upload/
+!/upload/default/
