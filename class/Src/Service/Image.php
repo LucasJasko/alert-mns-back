@@ -6,9 +6,11 @@ class Image
 {
 
   private $pathFile = ROOT . "/upload/";
+  private $imageType;
 
-  public function __construct()
+  public function __construct($type)
   {
+    $this->imageType = $type;
     $this->pathFile = str_replace("\\", "/", $this->pathFile);
   }
 
@@ -25,10 +27,18 @@ class Image
 
           $this->deleteExistingImages();
 
-          $filename = "speak-profile-" . $_POST["profile_surname"] . "-" . $_POST["profile_name"];
+          $filename = "speak-profile-" . strtolower($_POST["profile_surname"]) . "-" . strtolower($_POST["profile_name"]);
 
           $this->pathFile .= $_POST["profile_id"] . "-" . $filename . "/";
-          mkdir($this->pathFile);
+
+          if (!is_dir($this->pathFile)) {
+            mkdir($this->pathFile);
+          }
+          if (is_dir($this->pathFile) && !is_dir($this->pathFile . "/" . $this->imageType)) {
+            mkdir($this->pathFile . "/" . $this->imageType);
+          }
+
+          $this->pathFile .= $this->imageType . "/";
 
           $_POST["profile_picture"] = $filename;
 
@@ -60,7 +70,7 @@ class Image
     $srcPrefix = "";
     $srcExtension = $extension;
 
-    foreach (IMG_CONFIG as $prefix => $info) {
+    foreach (IMG_CONFIG[$this->imageType] as $prefix => $info) {
 
       $srcSize = getimagesize($this->pathFile . $srcPrefix . $filename . "." . $srcExtension);
 
@@ -117,7 +127,7 @@ class Image
       imagecopyresampled($dest, $src, $destX, $destY, $srcX, $srcY, $destWidth, $destHeight, $srcWidth, $srcHeight);
 
       // Et on l'enregistre au format webp
-      imagewebp($dest, $this->pathFile . $prefix . "_" . $filename . ".webp", 100);
+      imagewebp($dest, $this->pathFile . $prefix . ($this->pathFile == "profile_picture" ? "_" : "") . $filename . ".webp", 100);
 
       $srcExtension = "webp";
 
@@ -146,7 +156,7 @@ class Image
     $count = 1;
     while ($is_found) {
       $is_found = false;
-      foreach (IMG_CONFIG as $key => $value) {
+      foreach (IMG_CONFIG[$this->imageType] as $key => $value) {
         if (file_exists($this->pathFile . $key . "_" . $filename . ($count > 1 ? "(" . $count . ")" : "") . ".webp")) {
           $is_found = true;
           break;

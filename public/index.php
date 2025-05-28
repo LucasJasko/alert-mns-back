@@ -71,6 +71,11 @@ Router::add("/auth", function ($isApi = true) {
   $apiAuth->dispatch($isApi);
 });
 
+Router::add("/image/{folder_name}/{file_name}", function ($folderName, $fileName, $isApi = true) {
+  $apiAuth = new \Src\Api\Image();
+  $apiAuth->dispatch($folderName, $fileName, $isApi);
+});
+
 Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function ($tableName, $id, $redirectpage, $deleteKey, $isApi = false) {
   $controller = new Src\Model\Form($tableName, $redirectpage);
   $controller->delete($deleteKey, $id, $isApi);

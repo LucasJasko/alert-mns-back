@@ -23,8 +23,13 @@ define("VENDORS", [
 ]);
 
 define("IMG_CONFIG", [
-  "lg" => ["width" => 1200, "height" => 900, "crop" => false],
-  "md" => ["width" => 800, "height" => 600, "crop" => false],
-  "sm" => ["width" => 200, "height" => 200, "crop" => true],
-  "xs" => ["width" => 64, "height" => 64, "crop" => true]
+  "profile_picture" => [
+    "" => ["width" => 64, "height" => 64, "crop" => true]
+  ],
+  "profile_images" => [
+    "lg" => ["width" => 1200, "height" => 900, "crop" => false],
+    "md" => ["width" => 800, "height" => 600, "crop" => false],
+    "sm" => ["width" => 200, "height" => 200, "crop" => true],
+    "xs" => ["width" => 64, "height" => 64, "crop" => true]
+  ]
 ]);
