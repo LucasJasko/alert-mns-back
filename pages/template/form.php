@@ -16,7 +16,7 @@
     <h1><?= $metaInfos["form_title"] ?></h1>
 
 
-    <form class="form" action="/<?= $metaInfos["redirect_page"] ?>" method="post">
+    <form class="form" action="/<?= $metaInfos["redirect_page"] ?>" method="post" enctype="multipart/form-data">
 
 
       <a class="return-link" href="/<?= $metaInfos["return_page"] ?>"><i class="fa-solid fa-arrow-left"></i></a>
@@ -36,7 +36,7 @@
         if (str_contains($dataField, $metaInfos["table_name"])) {
           ?>
           <input type='<?= $inputType ?>' placeholder='<?= $placeholder ?>' name="<?= $dataField ?>" id="<?= $dataField ?>"
-            <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>     <?php ?>>
+            <?= !empty($dataValue) ? "value='" . $dataValue . "'" : "" ?>     <?= $attributes ?>>
 
           <?php
         } else {

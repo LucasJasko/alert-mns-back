@@ -17,7 +17,6 @@ class ProfileSituation extends \Src\Model\Model
 
   public function updateSituations($data)
   {
-    var_dump($data);
     $this->db->deleteOne($this->tableName, $this->searchField, $this->id);
 
     foreach ($data as $index => $array) {

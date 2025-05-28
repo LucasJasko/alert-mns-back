@@ -37,18 +37,27 @@ class Profile extends \Src\Controller\Controller
 
     \Src\Auth\Auth::protect();
 
+
+
     if (isset($id)) {
+
 
       $profile = new ProfileModel($id);
 
       if ($_POST) {
         $profile->submitModel($_POST);
-        \Src\App::redirect("profile");
+        var_dump($_FILES);
+        var_dump($_POST);
+        exit();
+
+        // \Src\App::redirect("profile");
       }
 
       if ($id != 0) {
         $form = new \Src\Model\Form("profile", "profile/$id", $this->formInfos);
-        return $form->getForm($profile->all(), "Modification du profile $id", "profile");
+        $data = $profile->all();
+        $data["profile_password"] = "";
+        return $form->getForm($data, "Modification du profile $id", "profile");
       }
 
       $form = new \Src\Model\Form("profile", "profile/0", $this->formInfos);
