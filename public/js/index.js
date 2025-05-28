@@ -15,10 +15,6 @@ logOutCont.addEventListener("mouseleave", () => {
 for (let i = 0; i < tableLines.length; i++) {
   if (i % 2 == 0) tableLines[i].style.backgroundColor = "var(--palegreen)";
 }
-
-// Affichage de la navigation
-console.log(navlink);
-
 navlink.forEach((link) => {
   if (link.innerHTML == pageName.value) link.classList.add("a-active");
 });

@@ -47,7 +47,6 @@ class Profile extends \Src\Controller\Controller
       if ($_POST) {
         $profile->submitModel($_POST);
         var_dump($_FILES);
-        exit();
         // \Src\App::redirect("profile");
       }
 

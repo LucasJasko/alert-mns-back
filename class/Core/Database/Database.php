@@ -12,7 +12,7 @@ class Database
   private string $dbUsername;
   private string $dbPassword;
 
-  private $db;
+  protected $db;
   public function __construct(string $dbhost, string $dbname, string $dbuser, string $dbpass)
   {
     $this->dbHost = $dbhost;
