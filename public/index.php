@@ -71,9 +71,9 @@ Router::add("/auth", function ($isApi = true) {
   $apiAuth->dispatch($isApi);
 });
 
-Router::add("/image/{folder_name}/{file_name}", function ($folderName, $fileName, $isApi = true) {
+Router::add("/image/{folder_name}/{subfolder}/{file_name}", function ($folderName, $subfolder, $fileName, $isApi = true) {
   $apiAuth = new \Src\Api\Image();
-  $apiAuth->dispatch($folderName, $fileName, $isApi);
+  $apiAuth->dispatch($folderName, $subfolder, $fileName, $isApi);
 });
 
 Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function ($tableName, $id, $redirectpage, $deleteKey, $isApi = false) {

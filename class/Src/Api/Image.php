@@ -5,9 +5,25 @@ namespace Src\Api;
 class Image
 {
 
-  public function dispatch($folderName, $fileName, $isApi)
+  public function dispatch($folderName, $subfolder, $fileName, $isApi)
   {
+    if ($isApi) {
 
+      \Src\Api\Auth::protect();
+
+      $path = ROOT . "/upload/" . $folderName . "/" . $subfolder . "/" . $fileName;
+      if (file_exists($path)) {
+        $imageData = base64_encode(file_get_contents($path));
+        echo json_encode($imageData);
+      } else {
+        http_response_code(404);
+        echo json_encode(['error' => 'Image not found']);
+      }
+
+      return;
+    }
+
+    echo json_encode("403");
   }
 
 }
