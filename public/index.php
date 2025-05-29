@@ -11,7 +11,9 @@ use \Core\Router\Router;
 
 $router = new Router();
 
-Router::add("/", function () {
+// =================== BACK-OFFICE ROUTES ============================== //
+
+Router::add("/", function ($isApi = false) {
   $controller = new Src\Controller\Profile();
   $controller->dispatch();
 });
@@ -66,21 +68,10 @@ Router::add("/stats", function ($isApi = false) {
   $controller->dispatch($isApi);
 });
 
-Router::add("/auth", function ($isApi = true) {
-  $apiAuth = new \Src\Api\Auth();
-  $apiAuth->dispatch($isApi);
-});
-
-Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = true) {
-  $apiAuth = new \Src\Api\Image();
-  $apiAuth->dispatch($table, $folderName, $subfolder, $fileName, $isApi);
-});
-
 Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function ($tableName, $id, $redirectpage, $deleteKey, $isApi = false) {
   $controller = new Src\Model\Form($tableName, $redirectpage);
   $controller->delete($deleteKey, $id, $isApi);
 });
-
 
 Router::add("/error", function ($isApi = false) {
   require_once "../pages/error.php";
@@ -88,6 +79,23 @@ Router::add("/error", function ($isApi = false) {
 
 Router::add("/page404", function () {
   require_once "../pages/page404.php";
+});
+
+// =================== API ROUTES ============================== //
+
+Router::add("/auth", function ($isApi = true) {
+  $apiAuth = new \Src\Api\Auth();
+  $apiAuth->dispatch($isApi);
+});
+
+Router::add("/search", function ($isApi = true) {
+  $apiAuth = new \Src\Api\Search();
+  $apiAuth->dispatch($isApi);
+});
+
+Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = true) {
+  $apiAuth = new \Src\Api\Image();
+  $apiAuth->dispatch($table, $folderName, $subfolder, $fileName, $isApi);
 });
 
 Router::dispatch($path);
