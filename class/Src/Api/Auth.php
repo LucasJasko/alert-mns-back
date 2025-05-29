@@ -22,50 +22,57 @@ class Auth extends \Core\Auth\Auth
 
   public static function protect()
   {
-    $db = \Src\App::db();
-    $refreshKey = self::decodeJWT($_COOKIE["refresh_key"]);
-    $id = $refreshKey->data->profile_id;
-    if (!$res = $db->getMultipleWhere("token", ["token_value", "profile_id"], "profile_id", $id)) {
+    if (isset($_COOKIE["refresh_key"])) {
 
-      if (!password_verify($_COOKIE["refresh_key"], $res["token_value"])) {
-        echo json_encode("Session non valide");
-        exit();
+      $refreshToken = hash("sha256", self::decodeJWT($_COOKIE["refresh_key"]));
+
+      $db = \Src\App::db();
+      if ($res = $db->getMultipleWhere("token", ["token_value", "token_user_agent", "token_remote_host"], "token_value", $refreshToken)) {
+
+        if ($refreshToken === $res["token_value"]) {
+
+          if (password_verify($_SERVER["HTTP_USER_AGENT"], $res["token_user_agent"])) {
+
+            if (password_verify($_SERVER["REMOTE_HOST"], $res["token_remote_host"])) {
+
+              http_response_code(200);
+              return true;
+
+            }
+          }
+        }
       }
     }
+
+    http_response_code(403);
+    return false;
   }
 
   public function newAccessKey()
   {
-    if (isset($_COOKIE["refresh_key"])) {
+    if (self::protect()) {
 
-      http_response_code(200);
-      $refreshKey = self::decodeJWT($_COOKIE["refresh_key"]);
-
-      $id = $refreshKey->data->profile_id;
+      $refreshToken = hash("sha256", self::decodeJWT($_COOKIE["refresh_key"]));
 
       $db = \Src\App::db();
+      $res = $db->getMultipleWhere("token", ["profile_id"], "token_value", $refreshToken);
 
-
-      // TODO à terme remplacer cette vérification par une simple comapraison du contenu du refresh token décrypté avec le contenu de la requête
-      if ($res = $db->getMultipleWhere("token", ["token_value", "profile_id"], "profile_id", $id)) {
-
-        if (password_verify($_COOKIE["refresh_key"], $res["token_value"])) {
-
-          $response = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_id", $res["profile_id"]);
-
-          echo json_encode([
-            "accessToken" => self::newJWToken($response),
-            "UID" => $res["profile_id"],
-            "deleteToken" => self::generateDeleteToken(),
-          ]);
-        }
-      }
+      echo json_encode([
+        "accessToken" => self::newJWToken($res),
+        "UID" => $res["profile_id"],
+        "deleteToken" => self::generateDeleteToken(),
+      ]);
 
     } else {
+
       if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+
         http_response_code(204);
+
       } else {
+
         http_response_code(403);
+
       }
     }
   }
@@ -77,21 +84,21 @@ class Auth extends \Core\Auth\Auth
 
     if ($res && password_verify($pwd, $res["profile_password"])) {
 
-      $refreshToken = self::newJWToken($res);
+      $refreshToken = self::newJWToken([base64_encode(random_bytes(64))]);
 
-      $oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
-      if ($oldToken) {
-        $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "profile_id", $res["profile_id"]);
+      if ($oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"])) {
+        $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"]);
       }
 
       $token = new \Src\Model\Entity\Token();
-      $token->createNewToken(password_hash($refreshToken, PASSWORD_DEFAULT), $_SERVER["HTTP_USER_AGENT"], $res["profile_id"]);
+      $token->createNewToken(hash("sha256", $refreshToken), $res["profile_id"]);
+
+      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
 
       // TODO faire une fonction de comparaison du temps actuel avec les temps d'expiration des token de la table token, et supprimé ceux expirés
 
       Log::writeLog("L'utilisateur [" . $res["profile_id"] . "] " . $res["profile_name"] . " " . $res["profile_surname"] . " s'est connecté.");
 
-      $this->setHttpOnlyCookie("refresh_key", $refreshToken, 2592000);
 
       $res = [
         'success' => true,
@@ -113,13 +120,13 @@ class Auth extends \Core\Auth\Auth
     echo json_encode($res);
   }
 
-  public function setHttpOnlyCookie($name, $value, $expirationTime)
+  public function setHttpOnlyCookie($name, $value)
   {
     setcookie(
       $name,
       $value,
       [
-        "expires" => time() + $expirationTime,
+        "expires" => time() + 2592000, // 30 jours
         "path" => "/",
         "domain" => "speak",
         "secure" => false,

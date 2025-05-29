@@ -30,8 +30,8 @@ abstract class Auth
 
     $issuedAt = time();
     $payload = [
-      "iss" => "lienapi",
-      "aud" => "lienapi",
+      "iss" => "http://speak/",
+      "aud" => "http://speak:3216/auth/",
       "iat" => $issuedAt,
       "nbf" => $issuedAt,
       "data" => $data

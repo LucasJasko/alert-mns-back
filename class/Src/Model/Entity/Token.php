@@ -33,14 +33,15 @@ class Token extends \Src\Model\Model
     }
   }
 
-  public function createNewToken($refreshToken, $serverUserAgent, $resProfileId)
+  public function createNewToken($refreshToken, $id)
   {
     $this->createNewModel("token", [
       "token_value" => $refreshToken,
       "token_expiration_time" => time() + 2592000, // 30 jours
       "token_creation_time" => time(),
-      "token_user_agent" => $serverUserAgent,
-      "profile_id" => $resProfileId,
+      "token_user_agent" => password_hash($_SERVER["HTTP_USER_AGENT"], PASSWORD_DEFAULT),
+      "token_remote_host" => password_hash($_SERVER["REMOTE_HOST"], PASSWORD_DEFAULT),
+      "profile_id" => $id
     ]);
   }
 

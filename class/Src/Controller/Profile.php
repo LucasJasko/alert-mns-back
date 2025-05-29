@@ -24,23 +24,22 @@ class Profile extends \Src\Controller\Controller
 
     if ($isApi) {
 
-      \Src\Api\Auth::protect();
+      if (\Src\Api\Auth::protect()) {
 
-      $profile = new ProfileModel($id);
-      $data = $profile->all();
-      unset($data["profile_password"]);
+        $profile = new ProfileModel($id);
+        $data = $profile->all();
+        unset($data["profile_password"]);
 
-      echo json_encode($data);
+        echo json_encode($data);
 
-      return;
+        return;
+
+      }
     }
 
     \Src\Auth\Auth::protect();
 
-
-
     if (isset($id)) {
-
 
       $profile = new ProfileModel($id);
 
@@ -64,6 +63,10 @@ class Profile extends \Src\Controller\Controller
 
       return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
     }
+
+    var_dump($_COOKIE);
+    echo "=======================";
+    var_dump($_SERVER);
 
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
