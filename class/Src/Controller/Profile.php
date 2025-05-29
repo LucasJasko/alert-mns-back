@@ -35,6 +35,8 @@ class Profile extends \Src\Controller\Controller
         return;
 
       }
+
+      http_response_code(401);
     }
 
     \Src\Auth\Auth::protect();

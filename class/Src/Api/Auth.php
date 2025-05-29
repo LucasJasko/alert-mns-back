@@ -86,11 +86,13 @@ class Auth extends \Core\Auth\Auth
 
       $refreshToken = self::newJWToken([base64_encode(random_bytes(64))]);
 
+      // TODO ici la récuération des token existant se fait sur un recherche sans valeurs haché alors qu'elles le sont côté base
       if ($oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"])) {
         $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"]);
       }
 
       $token = new \Src\Model\Entity\Token();
+      // TODO ici il semblerait que sha256 ne génère pas les mêmes hachage pour une même valeur, à vérifier...
       $token->createNewToken(hash("sha256", $refreshToken), $res["profile_id"]);
 
       $this->setHttpOnlyCookie("refresh_key", $refreshToken);
