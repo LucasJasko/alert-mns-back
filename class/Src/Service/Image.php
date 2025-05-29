@@ -7,6 +7,7 @@ class Image
 
   private $pathFile = ROOT . "/upload/";
   private $imageType;
+  private $id;
 
   public function __construct($type)
   {
@@ -14,8 +15,9 @@ class Image
     $this->pathFile = str_replace("\\", "/", $this->pathFile);
   }
 
-  public function createPicture($table)
+  public function createPicture($table, $id = "")
   {
+    $this->id = $id != "" ? $id : $_POST[$table . "_id"];
 
     if (isset($_FILES[$table . "_picture"])) {
 
@@ -27,9 +29,11 @@ class Image
 
           $this->deleteExistingImages($table);
 
-          $filename = "speak-" . $table . "-" . strtolower($_POST[$table . "_surname"]) . "-" . strtolower($_POST[$table . "_name"]);
+          $firstPart = $table == "profile" ? "-" . strtolower($_POST[$table . "_surname"]) : "";
+          $secondPart = $this->cleanFileName(strtolower($_POST[$table . "_name"]));
+          $filename = "speak-" . $table . $firstPart . "-" . $secondPart;
 
-          $this->pathFile .= $_POST[$table . "_id"] . "-" . $filename . "/";
+          $this->pathFile .= $table . "/" . $this->id . "-" . $filename . "/";
 
           if (!is_dir($this->pathFile)) {
             mkdir($this->pathFile);
@@ -50,7 +54,7 @@ class Image
           unlink($this->pathFile . $filename . "." . $extension);
         }
 
-        \Src\App::db()->setPicture($table, $table . "_picture", $table . "_id", "$filename.webp", $_POST[$table . "_id"]);
+        \Src\App::db()->setPicture($table, $table . "_picture", $table . "_id", "$filename.webp", $this->id);
       }
     } else {
 
@@ -172,16 +176,13 @@ class Image
 
   private function deleteExistingImages($table)
   {
-    if ($_POST[$table . "_id"] > 0) {
 
-      if ($row = \Src\App::db()->getPicture($table . "", $table . "_picture", $table . "_id", $_POST[$table . "_id"])) {
+    if ($row = \Src\App::db()->getPicture($table, $table . "_picture", $table . "_id", $this->id)) {
 
-        foreach (IMG_CONFIG as $prefix => $value) {
-          if (file_exists($this->pathFile . $prefix . "_" . $row[$table . "_picture"])) {
-            unlink($this->pathFile . $prefix . "_" . $row[$table . "_picture"]);
-          }
+      foreach (IMG_CONFIG as $prefix => $value) {
+        if (file_exists($this->pathFile . $prefix . "_" . $row[$table . "_picture"])) {
+          unlink($this->pathFile . $prefix . "_" . $row[$table . "_picture"]);
         }
-
       }
     }
   }

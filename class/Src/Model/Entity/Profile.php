@@ -157,27 +157,27 @@ class Profile extends \Src\Model\Model
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
 
-      $imageManager = new \Src\Service\Image("profile_picture");
-      $imageManager->createPicture("profile");
 
       $lastInsertId = $this->createNewModel("profile", $data);
 
-      $profileSituationInstance = new ProfileSituation($lastInsertId);
-      $profileSituationInstance->updateSituations($profileSituation);
-    } else {
-
-      $profileSituation = $this->isolateSituations($data);
-      unset($data["situation_id"]);
-
       $imageManager = new \Src\Service\Image("profile_picture");
-      $imageManager->createPicture("profile");
+      $imageManager->createPicture("profile", $lastInsertId);
 
-      $this->updateModel($data["profile_id"], $data);
-
-      $profileSituationInstance = new ProfileSituation($data["profile_id"]);
-      $profileSituationInstance->updateSituations($profileSituation);
-
+      $profileSituationInstance = new ProfileSituation($lastInsertId);
+      return $profileSituationInstance->updateSituations($profileSituation);
     }
+
+    $profileSituation = $this->isolateSituations($data);
+    unset($data["situation_id"]);
+
+    $imageManager = new \Src\Service\Image("profile_picture");
+    $imageManager->createPicture("profile");
+
+    $this->updateModel($data["profile_id"], $data);
+
+    $profileSituationInstance = new ProfileSituation($data["profile_id"]);
+    $profileSituationInstance->updateSituations($profileSituation);
+
   }
 
   private function isolateSituations($data)
@@ -223,9 +223,9 @@ class Profile extends \Src\Model\Model
   public function setPicture(string|null $picture)
   {
     if ($picture == null) {
-      $this->picture = "'le chemin vers une image par défaut'";
+      $this->picture = "default.webp";
     } else {
-      $this->picture = htmlspecialchars($picture);
+      $this->picture = $picture;
     }
   }
   public function setLanguage(int $languageID)

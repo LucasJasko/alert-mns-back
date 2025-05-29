@@ -6,6 +6,7 @@ class Group extends \Src\Model\Model
 {
   private int $id;
   private string $name;
+  private string $picture;
   private $state;
   private $type;
   private array $room;
@@ -105,8 +106,15 @@ class Group extends \Src\Model\Model
   public function submitModel(array $data)
   {
     if (empty($data["group_id"])) {
-      return $this->createNewModel("group", $data);
+
+      $lastInsertId = $this->createNewModel("group", $data);
+
+      $imageManager = new \Src\Service\Image("profile_picture");
+      return $imageManager->createPicture("group", $lastInsertId);
     }
+
+    $imageManager = new \Src\Service\Image("profile_picture");
+    $imageManager->createPicture("group");
 
     $this->updateModel($data["group_id"], $data);
   }
@@ -116,6 +124,7 @@ class Group extends \Src\Model\Model
     return [
       "group_id" => $this->id(),
       "group_name" => $this->name(),
+      "group_picture" => $this->picture(),
       "state_id" => $this->state(),
       "type_id" => $this->type(),
       "room_id" => $this->room()
@@ -145,6 +154,14 @@ class Group extends \Src\Model\Model
   {
     $this->name = $name;
   }
+  public function setPicture(string|null $picture)
+  {
+    if ($picture == null) {
+      $this->picture = "default.webp";
+    } else {
+      $this->picture = $picture;
+    }
+  }
   public function setTableName($tableName)
   {
     $this->tableName = $tableName;
@@ -169,6 +186,10 @@ class Group extends \Src\Model\Model
   public function name()
   {
     return htmlspecialchars($this->name);
+  }
+  public function picture()
+  {
+    return htmlspecialchars($this->picture);
   }
   public function tableName()
   {

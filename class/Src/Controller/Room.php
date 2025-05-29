@@ -37,7 +37,7 @@ class Room extends \Src\Controller\Controller
       if ($room_id != 0) {
 
         $form = new \Src\Model\Form("room", "room/$group_id/$room_id", $this->formInfos, $group_id);
-        return $form->getForm($room->all(), "Modification du salon $room_id", "group/$group_id");
+        return $form->getForm($room->all(), "Modification du salon " . $room->name() . " du groupe " . $room->group(), "group/$group_id");
       }
 
       $form = new \Src\Model\Form("room", "room/$group_id/0", $this->formInfos, $group_id);
