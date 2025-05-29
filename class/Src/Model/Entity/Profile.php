@@ -158,7 +158,7 @@ class Profile extends \Src\Model\Model
       unset($data["situation_id"]);
 
       $imageManager = new \Src\Service\Image("profile_picture");
-      $imageManager->createProfilePicture();
+      $imageManager->createPicture("profile");
 
       $lastInsertId = $this->createNewModel("profile", $data);
 
@@ -170,7 +170,7 @@ class Profile extends \Src\Model\Model
       unset($data["situation_id"]);
 
       $imageManager = new \Src\Service\Image("profile_picture");
-      $imageManager->createProfilePicture();
+      $imageManager->createPicture("profile");
 
       $this->updateModel($data["profile_id"], $data);
 

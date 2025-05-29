@@ -14,22 +14,22 @@ class Image
     $this->pathFile = str_replace("\\", "/", $this->pathFile);
   }
 
-  public function createProfilePicture()
+  public function createPicture($table)
   {
 
-    if (isset($_FILES["profile_picture"])) {
+    if (isset($_FILES[$table . "_picture"])) {
 
-      if ($_FILES["profile_picture"]["error"] == 0) {
+      if ($_FILES[$table . "_picture"]["error"] == 0) {
 
-        $extension = strtolower(pathinfo($_FILES["profile_picture"]["name"], PATHINFO_EXTENSION));
+        $extension = strtolower(pathinfo($_FILES[$table . "_picture"]["name"], PATHINFO_EXTENSION));
 
-        if ($_FILES["profile_picture"]["type"] == "image/" . str_replace("jpg", "jpeg", $extension) && in_array($extension, ["jpg", "jpeg", "png", "gif", "webp"])) {
+        if ($_FILES[$table . "_picture"]["type"] == "image/" . str_replace("jpg", "jpeg", $extension) && in_array($extension, ["jpg", "jpeg", "png", "gif", "webp"])) {
 
-          $this->deleteExistingImages();
+          $this->deleteExistingImages($table);
 
-          $filename = "speak-profile-" . strtolower($_POST["profile_surname"]) . "-" . strtolower($_POST["profile_name"]);
+          $filename = "speak-" . $table . "-" . strtolower($_POST[$table . "_surname"]) . "-" . strtolower($_POST[$table . "_name"]);
 
-          $this->pathFile .= $_POST["profile_id"] . "-" . $filename . "/";
+          $this->pathFile .= $_POST[$table . "_id"] . "-" . $filename . "/";
 
           if (!is_dir($this->pathFile)) {
             mkdir($this->pathFile);
@@ -40,9 +40,9 @@ class Image
 
           $this->pathFile .= $this->imageType . "/";
 
-          $_POST["profile_picture"] = $filename;
+          $_POST[$table . "_picture"] = $filename;
 
-          $this->createIMG($filename, $extension);
+          $this->createIMG($table, $filename, $extension);
 
         }
 
@@ -50,22 +50,22 @@ class Image
           unlink($this->pathFile . $filename . "." . $extension);
         }
 
-        \Src\App::db()->setProfilePicture("profile", "profile_picture", "profile_id", "$filename.webp", $_POST["profile_id"]);
+        \Src\App::db()->setPicture($table, $table . "_picture", $table . "_id", "$filename.webp", $_POST[$table . "_id"]);
       }
     } else {
 
-      $_POST["profile_picture"] = "default";
+      $_POST[$table . "_picture"] = "default";
 
     }
 
   }
 
-  private function createIMG($filename, $extension)
+  private function createIMG($table, $filename, $extension)
   {
     $filename = $this->cleanFileName($filename);
     $filename = $this->incrementFileName($filename);
 
-    move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $this->pathFile . $filename . "." . $extension);
+    move_uploaded_file($_FILES[$table . "_picture"]["tmp_name"], $this->pathFile . $filename . "." . $extension);
 
     $srcPrefix = "";
     $srcExtension = $extension;
@@ -127,7 +127,7 @@ class Image
       imagecopyresampled($dest, $src, $destX, $destY, $srcX, $srcY, $destWidth, $destHeight, $srcWidth, $srcHeight);
 
       // Et on l'enregistre au format webp
-      imagewebp($dest, $this->pathFile . $prefix . ($this->pathFile == "profile_picture" ? "_" : "") . $filename . ".webp", 100);
+      imagewebp($dest, $this->pathFile . $prefix . ($this->pathFile == $table . "_picture" ? "_" : "") . $filename . ".webp", 100);
 
       $srcExtension = "webp";
 
@@ -170,15 +170,15 @@ class Image
     return $filename;
   }
 
-  private function deleteExistingImages()
+  private function deleteExistingImages($table)
   {
-    if ($_POST["profile_id"] > 0) {
+    if ($_POST[$table . "_id"] > 0) {
 
-      if ($row = \Src\App::db()->getProfilePicture("profile", "profile_picture", "profile_id", $_POST['profile_id'])) {
+      if ($row = \Src\App::db()->getPicture($table . "", $table . "_picture", $table . "_id", $_POST[$table . "_id"])) {
 
         foreach (IMG_CONFIG as $prefix => $value) {
-          if (file_exists($this->pathFile . $prefix . "_" . $row["profile_picture"])) {
-            unlink($this->pathFile . $prefix . "_" . $row["profile_picture"]);
+          if (file_exists($this->pathFile . $prefix . "_" . $row[$table . "_picture"])) {
+            unlink($this->pathFile . $prefix . "_" . $row[$table . "_picture"]);
           }
         }
 

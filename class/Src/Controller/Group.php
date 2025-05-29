@@ -40,7 +40,7 @@ class Group extends \Src\Controller\Controller
 
       if ($id != 0) {
         $form = new \Src\Model\Form("group", "group/$id", $this->formInfos);
-        return $form->getForm($group->all(), "Modification du groupe $id", "group");
+        return $form->getForm($group->all(), "Modification du groupe " . $group->name(), "group");
       }
 
       $form = new \Src\Model\Form("group", "group/0", $this->formInfos);

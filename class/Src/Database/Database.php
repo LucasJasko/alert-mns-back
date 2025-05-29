@@ -9,7 +9,7 @@ class Database extends \Core\Database\Database
   {
   }
 
-  public function getProfilePicture($table, $target, $field, $value): mixed
+  public function getPicture($table, $target, $field, $value): mixed
   {
     $sql = "SELECT $target FROM $table WHERE $field = :$field AND $target IS NOT NULL AND $target <> ''";
     $stmt = $this->db->prepare($sql);
@@ -18,7 +18,7 @@ class Database extends \Core\Database\Database
     return $stmt->fetch();
   }
 
-  public function setProfilePicture($table, $target, $field, $targetValue, $fieldValue)
+  public function setPicture($table, $target, $field, $targetValue, $fieldValue)
   {
     $sql = "UPDATE $table SET $target = :$target WHERE $field = :$field";
     $stmt = $this->db->prepare($sql);

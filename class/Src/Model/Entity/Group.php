@@ -25,6 +25,12 @@ class Group extends \Src\Model\Model
       "input_type" => "text",
       "attributes" => "required"
     ],
+    "group_picture" => [
+      "label" => "Image du groupe",
+      "placeholder" => "",
+      "input_type" => "file",
+      "attributes" => ""
+    ],
     "state_id" => [
       "label" => "Etat du groupe",
       "placeholder" => "",

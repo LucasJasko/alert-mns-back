@@ -53,7 +53,7 @@ class Profile extends \Src\Controller\Controller
         $form = new \Src\Model\Form("profile", "profile/$id", $this->formInfos);
         $data = $profile->all();
         $data["profile_password"] = "";
-        return $form->getForm($data, "Modification du profile $id", "profile");
+        return $form->getForm($data, "Modification du profile de " . $profile->name() . " " . $profile->surname(), "profile");
       }
 
       $form = new \Src\Model\Form("profile", "profile/0", $this->formInfos);
