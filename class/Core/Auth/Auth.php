@@ -37,7 +37,7 @@ abstract class Auth
       "data" => $data
     ];
 
-    return \Firebase\JWT\JWT::encode($payload, $key, "RS256");
+    return \Firebase\JWT\JWT::encode($payload, $key, "RS256", JWT_SECRET_KEY);
 
   }
   public static function decodeJWT($jwt)
