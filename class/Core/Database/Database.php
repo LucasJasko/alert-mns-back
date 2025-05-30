@@ -87,17 +87,17 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getAllWhere(string $table, string $field, int $id)
+  public function getAllWhere(string $table, string $field, mixed $value)
   {
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    $stmt->execute([":" . $field => $id]);
+    $stmt->execute([":" . $field => $value]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getOneWhere(string $table, string $field, int $id)
+  public function getOneWhere(string $table, string $field, mixed $value)
   {
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field . " = :" . $field);
-    $stmt->execute([":" . $field => $id]);
+    $stmt->execute([":" . $field => $value]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 

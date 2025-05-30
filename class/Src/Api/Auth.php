@@ -12,7 +12,7 @@ class Auth extends \Core\Auth\Auth
 
     if ($isApi) {
 
-      $this->newAccessKey();
+      self::newAccessKey();
 
     } else {
       http_response_code(403);
@@ -22,18 +22,23 @@ class Auth extends \Core\Auth\Auth
 
   public static function protect()
   {
+    if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+      exit();
+    }
+
     $req = \Src\App::clientData();
 
-    if (isset($req["accessToken"])) {
-
-      $token = \Core\Auth\Auth::decodeJWT($req["accessToken"]);
-
-      if ($token->iss === "http://speak/" && $token->aud === "http://speak:3216/auth/") {
-        return true;
-      }
-
+    if (!isset($req["accessToken"])) {
+      http_response_code(403);
+      exit();
     }
-    return false;
+
+    $token = \Core\Auth\Auth::decodeJWT($req["accessToken"]);
+
+    if (!$token->iss === "http://speak/" || !$token->aud === "http://speak:3216/auth/") {
+      http_response_code(403);
+      exit();
+    }
   }
 
   public static function checkRefreshToken()
@@ -64,7 +69,7 @@ class Auth extends \Core\Auth\Auth
     return false;
   }
 
-  public static function newAccessKey()
+  public function newAccessKey()
   {
     if (self::checkRefreshToken()) {
 
@@ -81,18 +86,6 @@ class Auth extends \Core\Auth\Auth
         "deleteToken" => self::generateDeleteToken(),
       ]);
 
-    } else {
-
-      if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-
-        http_response_code(204);
-
-      } else {
-
-        http_response_code(403);
-        return false;
-
-      }
     }
   }
 
@@ -140,35 +133,5 @@ class Auth extends \Core\Auth\Auth
     echo json_encode($res);
   }
 
-  public function setHttpOnlyCookie($name, $value)
-  {
-    setcookie(
-      $name,
-      $value,
-      [
-        "expires" => time() + 2592000, // 30 jours
-        "path" => "/",
-        "domain" => "speak",
-        "secure" => false,
-        "httponly" => true,
-        "samesite" => "Strict",
-      ]
-    );
-  }
 
-  public function setClientCookie($name, $value, $expirationTime)
-  {
-    setcookie(
-      $name,
-      $value,
-      [
-        "expires" => time() + $expirationTime,
-        "path" => "/",
-        "domain" => "speak",
-        "secure" => false,
-        "httponly" => false,
-        "samesite" => "Strict",
-      ]
-    );
-  }
 }

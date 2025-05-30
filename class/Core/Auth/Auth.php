@@ -53,5 +53,34 @@ abstract class Auth
       return $e;
     }
   }
-
+  public function setHttpOnlyCookie($name, $value)
+  {
+    setcookie(
+      $name,
+      $value,
+      [
+        "expires" => time() + 2592000, // 30 jours
+        "path" => "/",
+        "domain" => "speak",
+        "secure" => false,
+        "httponly" => true,
+        "samesite" => "Strict",
+      ]
+    );
+  }
+  public function setCookie($name, $value)
+  {
+    setcookie(
+      $name,
+      $value,
+      [
+        "expires" => time() + 2592000,
+        "path" => "/",
+        "domain" => "speak",
+        "secure" => false,
+        "httponly" => false,
+        "samesite" => "Strict",
+      ]
+    );
+  }
 }

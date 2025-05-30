@@ -23,19 +23,15 @@ class Profile extends \Src\Controller\Controller
   {
     if ($isApi) {
 
-      if (\Src\Api\Auth::protect()) {
+      \Src\Api\Auth::protect();
 
-        $profile = new ProfileModel($id);
-        $data = $profile->all();
-        unset($data["profile_password"]);
+      $profile = new ProfileModel($id);
+      $data = $profile->all();
+      unset($data["profile_password"]);
 
-        echo json_encode($data);
+      echo json_encode($data);
 
-        return;
-
-      }
-
-      http_response_code(401);
+      return;
     }
 
     \Src\Auth\Auth::protect();

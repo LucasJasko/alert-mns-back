@@ -18,6 +18,15 @@ class Database extends \Core\Database\Database
     return $stmt->fetch();
   }
 
+  public function getResultsThatContain($table, $target, $target2, $value)
+  {
+    $sql = "SELECT $target, $target2 FROM `$table` WHERE $target LIKE CONCAT('%', :query, '%') OR $target2 LIKE CONCAT('%', :query, '%')";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindValue(":query", $value);
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
+
   public function setPicture($table, $target, $field, $targetValue, $fieldValue)
   {
     $sql = "UPDATE `$table` SET $target = :$target WHERE $field = :$field";

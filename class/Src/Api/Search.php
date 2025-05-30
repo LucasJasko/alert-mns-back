@@ -9,16 +9,13 @@ class Search
   {
     if ($isApi) {
 
-      if (\Src\Api\Auth::protect()) {
+      \Src\Api\Auth::protect();
 
-        echo json_encode($_COOKIE);
-        return;
-
-      }
-
-      http_response_code(401);
+      $req = \Src\App::clientData();
+      $query = $req["query"];
+      $res = \Src\App::db()->getResultsThatContain("profile", "profile_name", "profile_surname", $query);
+      echo json_encode($res);
+      return;
     }
-
-    http_response_code(404);
   }
 }
