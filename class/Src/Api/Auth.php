@@ -43,6 +43,10 @@ class Auth extends \Core\Auth\Auth
 
   public static function checkRefreshToken()
   {
+    if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+      exit();
+    }
+
     if (isset($_COOKIE["refresh_key"])) {
 
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);

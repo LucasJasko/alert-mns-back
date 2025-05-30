@@ -13,7 +13,7 @@ class Search
 
       $req = \Src\App::clientData();
       $query = $req["query"];
-      $res = \Src\App::db()->getResultsThatContain("profile", "profile_name", "profile_surname", $query);
+      $res = \Src\App::db()->getResultsThatContain("profile", ["profile_name", "profile_id", "profile_surname", "profile_picture", "status_id"], "profile_name", "profile_surname", $query);
       echo json_encode($res);
       return;
     }

@@ -18,9 +18,17 @@ class Database extends \Core\Database\Database
     return $stmt->fetch();
   }
 
-  public function getResultsThatContain($table, $target, $target2, $value)
+  public function getResultsThatContain($table, array $searched, $target, $target2, $value)
   {
-    $sql = "SELECT $target, $target2 FROM `$table` WHERE $target LIKE CONCAT('%', :query, '%') OR $target2 LIKE CONCAT('%', :query, '%')";
+    $sql = "SELECT ";
+    for ($i = 0; $i < count($searched); $i++) {
+      if ($i < count($searched) - 1) {
+        $sql .= $searched[$i] . ", ";
+      } else {
+        $sql .= $searched[$i];
+      }
+    }
+    $sql .= " FROM `$table` WHERE $target LIKE CONCAT('%', :query, '%') OR $target2 LIKE CONCAT('%', :query, '%')";
     $stmt = $this->db->prepare($sql);
     $stmt->bindValue(":query", $value);
     $stmt->execute();
