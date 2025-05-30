@@ -10,16 +10,17 @@ A chaque commit:
 
 si patch, git tag avant
 
-Pour fonctionner ce projet doit avoir un serveur apache avec les mdoules suivant actif:
+Pour fonctionner ce projet doit avoir un serveur apache avec les modules suivant actif:
 
 - Headers_module
 - Rewrite_module
+
+et la directive suivante activé dans le httpd.conf :
+
+- HostnameLookups On
 
 Il nécessite aussi les programmes tiers suivant:
 
 - Composer
 - OpenSSL
 - Perl
-
-TODO le refresh token généré contient les informations de la requête de connexion,
-puis lorsque l'utilisateur demande un nouveau access avec le refresh, on compare le contenu décrypté du token avec le contenu de la requête de récupération
