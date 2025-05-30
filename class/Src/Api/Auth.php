@@ -32,11 +32,8 @@ class Auth extends \Core\Auth\Auth
         return true;
       }
 
-    } else {
-
-      self::newAccessKey();
-
     }
+    return false;
   }
 
   public static function checkRefreshToken()

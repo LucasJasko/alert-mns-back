@@ -65,10 +65,6 @@ class Profile extends \Src\Controller\Controller
       return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
     }
 
-    var_dump($_COOKIE);
-    echo "=======================";
-    var_dump($_SERVER);
-
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
 }

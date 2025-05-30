@@ -26,8 +26,6 @@ class Image
 
       }
     }
-
-    echo json_encode("403");
   }
 
 }
