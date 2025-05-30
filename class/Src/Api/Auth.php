@@ -24,7 +24,7 @@ class Auth extends \Core\Auth\Auth
   {
     if (isset($_COOKIE["refresh_key"])) {
 
-      $refreshToken = hash("sha256", self::decodeJWT($_COOKIE["refresh_key"]));
+      $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
 
       $db = \Src\App::db();
       if ($res = $db->getMultipleWhere("token", ["token_value", "token_user_agent", "token_remote_host"], "token_value", $refreshToken)) {
@@ -52,9 +52,9 @@ class Auth extends \Core\Auth\Auth
   {
     if (self::protect()) {
 
-      $refreshToken = hash("sha256", self::decodeJWT($_COOKIE["refresh_key"]));
-
       $db = \Src\App::db();
+      $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
+
       $res = $db->getMultipleWhere("token", ["profile_id"], "token_value", $refreshToken);
 
       echo json_encode([
@@ -86,16 +86,15 @@ class Auth extends \Core\Auth\Auth
 
       $refreshToken = self::newJWToken([base64_encode(random_bytes(64))]);
 
-      // TODO ici la récuération des token existant se fait sur un recherche sans valeurs haché alors qu'elles le sont côté base
-      if ($oldToken = $db->getAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"])) {
-        $db->deleteAllWhereAnd("token", "token_user_agent", $_SERVER["HTTP_USER_AGENT"], "token_remote_host", $_SERVER["REMOTE_HOST"]);
+      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
+
+      if ($oldToken = $db->getAllWhere("token", "profile_id", $res["profile_id"])) {
+        $db->deleteAllWhere("token", "profile_id", $res["profile_id"]);
       }
 
       $token = new \Src\Model\Entity\Token();
-      // TODO ici il semblerait que sha256 ne génère pas les mêmes hachage pour une même valeur, à vérifier...
-      $token->createNewToken(hash("sha256", $refreshToken), $res["profile_id"]);
+      $token->insertTokenToBase(hash("sha256", $refreshToken), $res["profile_id"]);
 
-      $this->setHttpOnlyCookie("refresh_key", $refreshToken);
 
       // TODO faire une fonction de comparaison du temps actuel avec les temps d'expiration des token de la table token, et supprimé ceux expirés
 
