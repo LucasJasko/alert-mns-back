@@ -33,7 +33,7 @@ class Token extends \Src\Model\Model
     }
   }
 
-  public function createNewToken($refreshToken, $id)
+  public function insertTokenToBase($refreshToken, $id)
   {
     $this->createNewModel("token", [
       "token_value" => $refreshToken,

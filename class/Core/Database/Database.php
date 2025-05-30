@@ -214,12 +214,18 @@ class Database
     $stmt->execute([":" . $field => $param]);
   }
 
+  public function deleteAllWhere(string $table, string $field, string $fieldValue)
+  {
+    $stmt = $this->db->prepare("DELETE FROM `" . $table . "` WHERE " . $field . " = :" . $field);
+    $stmt->bindValue(":" . $field, $fieldValue);
+    $stmt->execute();
+  }
+
   public function deleteAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("DELETE FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
     $stmt->bindValue(":" . $field1, $field1Value);
     $stmt->bindValue(":" . $field2, $field2Value);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }
