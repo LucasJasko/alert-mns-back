@@ -21,7 +21,6 @@ class Profile extends \Src\Controller\Controller
 
   public function dispatch($id = null, bool $isApi = false)
   {
-
     if ($isApi) {
 
       if (\Src\Api\Auth::protect()) {

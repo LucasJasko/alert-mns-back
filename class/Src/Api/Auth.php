@@ -22,6 +22,25 @@ class Auth extends \Core\Auth\Auth
 
   public static function protect()
   {
+    $req = \Src\App::clientData();
+
+    if (isset($req["accessToken"])) {
+
+      $token = \Core\Auth\Auth::decodeJWT($req["accessToken"]);
+
+      if ($token->iss === "http://speak/" && $token->aud === "http://speak:3216/auth/") {
+        return true;
+      }
+
+    } else {
+
+      self::newAccessKey();
+
+    }
+  }
+
+  public static function checkRefreshToken()
+  {
     if (isset($_COOKIE["refresh_key"])) {
 
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
@@ -48,17 +67,19 @@ class Auth extends \Core\Auth\Auth
     return false;
   }
 
-  public function newAccessKey()
+  public static function newAccessKey()
   {
-    if (self::protect()) {
+    if (self::checkRefreshToken()) {
 
       $db = \Src\App::db();
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
 
       $res = $db->getMultipleWhere("token", ["profile_id"], "token_value", $refreshToken);
 
+      $profileData = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_id", $res["profile_id"]);
+
       echo json_encode([
-        "accessToken" => self::newJWToken($res),
+        "accessToken" => self::newJWToken($profileData),
         "UID" => $res["profile_id"],
         "deleteToken" => self::generateDeleteToken(),
       ]);
@@ -72,6 +93,7 @@ class Auth extends \Core\Auth\Auth
       } else {
 
         http_response_code(403);
+        return false;
 
       }
     }

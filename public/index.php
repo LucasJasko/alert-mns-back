@@ -43,7 +43,7 @@ Router::add("/room/{group_id}/{room_id}", function ($group_id, $room_id, $isApi 
   $controller->dispatch($group_id, $room_id, $isApi);
 });
 
-Router::add("/profile", function ($isApi = false) {
+Router::add("/profile", function () {
   $controller = new Src\Controller\Profile();
   $controller->dispatch();
 });
