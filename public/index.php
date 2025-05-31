@@ -23,9 +23,9 @@ Router::add("/login", function ($isApi = false) {
   $controller->dispatch($isApi);
 });
 
-Router::add("/logout", function ($isApi = false) {
+Router::add("/logout/{id}", function ($id, $isApi = false) {
   $controller = new Src\Controller\Logout();
-  $controller->dispatch($isApi);
+  $controller->dispatch($id, $isApi);
 });
 
 Router::add("/group", function ($isApi = false) {

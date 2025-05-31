@@ -5,12 +5,13 @@ namespace Src\Controller;
 class Logout extends \Src\Controller\Controller
 {
 
-  public function dispatch(bool $isApi)
+  public function dispatch($id, bool $isApi = false)
   {
 
     if ($isApi) {
-      // Protect API
-      return;
+      \Src\Api\Auth::protect();
+      \Src\Api\Auth::clearCookie("refresh_key");
+      return $this->deleteToken($id);
     }
 
     \Src\Auth\Auth::protect();
@@ -21,6 +22,12 @@ class Logout extends \Src\Controller\Controller
   {
     session_destroy();
     \Src\App::redirect("login");
+  }
+
+
+  public function deleteToken($id)
+  {
+    $this->db->deleteAllWhere("token", "profile_id", $id);
   }
 
 }

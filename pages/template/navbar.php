@@ -17,7 +17,7 @@
       </ul>
     </div>
     <div class="navbar__container__right">
-      <a href="logout" class="log-out__btn">
+      <a href="logout/<?= $_SESSION["id"] ?>" class="log-out__btn">
         <i class="fa-solid fa-power-off"></i>
       </a>
     </div>

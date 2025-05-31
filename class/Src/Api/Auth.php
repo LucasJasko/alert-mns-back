@@ -137,5 +137,8 @@ class Auth extends \Core\Auth\Auth
     echo json_encode($res);
   }
 
-
+  public static function clearCookie($name)
+  {
+    setcookie($name, "", time() - 3600);
+  }
 }

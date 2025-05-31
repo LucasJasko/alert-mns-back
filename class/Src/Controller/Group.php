@@ -23,6 +23,7 @@ class Group extends \Src\Controller\Controller
   {
 
     if ($isApi) {
+      \Src\Api\Auth::protect();
       //  Process API
       return;
     }

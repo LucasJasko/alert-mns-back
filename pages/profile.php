@@ -22,7 +22,6 @@
     </div>
   </div>
 
-
   <?php require_once ROOT . "/pages/template/navbar.php" ?>
 
   <main class="main-container">
@@ -30,7 +29,9 @@
       <div class="btn-container">
         <a class="valid-button add-button" href="profile/0">Ajouter un utilisateur</a>
       </div>
+
       <?php require_once ROOT . "/pages/template/dashboard.php" ?>
+
     </div>
 
     <div class="delete-container"></div>
