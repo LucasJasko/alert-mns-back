@@ -88,9 +88,9 @@ Router::add("/auth", function ($isApi = true) {
   $apiAuth->dispatch($isApi);
 });
 
-Router::add("/search", function ($isApi = true) {
+Router::add("/search/{subject}", function (string $subject, $isApi = true) {
   $apiAuth = new \Src\Api\Search();
-  $apiAuth->dispatch($isApi);
+  $apiAuth->dispatch($subject, $isApi);
 });
 
 Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = true) {
