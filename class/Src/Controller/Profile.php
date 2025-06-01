@@ -36,12 +36,14 @@ class Profile extends \Src\Controller\Controller
 
           if (isset($res["secure"]) && $res["secure"] == "client-speak") {
 
+            echo json_encode($res);
+
             $userData = [
               "profile_name" => $res["name"],
               "profile_surname" => $res["surname"],
               "profile_mail" => $res["mail"],
               "profile_password" => $res["password"],
-              "profile_picture" => "",
+              "profile_picture" => $res["picture_name"],
               "language_id" => $res["language"],
               "theme_id" => $this->db->getFieldWhere("theme", "theme_id", "theme_name", $res["theme"])["theme_id"],
               "status_id" => $res["status"],
@@ -49,10 +51,16 @@ class Profile extends \Src\Controller\Controller
               "situation_id" => [["" => ""]]
             ];
 
-            $profile = new ProfileModel("0");
-            // $profile->submitModel($userData);
+            $pictureData = $res["picture_content"];
+            $pictureData["full_path"] = $res["picture_content"]["name"];
+            $pictureData["error"] = 0;
 
-            return http_response_code(201);
+            $profile = new ProfileModel("0");
+
+            if ($profile->submitModel($userData, $isApi, $pictureData)) {
+              echo json_encode("201");
+              return http_response_code(201);
+            }
           }
           return http_response_code(403);
         }
@@ -77,8 +85,9 @@ class Profile extends \Src\Controller\Controller
       $profile = new ProfileModel($id);
 
       if ($_POST) {
-        $profile->submitModel($_POST);
-        \Src\App::redirect("profile");
+        // $profile->submitModel($_POST);
+        // \Src\App::redirect("profile");
+        var_dump($_FILES);
       }
 
       if ($id != 0) {
@@ -97,7 +106,6 @@ class Profile extends \Src\Controller\Controller
       return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
     }
 
-    var_dump($_SERVER);
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
 }

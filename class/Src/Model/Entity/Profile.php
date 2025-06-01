@@ -148,7 +148,7 @@ class Profile extends \Src\Model\Model
     }
   }
 
-  public function submitModel(array $data)
+  public function submitModel(array $data, bool $isApi = false, $pictureContent = "")
   {
     $data["profile_password"] = password_hash($data["profile_password"], PASSWORD_DEFAULT);
 
@@ -160,10 +160,16 @@ class Profile extends \Src\Model\Model
       $lastInsertId = $this->createNewModel("profile", $data);
 
       $imageManager = new \Src\Service\Image("profile_picture");
-      $imageManager->createPicture("profile", $lastInsertId);
+
+      if ($isApi) {
+        $imageManager->createPicture("profile", $lastInsertId, $isApi, $pictureContent);
+      } else {
+        $imageManager->createPicture("profile", $lastInsertId);
+      }
 
       $profileSituationInstance = new ProfileSituation($lastInsertId);
-      return $profileSituationInstance->updateSituations($profileSituation);
+      $profileSituationInstance->updateSituations($profileSituation);
+      return true;
     }
 
     $profileSituation = $this->isolateSituations($data);
@@ -176,6 +182,7 @@ class Profile extends \Src\Model\Model
 
     $profileSituationInstance = new ProfileSituation($data["profile_id"]);
     $profileSituationInstance->updateSituations($profileSituation);
+    return true;
 
   }
 
