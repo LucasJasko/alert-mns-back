@@ -11,7 +11,8 @@ class Auth extends \Core\Auth\Auth
   {
     self::initSession();
 
-    if (!isset($_SESSION["access_key"])) {
+    // TODO rajouter des vérification au protect du back office
+    if (!isset($_SESSION["auth_key"])) {
       \Src\App::redirect("login");
       exit();
     }
@@ -35,6 +36,11 @@ class Auth extends \Core\Auth\Auth
         if (!isset($_SESSION["delete_key"])) {
           $_SESSION["delete_key"] = self::generateDeleteToken();
         }
+
+        if (!isset($_SESSION["auth_key"])) {
+          $_SESSION["auth_key"] = self::newJWToken($res);
+        }
+
 
         $response = [
           'success' => true,

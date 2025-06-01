@@ -11,7 +11,7 @@ class Router
     self::$routes[$path] = $handler;
   }
 
-  public static function dispatch(string $path): void
+  public static function dispatch(string $path)
   {
 
     $isApi = false;
@@ -41,11 +41,10 @@ class Router
 
     if (isset($isApi) && $isApi) {
 
-      http_response_code(404);
+      return http_response_code(404);
 
-    } else {
-      \Src\App::redirect("page404");
     }
 
+    return \Src\App::redirect("page404");
   }
 }

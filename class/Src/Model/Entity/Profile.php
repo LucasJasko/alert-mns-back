@@ -157,7 +157,6 @@ class Profile extends \Src\Model\Model
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
 
-
       $lastInsertId = $this->createNewModel("profile", $data);
 
       $imageManager = new \Src\Service\Image("profile_picture");

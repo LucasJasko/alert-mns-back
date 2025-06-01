@@ -15,9 +15,14 @@ class Login extends \Src\Controller\Controller
 
       $data = \Src\App::clientData();
 
-      if (!empty($data["email"] && !empty($data["password"]))) {
-        $apiAuth = new \Src\Api\Auth();
-        $apiAuth->apiAuth($data["email"], $data["password"]);
+      if (is_array($data)) {
+
+        if (!empty($data["email"] && !empty($data["password"]))) {
+
+          $apiAuth = new \Src\Api\Auth();
+          return $apiAuth->apiAuth($data["email"], $data["password"]);
+
+        }
       }
 
       return;

@@ -23,6 +23,42 @@ class Profile extends \Src\Controller\Controller
   {
     if ($isApi) {
 
+      if ($id == "0") {
+        if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+          http_response_code(200);
+          exit();
+        }
+
+        $res = \Src\App::clientData();
+
+        if (isset($res["userProfile"])) {
+          $res = $res["userProfile"];
+
+          if (isset($res["secure"]) && $res["secure"] == "client-speak") {
+
+            $userData = [
+              "profile_name" => $res["name"],
+              "profile_surname" => $res["surname"],
+              "profile_mail" => $res["mail"],
+              "profile_password" => $res["password"],
+              "profile_picture" => "",
+              "language_id" => $res["language"],
+              "theme_id" => $this->db->getFieldWhere("theme", "theme_id", "theme_name", $res["theme"])["theme_id"],
+              "status_id" => $res["status"],
+              "role_id" => $res["role"],
+              "situation_id" => [["" => ""]]
+            ];
+
+            $profile = new ProfileModel("0");
+            // $profile->submitModel($userData);
+
+            return http_response_code(201);
+          }
+          return http_response_code(403);
+        }
+        return http_response_code(403);
+      }
+
       \Src\Api\Auth::protect();
 
       $profile = new ProfileModel($id);
@@ -61,6 +97,7 @@ class Profile extends \Src\Controller\Controller
       return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
     }
 
+    var_dump($_SERVER);
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);
   }
 }

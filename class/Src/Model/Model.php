@@ -25,7 +25,6 @@ abstract class Model
       if (!isset($data[$value]))
         $data[$value] = "";
     }
-
     return $this->db->createOne($this->tableName, $data, $fields);
   }
 

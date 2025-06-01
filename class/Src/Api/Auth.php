@@ -23,6 +23,7 @@ class Auth extends \Core\Auth\Auth
   public static function protect()
   {
     if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+      http_response_code(200);
       exit();
     }
 
@@ -118,20 +119,20 @@ class Auth extends \Core\Auth\Auth
 
 
       $res = [
-        'success' => true,
         'message' => 'Utilisateur connecté',
-        "data" => [
-          "accessToken" => self::newJWToken($res),
-          "UID" => $res["profile_id"],
-          "deleteToken" => self::generateDeleteToken(),
-        ]
+        "accessToken" => self::newJWToken($res),
+        "UID" => $res["profile_id"],
+        "deleteToken" => self::generateDeleteToken(),
       ];
+
+      http_response_code(200);
 
     } else {
       $res = [
-        'success' => false,
         'message' => 'Échec de la connexion : email ou mot de passe incorrect.'
       ];
+
+      http_response_code(401);
     }
 
     echo json_encode($res);
