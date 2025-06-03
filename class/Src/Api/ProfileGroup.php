@@ -13,7 +13,7 @@ class ProfileGroup
 
       $res = [];
       for ($i = 0; $i < count($relations); $i++) {
-        $res[] = $db->getFieldsWhere("group", ["group_name"], "group_id", $relations[$i]["group_id"]);
+        $res[] = $db->getMultipleWhere("group", ["group_id", "group_name", "group_picture"], "group_id", $relations[$i]["group_id"]);
       }
 
       echo json_encode($res);
