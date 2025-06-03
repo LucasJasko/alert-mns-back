@@ -6,7 +6,6 @@ class Image
 {
 
   private $pathFile = ROOT . "/upload/";
-  private $pictureContent;
   private $imageType;
   private $id;
 
@@ -16,18 +15,17 @@ class Image
     $this->pathFile = str_replace("\\", "/", $this->pathFile);
   }
 
-  public function createPicture($table, $id = "", bool $isApi = false, array $pictureContent = "")
+  public function createPicture($table, $id = "")
   {
     $this->id = $id != "" ? $id : $_POST[$table . "_id"];
-    $this->pictureContent = $isApi ? $pictureContent : $_FILES[$table . "_picture"];
 
-    if (isset($this->pictureContent)) {
+    if (isset($_FILES[$table . "_picture"])) {
 
-      if ($this->pictureContent["error"] == 0) {
+      if ($_FILES[$table . "_picture"]["error"] == 0) {
 
-        $extension = strtolower(pathinfo($this->pictureContent["name"], PATHINFO_EXTENSION));
+        $extension = strtolower(pathinfo($_FILES[$table . "_picture"]["name"], PATHINFO_EXTENSION));
 
-        if ($this->pictureContent["type"] == "image/" . str_replace("jpg", "jpeg", $extension) && in_array($extension, ["jpg", "jpeg", "png", "gif", "webp"])) {
+        if ($_FILES[$table . "_picture"]["type"] == "image/" . str_replace("jpg", "jpeg", $extension) && in_array($extension, ["jpg", "jpeg", "png", "gif", "webp"])) {
 
           $this->deleteExistingImages($table);
 
@@ -71,7 +69,7 @@ class Image
     $filename = $this->cleanFileName($filename);
     $filename = $this->incrementFileName($filename);
 
-    move_uploaded_file($this->pictureContent["tmp_name"], $this->pathFile . $filename . "." . $extension);
+    move_uploaded_file($_FILES[$table . "_picture"]["tmp_name"], $this->pathFile . $filename . "." . $extension);
 
     $srcPrefix = "";
     $srcExtension = $extension;

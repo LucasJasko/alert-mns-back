@@ -16,10 +16,7 @@ class Image
         $imageData = base64_encode(file_get_contents($path));
         echo json_encode($imageData);
       } else {
-
-        http_response_code(404);
         echo json_encode(['error' => 'Image not found']);
-
       }
       return;
     }

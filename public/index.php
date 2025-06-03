@@ -93,6 +93,11 @@ Router::add("/search/{subject}", function (string $subject, $isApi = true) {
   $apiAuth->dispatch($subject, $isApi);
 });
 
+Router::add("/profile-groups/{profile_id}", function ($id, $isApi = true) {
+  $apiAuth = new \Src\Api\ProfileGroup();
+  $apiAuth->dispatch($id, $isApi);
+});
+
 Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = true) {
   $apiAuth = new \Src\Api\Image();
   $apiAuth->dispatch($table, $folderName, $subfolder, $fileName, $isApi);

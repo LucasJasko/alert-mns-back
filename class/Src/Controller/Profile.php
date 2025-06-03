@@ -71,9 +71,18 @@ class Profile extends \Src\Controller\Controller
 
       $profile = new ProfileModel($id);
       $data = $profile->all();
-      unset($data["profile_password"]);
 
-      echo json_encode($data);
+      $res = [
+        "picture" => $data["profile_picture"],
+        "situations" => $data["situation_id"],
+        "language" => $data["language_id"],
+        "status" => $data["status_id"],
+        "name" => $data["profile_name"],
+        "surname" => $data["profile_surname"],
+        "theme" => $data["theme_id"],
+      ];
+
+      echo json_encode($res);
 
       return;
     }
@@ -85,9 +94,8 @@ class Profile extends \Src\Controller\Controller
       $profile = new ProfileModel($id);
 
       if ($_POST) {
-        // $profile->submitModel($_POST);
-        // \Src\App::redirect("profile");
-        var_dump($_FILES);
+        $profile->submitModel($_POST);
+        \Src\App::redirect("profile");
       }
 
       if ($id != 0) {

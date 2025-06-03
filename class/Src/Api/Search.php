@@ -11,7 +11,7 @@ class Search
 
       switch ($subject) {
 
-        case "users":
+        case "profiles":
           \Src\Api\Auth::protect();
 
           $req = \Src\App::clientData();
