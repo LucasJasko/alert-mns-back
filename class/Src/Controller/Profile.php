@@ -43,7 +43,7 @@ class Profile extends \Src\Controller\Controller
               "profile_surname" => $res["surname"],
               "profile_mail" => $res["mail"],
               "profile_password" => $res["password"],
-              "profile_picture" => $res["picture_name"],
+              "profile_picture" => $res["picture"],
               "language_id" => $res["language"],
               "theme_id" => $this->db->getFieldWhere("theme", "theme_id", "theme_name", $res["theme"])["theme_id"],
               "status_id" => $res["status"],

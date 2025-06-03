@@ -12,7 +12,10 @@ class Auth extends \Core\Auth\Auth
 
     if ($isApi) {
 
-      self::newAccessKey();
+      if (!self::protect()) {
+        self::newAccessKey();
+      }
+
 
     } else {
       http_response_code(403);
@@ -22,27 +25,31 @@ class Auth extends \Core\Auth\Auth
 
   public static function protect()
   {
+
     if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
       http_response_code(200);
       exit();
     }
 
-    $req = \Src\App::clientData();
+    $req = getallheaders();
 
-    if (!isset($req["accessToken"])) {
+    if (!isset($req["Authorization"])) {
       http_response_code(403);
-      exit();
+      return false;
     }
 
-    $token = \Core\Auth\Auth::decodeJWT($req["accessToken"]);
+    $token = \Core\Auth\Auth::decodeJWT(str_replace("Bearer ", "", $req["Authorization"]));
+
 
     if (!$token->iss === "http://speak/" || !$token->aud === "http://speak:3216/auth/") {
       http_response_code(403);
-      exit();
+      return false;
     }
+
+    return true;
   }
 
-  public static function checkRefreshToken()
+  public static function validateRefreshToken()
   {
     if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
       exit();
@@ -76,7 +83,7 @@ class Auth extends \Core\Auth\Auth
 
   public function newAccessKey()
   {
-    if (self::checkRefreshToken()) {
+    if (self::validateRefreshToken()) {
 
       $db = \Src\App::db();
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
