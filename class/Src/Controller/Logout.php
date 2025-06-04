@@ -10,6 +10,7 @@ class Logout extends \Src\Controller\Controller
 
     if ($isApi) {
       \Src\Api\Auth::protect();
+
       \Src\Api\Auth::clearCookie("refresh_key");
       return $this->deleteToken($id);
     }

@@ -147,6 +147,13 @@ class Auth extends \Core\Auth\Auth
 
   public static function clearCookie($name)
   {
-    setcookie($name, "", time() - 3600);
+    setcookie($name, "", [
+      "expires" => time(),
+      "path" => "/",
+      "domain" => "speak",
+      "secure" => false,
+      "httponly" => true,
+      "samesite" => "Strict",
+    ]);
   }
 }
