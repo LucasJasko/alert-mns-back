@@ -5,7 +5,7 @@ namespace Src\Service;
 class Image
 {
 
-  private $pathFile = ROOT . "/upload/";
+  protected $pathFile = ROOT . "/upload/";
   private $imageType;
   private $id;
 
@@ -143,7 +143,7 @@ class Image
     }
   }
 
-  private function cleanFileName($str)
+  protected function cleanFileName($str)
   {
     $result = strtolower($str);
     $charKo = ["à", "â", "è", "é", "ê", "@", " ", "\\", ","];
@@ -154,7 +154,7 @@ class Image
     return trim($result, "-");
   }
 
-  private function incrementFileName($filename)
+  protected function incrementFileName($filename)
   {
     $is_found = false;
     $count = 1;
@@ -174,7 +174,7 @@ class Image
     return $filename;
   }
 
-  private function deleteExistingImages($table)
+  protected function deleteExistingImages($table)
   {
 
     if ($row = \Src\App::db()->getPicture($table, $table . "_picture", $table . "_id", $this->id)) {

@@ -159,11 +159,11 @@ class Profile extends \Src\Model\Model
 
       $lastInsertId = $this->createNewModel("profile", $data);
 
-      $imageManager = new \Src\Service\Image("profile_picture");
-
       if ($isApi) {
-        $imageManager->createPicture("profile", $lastInsertId, $isApi, $pictureContent);
+        $imageManager = new \Src\Service\ImageApi("profile_picture");
+        $imageManager->createApiPicture("profile", $pictureContent, $data, $lastInsertId);
       } else {
+        $imageManager = new \Src\Service\Image("profile_picture");
         $imageManager->createPicture("profile", $lastInsertId);
       }
 

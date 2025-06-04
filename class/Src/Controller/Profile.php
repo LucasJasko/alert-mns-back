@@ -31,12 +31,12 @@ class Profile extends \Src\Controller\Controller
 
         $res = \Src\App::clientData();
 
-        if (isset($res["userProfile"])) {
-          $res = $res["userProfile"];
+        if (isset($res)) {
 
           if (isset($res["secure"]) && $res["secure"] == "client-speak") {
 
-            echo json_encode($res);
+            $pictureContent = $res["pictureContent"];
+            unset($res["pictureContent"]);
 
             $userData = [
               "profile_name" => $res["name"],
@@ -51,14 +51,10 @@ class Profile extends \Src\Controller\Controller
               "situation_id" => [["" => ""]]
             ];
 
-            $pictureData = $res["picture_content"];
-            $pictureData["full_path"] = $res["picture_content"]["name"];
-            $pictureData["error"] = 0;
-
             $profile = new ProfileModel("0");
 
-            if ($profile->submitModel($userData, $isApi, $pictureData)) {
-              echo json_encode("201");
+            if ($profile->submitModel($userData, $isApi, $pictureContent)) {
+              echo json_encode("Account created !");
               return http_response_code(201);
             }
           }
