@@ -49,7 +49,7 @@ class Group extends \Src\Controller\Controller
       $fieldsOfTable = $this->db->getFieldsOfTable("group");
       $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
 
-      return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau groupe", "group", ["group_id"]);
+      return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau groupe", "group", ["group_id", "group_creation_time", "group_delete_time"]);
     }
 
     $this->getDashboard("group", [], $this->dashboardInfos, $this->fieldsToNotRender);

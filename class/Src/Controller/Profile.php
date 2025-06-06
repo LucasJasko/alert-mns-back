@@ -107,7 +107,7 @@ class Profile extends \Src\Controller\Controller
       $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
       $fieldsOfTable["situation_id"] = [["" => ""]];
 
-      return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id"]);
+      return $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau profile", "profile", ["profile_id", "profile_creation_time"]);
     }
 
     $this->getDashboard("profile", [], $this->dashboardInfos, $this->fieldsToNotRender);

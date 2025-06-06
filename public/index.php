@@ -74,6 +74,7 @@ Router::add("/delete/{table_name}/{id}/{redirect_page}/{delete_key}", function (
 });
 
 Router::add("/error", function ($isApi = false) {
+  \Src\Auth\Auth::protect();
   require_once "../pages/error.php";
 });
 

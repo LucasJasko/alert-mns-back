@@ -107,6 +107,7 @@ class Group extends \Src\Model\Model
   {
     if (empty($data["group_id"])) {
 
+      $data["group_creation_time"] = time();
       $lastInsertId = $this->createNewModel("group", $data);
 
       $imageManager = new \Src\Service\Image("profile_picture");

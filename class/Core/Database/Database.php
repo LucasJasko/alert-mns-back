@@ -194,7 +194,7 @@ class Database
 
   public function getFieldsOfTable(string $table)
   {
-    $stmt = $this->db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '"');
+    $stmt = $this->db->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = "' . $table . '" AND TABLE_SCHEMA = "' . DB_NAME . '"');
     $stmt->execute();
     $raw = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

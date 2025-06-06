@@ -154,6 +154,8 @@ class Profile extends \Src\Model\Model
 
     if (empty($data["profile_id"])) {
 
+      $data["profile_creation_time"] = time();
+
       $profileSituation = $this->isolateSituations($data);
       unset($data["situation_id"]);
 

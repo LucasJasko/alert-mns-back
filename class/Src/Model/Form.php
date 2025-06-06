@@ -25,8 +25,6 @@ class Form
   public function delete($deleteKey, $id, $isApi)
   {
 
-    \Src\Auth\Auth::protect();
-
     if ($isApi) {
       // Process API
     } else {

@@ -46,11 +46,12 @@ abstract class Controller extends \Core\Controller\Controller
 
     if ($pageName == "profile" || $pageName == "group") {
       $recordset = $this->db->getField($pageName, $pageName . "_id");
-      $clearedRecordset = $this->clearRecordset($recordset, $pageName);
-      $profiles = $this->getModelsFromRecordset($clearedRecordset, ucfirst($pageName));
-
+      if ($recordset != []) {
+        $clearedRecordset = $this->clearRecordset($recordset, $pageName);
+        $models = $this->getModelsFromRecordset($clearedRecordset, ucfirst($pageName));
+      }
       $fields = $this->unsetFieldsToNotRender($dashboardInfos, $fieldsToNotRender);
-      $data = $profiles;
+      $data = isset($models) ? $models : [];
       $tab = $pageName;
       $page = $pageName;
 
