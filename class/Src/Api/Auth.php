@@ -3,6 +3,7 @@
 namespace Src\Api;
 
 use \Core\Service\Log;
+use \Src\App;
 
 class Auth extends \Core\Auth\Auth
 {
@@ -15,7 +16,6 @@ class Auth extends \Core\Auth\Auth
       if (!self::protect()) {
         self::newAccessKey();
       }
-
 
     } else {
       http_response_code(403);
@@ -59,7 +59,7 @@ class Auth extends \Core\Auth\Auth
 
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
 
-      $db = \Src\App::db();
+      $db = App::db();
       if ($res = $db->getMultipleWhere("token", ["token_value", "token_user_agent", "token_remote_host"], "token_value", $refreshToken)) {
 
         if ($refreshToken === $res["token_value"]) {
@@ -85,14 +85,14 @@ class Auth extends \Core\Auth\Auth
   {
     if (self::validateRefreshToken()) {
 
-      $db = \Src\App::db();
+      $db = App::db();
       $refreshToken = hash("sha256", $_COOKIE["refresh_key"]);
 
       $res = $db->getMultipleWhere("token", ["profile_id"], "token_value", $refreshToken);
 
       $profileData = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_id", $res["profile_id"]);
 
-      echo json_encode([
+      App::sendApiData([
         "accessToken" => self::newJWToken($profileData),
         "UID" => $res["profile_id"],
         "deleteToken" => self::generateDeleteToken(),
@@ -103,7 +103,7 @@ class Auth extends \Core\Auth\Auth
 
   public function apiAuth($email, $pwd)
   {
-    $db = \Src\App::db();
+    $db = App::db();
     $res = $db->getMultipleWhere("profile", ["profile_id", "profile_password", "profile_name", "profile_surname", "role_id"], "profile_mail", $email);
 
     if ($res && password_verify($pwd, $res["profile_password"])) {
@@ -142,7 +142,7 @@ class Auth extends \Core\Auth\Auth
       http_response_code(401);
     }
 
-    echo json_encode($res);
+    App::sendApiData($res);
   }
 
   public static function clearCookie($name)

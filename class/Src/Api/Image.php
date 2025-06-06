@@ -18,7 +18,7 @@ class Image
         $path = ROOT . "/upload/default/default.webp";
         $imageData = base64_encode(file_get_contents($path));
       }
-      echo json_encode($imageData);
+      \Src\App::sendApiData($imageData);
       return;
     }
   }

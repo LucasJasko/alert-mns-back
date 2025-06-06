@@ -11,6 +11,8 @@ use \Core\Router\Router;
 
 $router = new Router();
 
+// TODO gérer toute les routes finissant par /
+
 // =================== BACK-OFFICE ROUTES ============================== //
 
 Router::add("/", function ($isApi = false) {
@@ -87,6 +89,16 @@ Router::add("/page404", function () {
 Router::add("/auth", function ($isApi = true) {
   $apiAuth = new \Src\Api\Auth();
   $apiAuth->dispatch($isApi);
+});
+
+Router::add("/chat", function ($isApi = true) {
+  $apiAuth = new \Src\Api\Chat();
+  $apiAuth->dispatch($isApi);
+});
+
+Router::add("/dm/{id}", function ($id, $isApi = true) {
+  $apiAuth = new \Src\Controller\Dm();
+  $apiAuth->dispatch($id, $isApi);
 });
 
 Router::add("/search/{subject}", function (string $subject, $isApi = true) {

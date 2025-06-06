@@ -2,13 +2,18 @@
 
 namespace Src\Api;
 
+use \Src\App;
+
 class ProfileGroup
 {
   public function dispatch($id, $isAPi = false)
   {
 
     if ($isAPi) {
-      $db = \Src\App::db();
+
+      \Src\Api\Auth::protect();
+
+      $db = App::db();
       $relations = $db->getFieldsWhere("profile__group", ["group_id"], "profile_id", $id);
 
       $res = [];
@@ -25,8 +30,7 @@ class ProfileGroup
         unset($res[$i]["group_picture"]);
       }
 
-      echo json_encode($res);
-
+      App::sendApiData($res);
       return;
     }
   }

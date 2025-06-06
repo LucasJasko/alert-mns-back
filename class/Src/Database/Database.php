@@ -43,4 +43,22 @@ class Database extends \Core\Database\Database
     $stmt->bindValue(":$field", $fieldValue);
     $stmt->execute();
   }
+
+  // TODO méthod dédiée à la recherche de discussion privé existantes
+  public function getDmBetweeenAandB(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
+  {
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE (" . $field1 . " = :A AND " . $field2 . " = :B) OR (" . $field2 . " = :A AND " . $field1 . " = :B)");
+    $stmt->bindValue(":A", $field1Value);
+    $stmt->bindValue(":B", $field2Value);
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
+
+  public function getDmOfProfile(string $table, string $field1, string $field2, string $value)
+  {
+    $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE (" . $field1 . " = :A OR " . $field2 . " = :A)");
+    $stmt->bindValue(":A", $value);
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
 }

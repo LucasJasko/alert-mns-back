@@ -3,6 +3,7 @@
 namespace Src\Controller;
 
 use Src\Model\Entity\Profile as ProfileModel;
+use \Src\App;
 
 class Profile extends \Src\Controller\Controller
 {
@@ -29,7 +30,7 @@ class Profile extends \Src\Controller\Controller
           exit();
         }
 
-        $res = \Src\App::clientData();
+        $res = App::getApiData();
 
         if (isset($res)) {
 
@@ -54,7 +55,7 @@ class Profile extends \Src\Controller\Controller
             $profile = new ProfileModel("0");
 
             if ($profile->submitModel($userData, $isApi, $pictureContent)) {
-              echo json_encode("Account created !");
+              App::sendApiData("Account created !");
               return http_response_code(201);
             }
           }
@@ -78,7 +79,7 @@ class Profile extends \Src\Controller\Controller
         "theme" => $data["theme_id"],
       ];
 
-      echo json_encode($res);
+      App::sendApiData($res);
 
       return;
     }
@@ -91,7 +92,7 @@ class Profile extends \Src\Controller\Controller
 
       if ($_POST) {
         $profile->submitModel($_POST);
-        \Src\App::redirect("profile");
+        App::redirect("profile");
       }
 
       if ($id != 0) {

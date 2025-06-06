@@ -41,9 +41,14 @@ class App
     return self::$db;
   }
 
-  public static function clientData()
+  public static function getApiData()
   {
     return json_decode(file_get_contents("php://input"), true);
+  }
+
+  public static function sendApiData($data)
+  {
+    echo json_encode($data);
   }
 
   public static function redirect($page)

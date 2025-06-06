@@ -13,7 +13,7 @@ class Login extends \Src\Controller\Controller
       // TODO trouver un moyen d'effectuer une suppression côté client car actuellement, seulemenet possible côté back
       // TODO voir ce que sont les private state token dans DevTool
 
-      $data = \Src\App::clientData();
+      $data = \Src\App::getApiData();
 
       if (is_array($data)) {
 
