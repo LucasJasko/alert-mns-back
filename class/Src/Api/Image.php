@@ -14,10 +14,11 @@ class Image
       $path = ROOT . "/upload/" . $table . "/" . $folderName . "/" . $subfolder . "/" . $fileName;
       if (file_exists($path)) {
         $imageData = base64_encode(file_get_contents($path));
-        echo json_encode($imageData);
       } else {
-        echo json_encode(['error' => 'Image not found']);
+        $path = ROOT . "/upload/default/default.webp";
+        $imageData = base64_encode(file_get_contents($path));
       }
+      echo json_encode($imageData);
       return;
     }
   }
