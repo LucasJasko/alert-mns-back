@@ -100,6 +100,24 @@ class Database
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getAllWhereOr(string $table, string $field, array $value)
+  {
+    $stmt = "SELECT * FROM `" . $table . "` WHERE ";
+    for ($i = 0; $i < count($value); $i++) {
+      if ($i < count($value) - 1) {
+        $stmt .= "$field = :" . $field . "_" . $i . " OR ";
+      } else {
+        $stmt .= "$field = :" . $field . "_" . $i;
+      }
+    }
+    $stmt = $this->db->prepare($stmt);
+    for ($i = 0; $i < count($value); $i++) {
+      $stmt->bindValue(":" . $field . "_" . $i, $value[$i]);
+    }
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function getAllWhereAnd(string $table, string $field1, string $field1Value, string $field2, string $field2Value)
   {
     $stmt = $this->db->prepare("SELECT * FROM `" . $table . "` WHERE " . $field1 . " = :" . $field1 . " AND " . $field2 . " = :" . $field2);
