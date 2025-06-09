@@ -91,11 +91,10 @@ Router::add("/auth", function ($isApi = true) {
   $apiAuth->dispatch($isApi);
 });
 
-Router::add("/chat", function ($isApi = true) {
+Router::add("/chat/{action}", function ($action, $isApi = true) {
   $apiAuth = new \Src\Api\Chat();
-  $apiAuth->dispatch($isApi);
+  $apiAuth->dispatch($action, $isApi);
 });
-
 Router::add("/dm/{id}", function ($id, $isApi = true) {
   $apiAuth = new \Src\Controller\Dm();
   $apiAuth->dispatch($id, $isApi);

@@ -6,60 +6,76 @@ use \Src\App;
 
 class Chat
 {
-  public function dispatch($isApi)
+  public function dispatch($action, $isApi)
   {
-    \Src\Api\Auth::protect();
 
-    $req = App::getApiData();
+    if ($isApi) {
 
-    if ($targetProfile = App::db()->getOneWhere("profile", "profile_id", $req["target"])) {
-      // TODO Ici à terme vérifier si l'utilisateur cible n'a pas bloqué l'utilisateur à l'origine de la requête
+      \Src\Api\Auth::protect();
 
-      if (empty(App::db()->getDmBetweeenAandB("dm", "profile_id_A", $req["target"], "profile_id_B", $req["origin"]))) {
+      switch ($action) {
 
-        (new \Src\Model\Entity\Dm("0"))->submitModel(["dm_id" => "", "dm_creation_time" => "", "profile_id_A" => $req["target"], "profile_id_B" => $req["origin"], "state_id" => 1]);
+        case "select":
+          $req = App::getApiData();
 
-        unset($targetProfile["profile_password"]);
-        unset($targetProfile["profile_mail"]);
-        unset($targetProfile["theme_id"]);
-        unset($targetProfile["language_id"]);
+          if ($targetProfile = App::db()->getOneWhere("profile", "profile_id", $req["target"])) {
+            // TODO Ici à terme vérifier si l'utilisateur cible n'a pas bloqué l'utilisateur à l'origine de la requête
 
-        unset($targetProfile["profile_password"]);
-        unset($targetProfile["profile_mail"]);
-        unset($targetProfile["theme_id"]);
-        unset($targetProfile["language_id"]);
+            if (empty(App::db()->getDmBetweeenAandB("dm", "profile_id_A", $req["target"], "profile_id_B", $req["origin"]))) {
 
-        $targetProfile["creation"] = $targetProfile["profile_creation_time"];
-        unset($targetProfile["profile_creation_time"]);
+              (new \Src\Model\Entity\Dm("0"))->submitModel(["dm_id" => "", "dm_creation_time" => "", "profile_id_A" => $req["target"], "profile_id_B" => $req["origin"], "state_id" => 1]);
 
-        $targetProfile["id"] = $targetProfile["profile_id"];
-        unset($targetProfile["profile_id"]);
+              unset($targetProfile["profile_password"]);
+              unset($targetProfile["profile_mail"]);
+              unset($targetProfile["theme_id"]);
+              unset($targetProfile["language_id"]);
 
-        $targetProfile["name"] = $targetProfile["profile_name"];
-        unset($targetProfile["profile_name"]);
+              unset($targetProfile["profile_password"]);
+              unset($targetProfile["profile_mail"]);
+              unset($targetProfile["theme_id"]);
+              unset($targetProfile["language_id"]);
 
-        $targetProfile["picture"] = $targetProfile["profile_picture"];
-        unset($targetProfile["profile_picture"]);
+              $targetProfile["creation"] = $targetProfile["profile_creation_time"];
+              unset($targetProfile["profile_creation_time"]);
 
-        $targetProfile["surname"] = $targetProfile["profile_surname"];
-        unset($targetProfile["profile_surname"]);
+              $targetProfile["id"] = $targetProfile["profile_id"];
+              unset($targetProfile["profile_id"]);
 
-        $targetProfile["role"] = $targetProfile["role_id"];
-        unset($targetProfile["role_id"]);
+              $targetProfile["name"] = $targetProfile["profile_name"];
+              unset($targetProfile["profile_name"]);
 
-        $targetProfile["status"] = $targetProfile["status_id"];
-        unset($targetProfile["status_id"]);
+              $targetProfile["picture"] = $targetProfile["profile_picture"];
+              unset($targetProfile["profile_picture"]);
 
-        App::sendApiData($targetProfile);
+              $targetProfile["surname"] = $targetProfile["profile_surname"];
+              unset($targetProfile["profile_surname"]);
 
-      } else {
-        // TODO Envoyer à terme ici les infos du dm
-        http_response_code(204);
+              $targetProfile["role"] = $targetProfile["role_id"];
+              unset($targetProfile["role_id"]);
+
+              $targetProfile["status"] = $targetProfile["status_id"];
+              unset($targetProfile["status_id"]);
+
+              App::sendApiData($targetProfile);
+
+            } else {
+              // TODO Envoyer à terme ici les infos du dm
+              http_response_code(204);
+            }
+
+          } else {
+            App::sendApiData("target is not a user");
+          }
+
+          break;
+
+        case "remove":
+          //  TODO gérer la suppression d'une messagerie privée
+          break;
       }
 
     } else {
-      App::sendApiData("target is not a user");
+      http_response_code(404);
     }
-
   }
 }

@@ -2,6 +2,8 @@
 
 namespace Core\Router;
 
+// TODO gérer les pages exclusivement api accédés sans le tag api/
+
 class Router
 {
   private static array $routes = [];
