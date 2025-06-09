@@ -12,18 +12,49 @@ class Chat
 
     $req = App::getApiData();
 
-    if ($isReal = App::db()->getOneWhere("profile", "profile_id", $req["target"])) {
+    if ($targetProfile = App::db()->getOneWhere("profile", "profile_id", $req["target"])) {
       // TODO Ici à terme vérifier si l'utilisateur cible n'a pas bloqué l'utilisateur à l'origine de la requête
 
       if (empty(App::db()->getDmBetweeenAandB("dm", "profile_id_A", $req["target"], "profile_id_B", $req["origin"]))) {
 
         (new \Src\Model\Entity\Dm("0"))->submitModel(["dm_id" => "", "dm_creation_time" => "", "profile_id_A" => $req["target"], "profile_id_B" => $req["origin"], "state_id" => 1]);
 
-        App::sendApiData("created");
+        unset($targetProfile["profile_password"]);
+        unset($targetProfile["profile_mail"]);
+        unset($targetProfile["theme_id"]);
+        unset($targetProfile["language_id"]);
+
+        unset($targetProfile["profile_password"]);
+        unset($targetProfile["profile_mail"]);
+        unset($targetProfile["theme_id"]);
+        unset($targetProfile["language_id"]);
+
+        $targetProfile["creation"] = $targetProfile["profile_creation_time"];
+        unset($targetProfile["profile_creation_time"]);
+
+        $targetProfile["id"] = $targetProfile["profile_id"];
+        unset($targetProfile["profile_id"]);
+
+        $targetProfile["name"] = $targetProfile["profile_name"];
+        unset($targetProfile["profile_name"]);
+
+        $targetProfile["picture"] = $targetProfile["profile_picture"];
+        unset($targetProfile["profile_picture"]);
+
+        $targetProfile["surname"] = $targetProfile["profile_surname"];
+        unset($targetProfile["profile_surname"]);
+
+        $targetProfile["role"] = $targetProfile["role_id"];
+        unset($targetProfile["role_id"]);
+
+        $targetProfile["status"] = $targetProfile["status_id"];
+        unset($targetProfile["status_id"]);
+
+        App::sendApiData($targetProfile);
 
       } else {
         // TODO Envoyer à terme ici les infos du dm
-        App::sendApiData("existing");
+        http_response_code(204);
       }
 
     } else {
