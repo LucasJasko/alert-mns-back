@@ -24,3 +24,4 @@ Il nécessite aussi les programmes tiers suivant:
 - Composer
 - OpenSSL
 - Perl
+- wscat

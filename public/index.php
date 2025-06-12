@@ -86,6 +86,11 @@ Router::add("/page404", function () {
 
 // =================== API ROUTES ============================== //
 
+Router::add("/socket", function () {
+  \Src\Api\Socket::new_socket();
+  // TODO ici il faudra donc instancier une connexion si elle n'existe pas et y connecter l'utilisateur A, et faire rejoindre l'utilisateur B si la connexion existe deja
+});
+
 Router::add("/auth", function ($isApi = true) {
   $apiAuth = new \Src\Api\Auth();
   $apiAuth->dispatch($isApi);
