@@ -2,14 +2,6 @@
 
 Ce projet est réalisé dans le cadre de la formation MNS développeur web et web mobile.
 
-A chaque commit:
-
-- git commit -a -m "prefix: commit conventionnel"
-- git cliff --bump -o CHANGELOG.md
-- git commit -a -m "version X.X.X"
-
-si patch, git tag avant
-
 Pour fonctionner ce projet doit avoir un serveur apache avec les modules suivant actif:
 
 - Headers_module
@@ -25,3 +17,13 @@ Il nécessite aussi les programmes tiers suivant:
 - OpenSSL
 - Perl
 - wscat
+
+Et le serveur socket doit être activé avec la commande bash:
+
+php {chemin_jusqu'a_la_racine_du_projet}/class/Src/SocketServer.php
+
+On peut aussi vérifier les connexions actives sur le socket avec la commande suivante une fois le serveur lancé:
+
+netstat -ano | findstr :8060
+
+8060 ou autre port si différent

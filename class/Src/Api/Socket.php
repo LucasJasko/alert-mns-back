@@ -20,6 +20,8 @@ class Socket
 
   }
 
+  // TODO créer une méthode de ping, qui vérifie si l'utilisateur est toujours présent, et déconnextion du socket si non
+
   public function lauchSocketServer()
   {
 
@@ -74,10 +76,13 @@ class Socket
         // Il y a un nouveau message de client, il faut l'envoyer à tous les clients connectés
 
         $message = $this->unmask($data);
+
+        // echo $message;
+
         $masked_message = $this->pack_data($message);
         $this->broadcastMessage($connections, $masked_message);
 
-      } else if ($data === '') {
+      } else if ($data === '' || !$data) {
 
         echo "Le client " . $key . " s'est déconnecté \n";
         unset($this->connections[$key]);
@@ -110,7 +115,6 @@ class Socket
       $this->connections[] = $new_connections;
       $reply = "Vous avez rejoins la discussion. \n";
       echo "Nouvelle connection socket \n";
-      print_r($this->connections);
       $reply = $this->pack_data($reply);
 
       socket_write($new_connections, $reply, strlen($reply));
