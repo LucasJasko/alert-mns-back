@@ -31,15 +31,14 @@ class Auth extends \Core\Auth\Auth
       exit();
     }
 
-    $req = getallheaders();
+    $headers = getallheaders();
 
-    if (!isset($req["Authorization"])) {
+    if (!isset($headers["Authorization"])) {
       http_response_code(403);
       return false;
     }
 
-    $token = \Core\Auth\Auth::decodeJWT(str_replace("Bearer ", "", $req["Authorization"]));
-
+    $token = \Core\Auth\Auth::decodeJWT(str_replace("Bearer ", "", $headers["Authorization"]));
 
     if (!$token->iss === "http://speak/" || !$token->aud === "http://speak:3216/auth/") {
       http_response_code(403);

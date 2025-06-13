@@ -11,6 +11,7 @@ class App
   {
     require "../config/config.php";
     self::autoload();
+
   }
 
   public static function autoload()
