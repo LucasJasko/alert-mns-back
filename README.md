@@ -22,6 +22,11 @@ Et le serveur socket doit être activé avec la commande bash:
 
 php {chemin_jusqu'a_la_racine_du_projet}/class/Src/SocketServer.php
 
+OU
+se positionner dans ~/class/Src puis:
+
+php SocketServer.php
+
 On peut aussi vérifier les connexions actives sur le socket avec la commande suivante une fois le serveur lancé:
 
 netstat -ano | findstr :8060

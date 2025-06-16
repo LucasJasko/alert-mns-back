@@ -6,6 +6,7 @@ class Socket
 {
   private $socketServer;
   private array $connections;
+  private array $members;
   private string $address = "0.0.0.0";
   private int $port = 8060;
 
@@ -47,7 +48,7 @@ class Socket
 
   private function listenForNewConnections($sock)
   {
-    $members = [];
+    $this->members = [];
     $this->connections[] = $sock;
 
     while (true) {
@@ -57,49 +58,7 @@ class Socket
       socket_select($reads, $writes, $exceptions, 0);
 
       $this->acceptNewConnections($sock, $reads);
-      $this->handleIncomingMessage($reads, $this->connections);
-
-    }
-  }
-
-  private function handleIncomingMessage($reads, $connections)
-  {
-    foreach ($reads as $key => $sock) {
-
-      if ($sock === $this->socketServer) {
-        continue;
-      }
-
-      $data = socket_read($sock, 1024, PHP_NORMAL_READ);
-
-      if (!empty($data)) {
-        // Il y a un nouveau message de client, il faut l'envoyer à tous les clients connectés
-
-        $message = $this->unmask($data);
-
-        // echo $message;
-
-        $masked_message = $this->pack_data($message);
-        $this->broadcastMessage($connections, $masked_message);
-
-      } else if ($data === '' || !$data) {
-
-        echo "Le client " . $key . " s'est déconnecté \n";
-        unset($this->connections[$key]);
-        socket_close($sock);
-
-      }
-    }
-  }
-
-  private function broadcastMessage($connections, $masked_message)
-  {
-    foreach ($connections as $ckey => $cvalue) {
-      // Le premier client connecté au serveur est le serveur lui même ! pour ne pas envoyer les réponses au serveur il faut passer la première connection au serveur
-      if ($ckey === 0)
-        continue;
-
-      socket_write($cvalue, $masked_message, strlen($masked_message));
+      $this->handleIncomingMessage($reads);
 
     }
   }
@@ -113,9 +72,22 @@ class Socket
       $this->handshake($header, $new_connections, $this->address, $this->port);
 
       $this->connections[] = $new_connections;
-      $reply = "Vous avez rejoins la discussion. \n";
-      echo "Nouvelle connection socket \n";
-      $reply = $this->pack_data($reply);
+
+      echo "Nouvelle connection \n";
+
+      $reply = [
+        "messageInfos" => [
+          "date" => date("d M Y - H:i:s"),
+          "type" => "join",
+          "sender" => "Server",
+        ],
+        "authorName" => "Server",
+        "authorMessage" => [
+          "messageText" => "Vous avez rejoins la discussion",
+        ]
+      ];
+
+      $reply = $this->pack_data(json_encode($reply));
 
       socket_write($new_connections, $reply, strlen($reply));
 
@@ -124,30 +96,117 @@ class Socket
     }
   }
 
-  private function unmask($text)
+  private function handleIncomingMessage($reads)
   {
-    // La recommandation RFC6455 stipule qu'un payload doit avoir une longueur de 7 bits, on doit donc effectuer la conversion de 8 à 7.
-    $length = @ord($text[1]) & 127;
+    foreach ($reads as $key => $sock) {
 
-    if ($length == 126) {
-      $masks = substr($text, 4, 4);
-      $data = substr($text, 8);
-    } else if ($length == 127) {
-      $masks = substr($text, 10, 4);
-      $data = substr($text, 14);
-    } else {
-      $masks = substr($text, 2, 4);
-      $data = substr($text, 6);
+      if ($sock === $this->socketServer) {
+        continue;
+      }
+
+      $data = socket_read($sock, 1024);
+
+      if (!empty($data)) {
+        // Il y a un nouveau message de client, il faut l'envoyer à tous les clients connectés
+
+        $message = $this->unmask($data);
+
+        $decoded_message = json_decode($message, true);
+
+        // TODO TRES IMPORTANT !! ajouter une vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
+
+        if ($decoded_message && isset($decoded_message["messageInfos"]["type"])) {
+
+          $type = $decoded_message["messageInfos"]["type"];
+
+
+          $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
+
+          if ($type == "join") {
+            $this->members[$key] = [
+              "name" => $decoded_message["messageInfos"]["sender"],
+              "connection" => $sock
+            ];
+          }
+
+          if ($type == "message") {
+            var_dump($type);
+            // TODO problème ici on rentre bien dans la boucle mais le contenu ne s'exécute pas
+            $masked_message = $this->pack_data($message);
+
+            foreach ($this->members as $mkey => $mvalue) {
+              socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+            }
+
+          }
+        }
+
+
+      } else if ($data === '' || !$data) {
+
+        echo "Le client " . $key . " s'est déconnecté \n";
+        unset($this->connections[$key]);
+
+        if (array_key_exists($key, $this->members)) {
+          $message = [
+            "messageInfos" => [
+              "date" => date("d M Y - H:i:s"),
+              "type" => "left",
+              "sender" => "Server",
+            ],
+            "authorName" => "Server",
+            "authorMessage" => [
+              "messageText" => $this->members[$key]["name"] . " A quitté la discussion",
+            ]
+          ];
+
+          $masked_message = $this->pack_data(json_encode($message));
+          unset($this->members[$key]);
+
+          foreach ($this->members as $mkey => $mvalue) {
+            socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+          }
+        }
+
+        socket_close($sock);
+      }
     }
-    $text = "";
-
-    for ($i = 0; $i < strlen($data); ++$i) {
-      $text .= $data[$i] ^ $masks[$i % 4];
-    }
-
-    return $text;
   }
 
+  /**
+   * la fonction unmask permet de "décoder" le message reçu en concordance avec la recommandation RCF6455
+   * @param mixed $text
+   * @return string
+   */
+  private function unmask($payload)
+  {
+    // La recommandation RFC6455 stipule qu'un payload doit avoir une longueur de 7 bits, on doit donc effectuer la conversion de 8 à 7.
+    $length = @ord($payload[1]) & 127;
+
+    if ($length == 126) {
+      $masks = substr($payload, 4, 4);
+      $data = substr($payload, 8);
+    } else if ($length == 127) {
+      $masks = substr($payload, 10, 4);
+      $data = substr($payload, 14);
+    } else {
+      $masks = substr($payload, 2, 4);
+      $data = substr($payload, 6);
+    }
+
+    $unmasked = "";
+    for ($i = 0; $i < strlen($data); ++$i) {
+      $unmasked .= $data[$i] ^ $masks[$i % 4];
+    }
+
+    return $unmasked;
+  }
+
+  /**
+   * pack_data adosse au message reçu un header contenant sa longueur binaire en chaine de caratères en concordance avec les recommandations RFC
+   * @param mixed $text
+   * @return string
+   */
   private function pack_data($text)
   {
     // Ici b1 représente le premier byte du payload (1 byte = 8 bits), qui est constitué de FIN, RSV1, RSV2, RSV3 et Opcode sur les 4 bits restants
@@ -160,7 +219,7 @@ class Socket
     } else if ($length > 125 && $length < 65536) {
       $header = pack("CCn", $b1, 126, $length);
     } else if ($length >= 65536) {
-      $header = pack("CCNN", $b1, 127, $length);
+      $header = pack("CCNN", $b1, 127, 0, $length);
     }
     return $header . $text;
 
@@ -176,6 +235,11 @@ class Socket
       if (preg_match('/\A(\S+): (.*)\z/', $line, $matches)) {
         $headers[$matches[1]] = $matches[2];
       }
+    }
+
+    if (!isset($headers['Sec-WebSocket-Key'])) {
+      socket_close($sock);
+      return;
     }
 
     $sec_key = $headers['Sec-WebSocket-Key'];
