@@ -73,24 +73,6 @@ class Socket
 
       $this->connections[] = $new_connections;
 
-      echo "Nouvelle connection \n";
-
-      $reply = [
-        "messageInfos" => [
-          "date" => date("d M Y - H:i:s"),
-          "type" => "join",
-          "sender" => "Server",
-        ],
-        "authorName" => "Server",
-        "authorMessage" => [
-          "messageText" => "Vous avez rejoins la discussion",
-        ]
-      ];
-
-      $reply = $this->pack_data(json_encode($reply));
-
-      socket_write($new_connections, $reply, strlen($reply));
-
       $sock_index = array_search($sock, $reads);
       unset($reads[$sock_index]);
     }
@@ -113,29 +95,29 @@ class Socket
 
         $decoded_message = json_decode($message, true);
 
-        // TODO TRES IMPORTANT !! ajouter une vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
+        // TODO TRES IMPORTANT !! ajouter + vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
 
         if ($decoded_message && isset($decoded_message["messageInfos"]["type"])) {
 
           $type = $decoded_message["messageInfos"]["type"];
 
-
           $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
 
           if ($type == "join") {
             $this->members[$key] = [
-              "name" => $decoded_message["messageInfos"]["sender"],
+              "member_id" => $decoded_message["messageInfos"]["sender"],
               "connection" => $sock
             ];
           }
 
           if ($type == "message") {
-            var_dump($type);
             // TODO problème ici on rentre bien dans la boucle mais le contenu ne s'exécute pas
             $masked_message = $this->pack_data($message);
 
             foreach ($this->members as $mkey => $mvalue) {
-              socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+              if ($mvalue["member_id"] != $decoded_message["messageInfos"]["sender"]) {
+                socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+              }
             }
 
           }
