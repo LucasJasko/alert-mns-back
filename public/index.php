@@ -86,40 +86,45 @@ Router::add("/page404", function () {
 
 // =================== API ROUTES ============================== //
 
-Router::add("/socket", function ($isApi = true) {
-  $socket = new \Src\Api\Socket();
-  $socket->dispatch($isApi);
+Router::add("/socket", function ($isApi = false) {
+  $controller = new \Src\Api\Socket();
+  $controller->dispatch($isApi);
 });
 
-Router::add("/auth", function ($isApi = true) {
-  $apiAuth = new \Src\Api\Auth();
-  $apiAuth->dispatch($isApi);
+Router::add("/auth", function ($isApi = false) {
+  $controller = new \Src\Api\Auth();
+  $controller->dispatch($isApi);
 });
 
-Router::add("/chat/{action}", function ($action, $isApi = true) {
-  $apiAuth = new \Src\Api\Chat();
-  $apiAuth->dispatch($action, $isApi);
-});
-Router::add("/dm/{id}", function ($id, $isApi = true) {
-  $apiAuth = new \Src\Controller\Dm();
-  $apiAuth->dispatch($id, $isApi);
+Router::add("/key", function ($isApi = false) {
+  $controller = new \Src\Api\PublicKey();
+  $controller->dispatch($isApi);
 });
 
-Router::add("/search/{subject}", function (string $subject, $isApi = true) {
-  $apiAuth = new \Src\Api\Search();
-  $apiAuth->dispatch($subject, $isApi);
+Router::add("/chat/{action}", function ($action, $isApi = false) {
+  $controller = new \Src\Api\Chat();
+  $controller->dispatch($action, $isApi);
+});
+Router::add("/dm/{id}", function ($id, $isApi = false) {
+  $controller = new \Src\Controller\Dm();
+  $controller->dispatch($id, $isApi);
 });
 
-Router::add("/profile-groups/{profile_id}", function ($id, $isApi = true) {
-  $apiAuth = new \Src\Api\ProfileGroup();
-  $apiAuth->dispatch($id, $isApi);
+Router::add("/search/{subject}", function (string $subject, $isApi = false) {
+  $controller = new \Src\Api\Search();
+  $controller->dispatch($subject, $isApi);
 });
 
-Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = true) {
-  $apiAuth = new \Src\Api\Image();
-  $apiAuth->dispatch($table, $folderName, $subfolder, $fileName, $isApi);
+Router::add("/profile-groups/{profile_id}", function ($id, $isApi = false) {
+  $controller = new \Src\Api\ProfileGroup();
+  $controller->dispatch($id, $isApi);
+});
+
+Router::add("/image/{table}/{folder_name}/{subfolder}/{file_name}", function ($table, $folderName, $subfolder, $fileName, $isApi = false) {
+  $controller = new \Src\Api\Image();
+  $controller->dispatch($table, $folderName, $subfolder, $fileName, $isApi);
 });
 
 Router::dispatch($path);
 
-exit;
+exit();
