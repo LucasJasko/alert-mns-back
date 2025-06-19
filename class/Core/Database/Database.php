@@ -103,6 +103,7 @@ class Database
   public function getAllWhereOr(string $table, string $field, array $value)
   {
     $stmt = "SELECT * FROM `" . $table . "` WHERE ";
+
     for ($i = 0; $i < count($value); $i++) {
       if ($i < count($value) - 1) {
         $stmt .= "$field = :" . $field . "_" . $i . " OR ";
@@ -110,10 +111,13 @@ class Database
         $stmt .= "$field = :" . $field . "_" . $i;
       }
     }
+
     $stmt = $this->db->prepare($stmt);
+
     for ($i = 0; $i < count($value); $i++) {
       $stmt->bindValue(":" . $field . "_" . $i, $value[$i]);
     }
+
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }

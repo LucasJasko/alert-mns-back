@@ -12,8 +12,7 @@ class Chat
     if ($isApi) {
 
       if (!\Src\Api\Auth::protect()) {
-        http_response_code(403);
-        exit();
+        return http_response_code(403);
       }
 
       switch ($action) {
@@ -77,11 +76,30 @@ class Chat
           break;
 
 
-        case "message":
+        case "messages":
 
-          $message = App::getApiData();
+          $infos = App::getApiData();
 
-          App::sendApiData($message);
+          if ($res = App::db()->getDmBetweeenAandB("dm", "profile_id_A", $infos["target"], "profile_id_B", $infos["origin"])) {
+
+            $dmId = $res[0]["dm_id"];
+            $messageIds = App::db()->getFieldsWhere("message__dm", ["message_id"], "dm_id", $dmId);
+
+            $idList = [];
+            for ($i = 0; $i < count($messageIds); $i++) {
+              $idList[$i] = $messageIds[$i]["message_id"];
+            }
+
+            if (!empty($messageIds)) {
+              $feed = App::db()->getAllWhereOr("message", "message_id", $idList);
+              App::sendApiData($feed);
+            } else {
+              App::sendApiData([]);
+            }
+
+          }
+
+
 
           break;
       }
