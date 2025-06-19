@@ -11,7 +11,11 @@ class Dm extends \Src\Controller\Controller
   {
 
     if ($isApi) {
-      \Src\Api\Auth::protect();
+
+      if (!\Src\Api\Auth::protect()) {
+        http_response_code(403);
+        exit();
+      }
 
       if ($res = App::db()->getDmOfProfile("dm", "profile_id_A", "profile_id_B", $id)) {
 
@@ -21,6 +25,7 @@ class Dm extends \Src\Controller\Controller
         $res = App::db()->getAllWhereOr("profile", "profile_id", $query);
 
         for ($i = 0; $i < count($res); $i++) {
+
           unset($res[$i]["profile_password"]);
           unset($res[$i]["profile_mail"]);
           unset($res[$i]["theme_id"]);
@@ -52,8 +57,10 @@ class Dm extends \Src\Controller\Controller
         $res = "";
       }
       return App::sendApiData($res);
+
+    } else {
+      http_response_code(400);
     }
 
-    http_response_code(404);
   }
 }

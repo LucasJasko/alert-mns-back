@@ -18,7 +18,7 @@ class Auth extends \Core\Auth\Auth
       }
 
     } else {
-      http_response_code(403);
+      http_response_code(400);
     }
 
   }

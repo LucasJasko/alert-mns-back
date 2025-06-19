@@ -64,7 +64,10 @@ class Profile extends \Src\Controller\Controller
         return http_response_code(403);
       }
 
-      \Src\Api\Auth::protect();
+      if (!\Src\Api\Auth::protect()) {
+        http_response_code(403);
+        exit();
+      }
 
       $profile = new ProfileModel($id);
       $data = $profile->all();

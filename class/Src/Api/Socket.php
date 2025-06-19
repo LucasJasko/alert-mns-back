@@ -17,6 +17,8 @@ class Socket
 
       \Src\App::sendApiData(\Src\Api\Auth::protect());
 
+    } else {
+      http_response_code(400);
     }
 
   }
@@ -26,23 +28,15 @@ class Socket
   public function lauchSocketServer()
   {
 
-    $this->initaliseSocketServer();
-    $this->listenForNewConnections($this->socketServer);
-
-  }
-
-  private function initaliseSocketServer()
-  {
-
     if ($this->socketServer === null) {
 
       $this->socketServer = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
       socket_bind($this->socketServer, $this->address, $this->port);
       socket_listen($this->socketServer);
 
-      echo "Le serveur écoute sur le port " . $this->port . "\n";
-
     }
+
+    $this->listenForNewConnections($this->socketServer);
 
   }
 
@@ -51,12 +45,13 @@ class Socket
     $this->members = [];
     $this->connections[] = $sock;
 
+    echo "Le serveur écoute sur le port " . $this->port . "\n";
+
     while (true) {
+
       $reads = $this->connections;
       $writes = $exceptions = null;
-
       socket_select($reads, $writes, $exceptions, 0);
-
       $this->acceptNewConnections($sock, $reads);
       $this->handleIncomingMessage($reads);
 
@@ -66,15 +61,16 @@ class Socket
   private function acceptNewConnections($sock, $reads)
   {
     if (in_array($sock, $reads, 0)) {
+
       $new_connections = socket_accept($sock);
-
       $header = socket_read($new_connections, 1024);
-      $this->handshake($header, $new_connections, $this->address, $this->port);
 
+      $this->handshake($header, $new_connections);
       $this->connections[] = $new_connections;
 
       $sock_index = array_search($sock, $reads);
       unset($reads[$sock_index]);
+
     }
   }
 
@@ -89,10 +85,8 @@ class Socket
       $data = socket_read($sock, 1024);
 
       if (!empty($data)) {
-        // Il y a un nouveau message de client, il faut l'envoyer à tous les clients connectés
 
         $message = $this->unmask($data);
-
         $decoded_message = json_decode($message, true);
 
         // TODO TRES IMPORTANT !! ajouter + vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
@@ -104,14 +98,18 @@ class Socket
           $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
 
           if ($type == "join") {
+
+            echo "Client " . $key . " connecté \n";
+
             $this->members[$key] = [
               "member_id" => $decoded_message["messageInfos"]["sender"],
+              "name" => $decoded_message["authorName"] . " " . $decoded_message["authorSurname"],
               "connection" => $sock
             ];
           }
 
           if ($type == "message") {
-            // TODO problème ici on rentre bien dans la boucle mais le contenu ne s'exécute pas
+
             $masked_message = $this->pack_data($message);
 
             foreach ($this->members as $mkey => $mvalue) {
@@ -123,43 +121,16 @@ class Socket
           }
         }
 
-
       } else if ($data === '' || !$data) {
 
-        echo "Le client " . $key . " s'est déconnecté \n";
+        echo "Client " . $key . " déconnecté \n";
         unset($this->connections[$key]);
-
-        if (array_key_exists($key, $this->members)) {
-          $message = [
-            "messageInfos" => [
-              "date" => date("d M Y - H:i:s"),
-              "type" => "left",
-              "sender" => "Server",
-            ],
-            "authorName" => "Server",
-            "authorMessage" => [
-              "messageText" => $this->members[$key]["name"] . " A quitté la discussion",
-            ]
-          ];
-
-          $masked_message = $this->pack_data(json_encode($message));
-          unset($this->members[$key]);
-
-          foreach ($this->members as $mkey => $mvalue) {
-            socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
-          }
-        }
-
+        unset($this->members[$key]);
         socket_close($sock);
       }
     }
   }
 
-  /**
-   * la fonction unmask permet de "décoder" le message reçu en concordance avec la recommandation RCF6455
-   * @param mixed $text
-   * @return string
-   */
   private function unmask($payload)
   {
     // La recommandation RFC6455 stipule qu'un payload doit avoir une longueur de 7 bits, on doit donc effectuer la conversion de 8 à 7.
@@ -184,14 +155,8 @@ class Socket
     return $unmasked;
   }
 
-  /**
-   * pack_data adosse au message reçu un header contenant sa longueur binaire en chaine de caratères en concordance avec les recommandations RFC
-   * @param mixed $text
-   * @return string
-   */
   private function pack_data($text)
   {
-    // Ici b1 représente le premier byte du payload (1 byte = 8 bits), qui est constitué de FIN, RSV1, RSV2, RSV3 et Opcode sur les 4 bits restants
     // 0x80 = 128, 0x1 = 1, 0x0f = 15
     $b1 = 0x80 | (0x1 & 0x0f);
     $length = strlen($text);
@@ -207,7 +172,7 @@ class Socket
 
   }
 
-  private function handshake($request_header, $sock, $address, $port)
+  private function handshake($request_header, $sock)
   {
     $headers = [];
     $lines = preg_split("/\r\n/", $request_header);

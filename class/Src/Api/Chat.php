@@ -11,7 +11,10 @@ class Chat
 
     if ($isApi) {
 
-      \Src\Api\Auth::protect();
+      if (!\Src\Api\Auth::protect()) {
+        http_response_code(403);
+        exit();
+      }
 
       switch ($action) {
 
@@ -64,18 +67,27 @@ class Chat
             }
 
           } else {
-            App::sendApiData("target is not a user");
+            App::sendApiData("La cible n'est pas un utilisateur");
           }
 
           break;
 
         case "remove":
-          //  TODO gérer la suppression d'une messagerie privée
+          //  TODO gérer la suppression d'une conversation privée
+          break;
+
+
+        case "message":
+
+          $message = App::getApiData();
+
+          App::sendApiData($message);
+
           break;
       }
 
     } else {
-      http_response_code(404);
+      http_response_code(400);
     }
   }
 }

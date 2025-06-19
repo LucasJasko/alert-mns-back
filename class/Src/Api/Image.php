@@ -9,7 +9,10 @@ class Image
   {
     if ($isApi) {
 
-      \Src\Api\Auth::protect();
+      if (!\Src\Api\Auth::protect()) {
+        http_response_code(403);
+        exit();
+      }
 
       $path = ROOT . "/upload/" . $table . "/" . $folderName . "/" . $subfolder . "/" . $fileName;
       if (file_exists($path)) {
@@ -20,6 +23,8 @@ class Image
       }
       \Src\App::sendApiData($imageData);
       return;
+    } else {
+      http_response_code(400);
     }
   }
 

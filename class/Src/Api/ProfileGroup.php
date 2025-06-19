@@ -6,12 +6,15 @@ use \Src\App;
 
 class ProfileGroup
 {
-  public function dispatch($id, $isAPi = false)
+  public function dispatch($id, $isApi = false)
   {
 
-    if ($isAPi) {
+    if ($isApi) {
 
-      \Src\Api\Auth::protect();
+      if (!\Src\Api\Auth::protect()) {
+        http_response_code(403);
+        exit();
+      }
 
       $db = App::db();
       $relations = $db->getFieldsWhere("profile__group", ["group_id"], "profile_id", $id);
@@ -32,6 +35,9 @@ class ProfileGroup
 
       App::sendApiData($res);
       return;
+
+    } else {
+      http_response_code(400);
     }
   }
 }
