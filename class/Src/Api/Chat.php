@@ -114,7 +114,35 @@ class Chat
 
           }
 
+          break;
 
+        case "message":
+
+          $message = App::getApiData()["pendingMessage"];
+
+          if ($message["messageInfos"]["target"] != "0") {
+
+            $target = $message["messageInfos"]["target"];
+            $sender = $message["messageInfos"]["sender"];
+            $file = isset($message["authorMessage"]["messageFile"]["FileName"]) ? htmlspecialchars($message["authorMessage"]["messageFile"]["FileName"]) : "";
+            $text = isset($message["authorMessage"]["messageText"]) ? htmlspecialchars($message["authorMessage"]["messageText"]) : "";
+            $dmId = App::db()->getDmBetweeenAandB("dm", "profile_id_A", $target, "profile_id_B", $sender)[0]["dm_id"];
+
+            $dbMessage = [
+              "message_file" => $file,
+              "message_content" => $text,
+              "message_creation_time" => "",
+              "profile_id" => intval($sender),
+            ];
+
+            $lastInsertId = App::db()->createOne("message", $dbMessage, ["message_file", "message_content", "message_creation_time", "profile_id"]);
+
+            App::db()->createOne("message__dm", ["message_id" => $lastInsertId, "dm_id" => strval($dmId)], ["message_id", "dm_id"]);
+
+            App::sendApiData("success");
+          } else {
+            App::sendApiData("fail");
+          }
 
           break;
       }

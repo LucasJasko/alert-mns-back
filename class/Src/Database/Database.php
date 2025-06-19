@@ -5,10 +5,6 @@ namespace Src\Database;
 class Database extends \Core\Database\Database
 {
 
-  public function getAllRelationsBetween()
-  {
-  }
-
   public function getPicture($table, $target, $field, $value): mixed
   {
     $sql = "SELECT $target FROM `$table` WHERE $field = :$field AND $target IS NOT NULL AND $target <> ''";
