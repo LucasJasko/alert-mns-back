@@ -87,15 +87,14 @@ class Socket
       if (!empty($data)) {
 
         $message = $this->unmask($data);
+
         $decoded_message = json_decode($message, true);
 
-        // TODO TRES IMPORTANT !! ajouter + vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
+        // TODO TRES IMPORTANT !! ajouter + de vérification du format de message avant envoie (pour éviter les éventuelles modifications intermédiaires donc htmlspecialchars sur les champs modifiables)
 
         if ($decoded_message && isset($decoded_message["messageInfos"]["type"])) {
 
           $type = $decoded_message["messageInfos"]["type"];
-
-          $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
 
           switch ($type) {
 
@@ -106,7 +105,8 @@ class Socket
               $this->members[$key] = [
                 "member_id" => $decoded_message["messageInfos"]["sender"],
                 "name" => $decoded_message["authorName"] . " " . $decoded_message["authorSurname"],
-                "connection" => $sock
+                "connection" => $sock,
+                "listening" => ""
               ];
 
               break;
@@ -115,13 +115,24 @@ class Socket
 
               $masked_message = $this->pack_data($message);
 
+              $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
+
               foreach ($this->members as $mkey => $mvalue) {
                 if ($mvalue["member_id"] != $decoded_message["messageInfos"]["sender"]) {
                   if ($mvalue["member_id"] === $decoded_message["messageInfos"]["target"]) {
-                    socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+                    if ($this->members[$key]["member_id"] === $this->members[$mkey]["listening"]) {
+                      socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+                    }
                   }
                 }
               }
+
+              break;
+
+            case "switch":
+
+              $this->members[$key]["listening"] = $decoded_message["messageInfos"]["target"];
+              echo "Profile " . $this->members[$key]["member_id"] . " parle à Profile " . $this->members[$key]["listening"] . "\n";
 
               break;
 
@@ -138,7 +149,7 @@ class Socket
 
         echo "Client " . $key . " déconnecté \n";
         unset($this->connections[$key]);
-        $this->connections = array_values($this->connections);
+        // $this->connections = array_values($this->connections);
         unset($this->members[$key]);
         socket_close($sock);
       }
