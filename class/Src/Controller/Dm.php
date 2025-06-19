@@ -20,8 +20,13 @@ class Dm extends \Src\Controller\Controller
       if ($res = App::db()->getDmOfProfile("dm", "profile_id_A", "profile_id_B", $id)) {
 
         for ($i = 0; $i < count($res); $i++) {
-          $query[] = $res[$i]["profile_id_A"];
+          if ($res[$i]["profile_id_A"] == $id) {
+            $query[] = $res[$i]["profile_id_B"];
+          } else {
+            $query[] = $res[$i]["profile_id_A"];
+          }
         }
+
         $res = App::db()->getAllWhereOr("profile", "profile_id", $query);
 
         for ($i = 0; $i < count($res); $i++) {
@@ -53,6 +58,7 @@ class Dm extends \Src\Controller\Controller
           unset($res[$i]["status_id"]);
 
         }
+
       } else {
         $res = "";
       }

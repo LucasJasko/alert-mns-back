@@ -51,7 +51,7 @@ class Socket
 
       $reads = $this->connections;
       $writes = $exceptions = null;
-      socket_select($reads, $writes, $exceptions, 0);
+      socket_select($reads, $writes, $exceptions, 0, 1000000);
       $this->acceptNewConnections($sock, $reads);
       $this->handleIncomingMessage($reads);
 
@@ -97,26 +97,39 @@ class Socket
 
           $decoded_message["authorMessage"]["messageText"] = htmlspecialchars($decoded_message["authorMessage"]["messageText"] ?? '');
 
-          if ($type == "join") {
+          switch ($type) {
 
-            echo "Client " . $key . " connecté \n";
+            case "join":
 
-            $this->members[$key] = [
-              "member_id" => $decoded_message["messageInfos"]["sender"],
-              "name" => $decoded_message["authorName"] . " " . $decoded_message["authorSurname"],
-              "connection" => $sock
-            ];
-          }
+              echo "Client " . $key . " connecté \n";
 
-          if ($type == "message") {
+              $this->members[$key] = [
+                "member_id" => $decoded_message["messageInfos"]["sender"],
+                "name" => $decoded_message["authorName"] . " " . $decoded_message["authorSurname"],
+                "connection" => $sock
+              ];
 
-            $masked_message = $this->pack_data($message);
+              break;
 
-            foreach ($this->members as $mkey => $mvalue) {
-              if ($mvalue["member_id"] != $decoded_message["messageInfos"]["sender"]) {
-                socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+            case "message":
+
+              $masked_message = $this->pack_data($message);
+
+              foreach ($this->members as $mkey => $mvalue) {
+                if ($mvalue["member_id"] != $decoded_message["messageInfos"]["sender"]) {
+                  if ($mvalue["member_id"] === $decoded_message["messageInfos"]["target"]) {
+                    socket_write($mvalue["connection"], $masked_message, strlen($masked_message));
+                  }
+                }
               }
-            }
+
+              break;
+
+            case "close":
+              break;
+
+            case "error":
+              break;
 
           }
         }
@@ -125,6 +138,7 @@ class Socket
 
         echo "Client " . $key . " déconnecté \n";
         unset($this->connections[$key]);
+        $this->connections = array_values($this->connections);
         unset($this->members[$key]);
         socket_close($sock);
       }
