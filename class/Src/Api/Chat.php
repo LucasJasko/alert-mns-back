@@ -85,14 +85,29 @@ class Chat
             $dmId = $res[0]["dm_id"];
             $messageIds = App::db()->getFieldsWhere("message__dm", ["message_id"], "dm_id", $dmId);
 
-            $idList = [];
-            for ($i = 0; $i < count($messageIds); $i++) {
-              $idList[$i] = $messageIds[$i]["message_id"];
-            }
-
             if (!empty($messageIds)) {
+
+              $idList = [];
+              for ($i = 0; $i < count($messageIds); $i++) {
+                $idList[$i] = $messageIds[$i]["message_id"];
+              }
+
               $feed = App::db()->getAllWhereOr("message", "message_id", $idList);
-              App::sendApiData($feed);
+
+              if ($feed) {
+
+                for ($i = 0; $i < count($feed); $i++) {
+                  $clearedMessage = [];
+                  foreach ($feed[$i] as $key => $value) {
+                    $newKey = str_replace("message_", "", $key);
+                    $clearedMessage[$newKey] = $value;
+                  }
+                  $feed[$i] = $clearedMessage;
+                }
+
+                App::sendApiData($feed);
+              }
+
             } else {
               App::sendApiData([]);
             }
