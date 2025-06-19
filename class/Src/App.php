@@ -21,7 +21,8 @@ class App
 
   private static function loadClass($class)
   {
-    $local = ROOT . "\class\\" . $class . ".php";
+    // $local = ROOT . "\class\\" . $class . ".php";
+    $local = ROOT . "/class/" . str_replace("\\", "/", $class) . ".php";
 
     if (file_exists($local)) {
       require_once $local;

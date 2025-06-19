@@ -1,16 +1,17 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+
 
 require_once "../class/Src/App.php";
 
 use \Core\Router\Router;
 
 \Src\App::init();
-
-$router = new Router();
-
 // TODO gérer toute les routes finissant par /
 
 // =================== BACK-OFFICE ROUTES ============================== //
