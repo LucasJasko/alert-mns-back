@@ -45,7 +45,7 @@ class Room extends \Src\Controller\Controller
       $fieldsOfTable = $this->db->getFieldsOfTable("room");
       $fieldsOfTable = array_fill_keys($fieldsOfTable, "");
 
-      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau salon", "group/$group_id", ["room_id"]);
+      $form->getEmptyForm($fieldsOfTable, "Création d'un nouveau salon", "group/$group_id", ["room_id", "room_creation_time", "room_delete_time"]);
     }
   }
 }

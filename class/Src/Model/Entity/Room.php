@@ -18,6 +18,18 @@ class Room extends \Src\Model\Model
       "input_type" => "text",
       "attributes" => "required readonly"
     ],
+    "room_creation_time" => [
+      "label" => "Date de création du salon",
+      "placeholder" => "",
+      "input_type" => "date",
+      "attributes" => ""
+    ],
+    "room_delete_time" => [
+      "label" => "Date de suppression du salon",
+      "placeholder" => "",
+      "input_type" => "date",
+      "attributes" => ""
+    ],
     "group_id" => [
       "label" => "Groupe du salon",
       "placeholder" => "",
