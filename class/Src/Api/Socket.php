@@ -149,7 +149,6 @@ class Socket
 
         echo "Client " . $key . " déconnecté \n";
         unset($this->connections[$key]);
-        // $this->connections = array_values($this->connections);
         unset($this->members[$key]);
         socket_close($sock);
       }
